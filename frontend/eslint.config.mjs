@@ -24,7 +24,6 @@ const eslintConfig = [
       "no-console": "warn", // console.log 경고
       "curly": "error", // 중괄호 {} 필수
       "prefer-const": "warn", // const 사용 권장
-      "quotes": ["error", "single"], // 작은따옴표 사용 강제
       "indent": ["error", 2], // 들여쓰기 2칸
     },
   },
