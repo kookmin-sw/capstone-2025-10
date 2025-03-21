@@ -17,7 +17,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -99,6 +101,25 @@ public class UserServiceTest {
     @Test
     @DisplayName("회원 생성 테스트 - 실패")
     void saveUserFailTest(){
+        //given
+        User user = new User();
+        user.setUserId("duplicateUser");
+        user.setPassword("1234");
+        user.setCompanyName("DupCorp");
+        user.setManagerName("김민준");
+
+        //when
+        when(userRepository.existsByUserId("duplicateUser")).thenReturn(true);
+
+        //then
+        assertThatThrownBy(() -> userService.registerUser(user))
+                .isInstanceOf(ResponseStatusException.class)
+                .hasMessageContaining("User already exist");
+
+
+        //호출 & 확인
+        verify(userRepository).existsByUserId("duplicateUser");
+        verify(userRepository, never()).save(any(User.class)); //저장되면 안됨
 
     }
 
@@ -106,6 +127,36 @@ public class UserServiceTest {
     @Test
     @DisplayName("회원 삭제 테스트")
     void deleteUserTest(){
+
+        //given
+        User testUser = new User();
+        testUser.setUserId("test");
+        testUser.setPassword("1234");
+        testUser.setCompanyName("DupCorp");
+        testUser.setManagerName("김민준");
+
+        when(userRepository.save(any(User.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        when(userRepository.findByUserId("test")).thenReturn(testUser);
+
+        User regiUser = userService.registerUser(testUser);
+
+
+        //등록확인
+        assertThat(regiUser.getUserId()).isNotNull();
+
+
+        //when
+        userService.deleteUser(regiUser.getUserId());
+
+        //then
+        User deleted = userRepository.findByUserId("test");
+        assertThat(deleted).isNull();
+
+        //1번 호출됐는지 확인
+        verify(userRepository, times(1)).deleteUserByUserId(testUser.getUserId());
+
 
     }
 
