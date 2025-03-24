@@ -3,6 +3,7 @@ package capstone.offflow.User.Service;
 import capstone.offflow.User.Domain.User;
 import capstone.offflow.User.Repository.UserRepository;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,7 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Transactional
 @Slf4j
 public class UserServiceImpl implements UserService{
@@ -24,7 +25,8 @@ public class UserServiceImpl implements UserService{
     //회원 조회
     @Override
     public User getUserById(String userId) {
-        return userRepository.findByUserId(userId);
+        return userRepository.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
     }
 
     //회원 등록

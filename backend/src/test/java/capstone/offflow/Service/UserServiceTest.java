@@ -1,23 +1,19 @@
 package capstone.offflow.Service;
 
-import capstone.offflow.Common.EncoderConfig;
 import capstone.offflow.User.Domain.User;
 import capstone.offflow.User.Repository.UserRepository;
 import capstone.offflow.User.Service.UserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
@@ -49,7 +45,7 @@ public class UserServiceTest {
         User user = new User();
         user.setUserId(userId);
 
-        when(userRepository.findByUserId(userId)).thenReturn(user); // ⭐ 먼저 stub 설정
+        when(userRepository.findByUserId(userId)).thenReturn(Optional.of(user)); // ⭐ 먼저 stub 설정
 
         System.out.println("userService class = " + userService.getClass());
         System.out.println("userRepository in userService = " + userService.getUserById("testUser"));
@@ -138,7 +134,7 @@ public class UserServiceTest {
         when(userRepository.save(any(User.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
-        when(userRepository.findByUserId("test")).thenReturn(testUser);
+        when(userRepository.findByUserId("test")).thenReturn(Optional.of(testUser));
 
         User regiUser = userService.registerUser(testUser);
 
@@ -151,7 +147,9 @@ public class UserServiceTest {
         userService.deleteUser(regiUser.getUserId());
 
         //then
-        User deleted = userRepository.findByUserId("test");
+        User deleted = userRepository.findByUserId("test")
+                        .orElseThrow(() -> new RuntimeException("User not found"));
+
         assertThat(deleted).isNull();
 
         //1번 호출됐는지 확인
