@@ -1,9 +1,8 @@
 "use client";
-
 import React from "react";
-import LabeledInput from "./labeledinput";
-import LabeledPasswordInput from "./labeledpasswordinput.js";
-import styles from "../app/login/login.module.scss";
+import LabeledInput from "../LabeledInput";
+import LabeledPasswordInput from "../LabeledPasswordInput";
+import styles from "./index.module.scss";
 
 export default function LoginFormFields({
   userId,
@@ -24,7 +23,7 @@ export default function LoginFormFields({
         id="userId"
         value={userId}
         onChange={(e) => setUserId(e.target.value)}
-        placeholder="아이디를 입력해 주세요."
+        placeholder="아이디 입력"
         required
       />
 
@@ -34,7 +33,7 @@ export default function LoginFormFields({
         id="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        placeholder="비밀번호를 입력해 주세요."
+        placeholder="비밀번호 입력(영문,숫자,특수문자 조합)"
         required
         showPassword={showPassword}
         togglePassword={toggleShowPassword}

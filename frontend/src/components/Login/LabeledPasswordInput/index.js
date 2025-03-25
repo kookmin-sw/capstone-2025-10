@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import styles from "../app/login/login.module.scss";
+import styles from "./index.module.scss";
 
 export default function LabeledPasswordInput({
   label,
@@ -14,7 +14,7 @@ export default function LabeledPasswordInput({
 }) {
   return (
     <>
-      <label htmlFor={id}>{label}</label>
+      <label htmlFor={id} className={styles.label}>{label}</label>
       <div className={styles.passwordContainer}>
         <input
           type={showPassword ? "text" : "password"}
@@ -23,6 +23,7 @@ export default function LabeledPasswordInput({
           onChange={onChange}
           placeholder={placeholder}
           required={required}
+          pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,16}$"
         />
         <button
           type="button"
