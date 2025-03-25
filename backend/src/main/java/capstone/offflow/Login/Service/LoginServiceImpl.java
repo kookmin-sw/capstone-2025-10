@@ -35,6 +35,11 @@ public class LoginServiceImpl implements LoginService {
             //DB 사용자 조회 -> 비밀번호 비교 -> 인증 성공시 Authentication 객체 생성
             Authentication authentication = authenticationManager.authenticate(token);
 
+            //UserId를 가진 사용자가 있는지 없는지 검증
+            userRepository.findByUserId(loginRequest.getUserId())
+                    .orElseThrow(() -> new RuntimeException("사용자 없음"));
+
+
             //세션을 생성하거나 이미 있으면 유지
             SecurityContextHolder.getContext().setAuthentication(authentication);
             request.getSession(true); // 세션 생성 (true : 없으면 새로 만든다는 뜻)

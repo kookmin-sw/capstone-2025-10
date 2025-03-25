@@ -44,10 +44,16 @@ public class SecurityConfig {
         return http.build();
     }
 
+    /**
+     * 내부에서 비밀번호 검증
+     * 로그인 처리 담당하는 핵심 로직 (수동처리)
+     * 수동처리 -> 로그인 API 활용해야하기 때문에
+     * 인증 요청을 받은 후 인증처리 수행 후 성공시 Authentication 객체 반환, 실패시 예외
+     */
     @Bean
     public AuthenticationManager authenticationManager(UserDetailsService userDetailsService,
                                                        PasswordEncoder passwordEncoder) {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(); //실질적으로 DB에서 유저정보를 가져와서 비밀번호 비교까지 수행하는 실제 실행자
         provider.setUserDetailsService(userDetailsService);
         provider.setPasswordEncoder(passwordEncoder);
         return new ProviderManager(provider);

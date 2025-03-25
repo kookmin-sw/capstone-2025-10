@@ -24,10 +24,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+
+    //해당 userId가 존재하는지 검증 method
+    //로직상 실패 VS 시스템 오류를 구분해서 예외처리 필요
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
         User user = userRepository.findByUserId(userId)
-                .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId ));
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId )); //throw -> 상황이 실패임을 보여줌
         return new UserPrincipal(user);
     }
 
