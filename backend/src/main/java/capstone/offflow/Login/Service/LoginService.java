@@ -6,5 +6,5 @@ import jakarta.servlet.http.HttpServletRequest;
 
 public interface LoginService {
 
-    Long login(LoginRequestDto loginRequest, HttpServletRequest request);
+    String login(LoginRequestDto loginRequest, HttpServletRequest request);
 }
