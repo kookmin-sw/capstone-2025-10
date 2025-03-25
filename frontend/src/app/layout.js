@@ -1,5 +1,6 @@
 import "./styles/globals.scss";
 import Header from "@/components/Header";
+import {ModalProvider} from "@/contexts/ModalContext";
 
 export const metadata = {
   title: "Create Next App",
@@ -10,8 +11,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <Header />
-        {children}
+          <ModalProvider>
+            <Header />
+            {children}
+          </ModalProvider>
       </body>
     </html>
   );

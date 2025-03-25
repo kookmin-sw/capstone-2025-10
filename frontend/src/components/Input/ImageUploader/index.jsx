@@ -77,7 +77,6 @@ const ImageUploader = () => {
                                 src="/upload-icon.svg"
                                 width={68}
                                 height={68}
-                                priority
                                 alt={"upload"}
                             />
                         </div>

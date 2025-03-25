@@ -1,11 +1,17 @@
+"use client"
+
 import Image from "next/image";
 import styles from "./page.module.css";
 import TextInput from "@/components/Input/TextInput";
 import ImageUploader from "@/components/Input/ImageUploader";
+import { useModal } from "@/contexts/ModalContext";
+import ProductCard from "@/components/Card/ProductCard";
 
 export default function Home() {
+  const { openModal } = useModal();
+
   return (
-    <div className={styles.page}>
+    <div className={styles.page} onClick={() => openModal(<ProductCard />)}>
       <main className={styles.main}>
         <div style={{display: "flex", width: "100%", height: "100%"}}>
           <div style={{display: "flex", flex: "1"}}>

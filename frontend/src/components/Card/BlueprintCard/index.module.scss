@@ -1,0 +1,38 @@
+.upload-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  padding: 40px;
+  border-radius: 20px;
+  background-color: white;
+  box-shadow: 0px 10px 40px 0px #00000026;
+  gap: 32px;
+}
+
+.description {
+  flex: 1;
+
+  .step-badge {
+    display: inline-block;
+    font-size: 12px;
+    color: var(--primary-blue);
+    background-color: #e6f0ff;
+    padding: 4px 8px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+  }
+
+  .title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 12px;
+  }
+
+  .hint {
+    font-size: 14px;
+    color: var(--gray-1);
+    line-height: 1.5;
+  }
+}
