@@ -1,0 +1,48 @@
+.label {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 37px;
+  color: #000000;
+  margin-bottom: 4px;
+}
+
+.passwordContainer {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 20px;
+}
+
+.passwordContainer input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 8px 0;
+  background-color: transparent;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px;
+  /* 강제 적용 테스트 */
+  color: #000000 !important;
+}
+
+.passwordContainer input::placeholder {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 500; /* Medium */
+  font-size: 14px;
+  line-height: 38px;
+  color: #b1b1b1;
+}
+
+.togglePassword {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 8px;
+}
+
+.togglePassword img {
+  width: 19.22px;
+  height: 17px;
+}
