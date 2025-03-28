@@ -1,0 +1,30 @@
+package capstone.offflow.Dashboard.Domain;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+/**
+ * 섹션 - 도메인 역할 수행 -> Entity로 만들기
+ */
+
+@Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class Section {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "dashborad_id") //대시보드 전용 칼럼 생성
+    private Dashboard dashboard;
+
+}
