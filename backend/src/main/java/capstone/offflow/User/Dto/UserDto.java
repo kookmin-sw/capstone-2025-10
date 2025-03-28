@@ -1,7 +1,6 @@
 package capstone.offflow.User.Dto;
 
 
-import ch.qos.logback.core.sift.AppenderTracker;
 import lombok.*;
 
 import java.util.Date;
@@ -24,4 +23,6 @@ public class UserDto {
     private boolean serviceAccepted;
 
     private Date registerDate;
+
+
 }
