@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import styles from "./login.module.scss";
-import LoginFormFields from "../../components/loginformfields.js";
+import LoginFormFields from "@/components/Login/LoginFormFields";
 
 export default function LoginPage() {
   const [userId, setUserId] = useState("");

@@ -44,7 +44,7 @@ export default function MemberCreatePage() {
 
   // 저장 버튼 핸들러
   const handleSave = () => {
-    if (!isValid) return;
+    if (!isValid) {return;}
 
     // 실제 저장 로직 구현
     console.log("저장된 회원 정보:", memberInfo);

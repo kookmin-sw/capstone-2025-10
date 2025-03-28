@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import styles from "./index.module.scss";
+import Image from "next/image";
 
 export default function LabeledPasswordInput({
   label,
@@ -30,7 +31,7 @@ export default function LabeledPasswordInput({
           className={styles.togglePassword}
           onClick={togglePassword}
         >
-          <img
+          <Image
             src={showPassword ? "/IP-password_open.svg" : "/IP-password_close.svg"}
             alt={showPassword ? "숨기기" : "보기"}
           />
