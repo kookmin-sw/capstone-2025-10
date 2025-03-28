@@ -148,7 +148,12 @@
   font-weight: 500;
   transition: background-color 0.2s;
   border-radius: 10px;
-
+  text-align: center;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
   &:hover {
     background-color: #003bb5;
   }

@@ -34,6 +34,8 @@ export default function LabeledPasswordInput({
           <Image
             src={showPassword ? "/IP-password_open.svg" : "/IP-password_close.svg"}
             alt={showPassword ? "숨기기" : "보기"}
+            width={20}
+            height={20}
           />
         </button>
       </div>
