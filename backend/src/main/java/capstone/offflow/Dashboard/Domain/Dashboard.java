@@ -39,6 +39,9 @@ public class Dashboard {
     //Cascade = 부모 저장/삭제시 자식도 자동 저장/삭제
     // orphanRemoval = 부모의 리스트에서 빠진 자식 -> DB 삭제
     @OneToMany(mappedBy = "Dashboard", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Section> section = new ArrayList<>();
+    private List<Section> sections = new ArrayList<>();
+
+    @OneToMany(mappedBy = "Dashboard", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Section> products = new ArrayList<>();
 
 }

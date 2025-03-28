@@ -25,7 +25,11 @@ public class Product {
     private String description;
     private String imageUrl;
 
-    @ManyToOne
+    @ManyToOne(optional = false) //항상 대시보드에 소속
+    @JoinColumn(name = "dashboard_id")
+    private Dashboard dashboard;
+
+    @ManyToOne //default => 섹션은 나중에 배치될 수 있음
     @JoinColumn(name = "section_id")
     private Section section;
 }

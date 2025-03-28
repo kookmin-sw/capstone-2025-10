@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 섹션 - 도메인 역할 수행 -> Entity로 만들기
  */
@@ -23,8 +26,16 @@ public class Section {
 
     private String name;
 
+
+    @ElementCollection //java collection을 jpa에 저장하려면 필요한 애노테이션
+    @Column(name="position")
+    private List<String> positionList;
+
     @ManyToOne
     @JoinColumn(name = "dashborad_id") //대시보드 전용 칼럼 생성
     private Dashboard dashboard;
+
+    @OneToMany(mappedBy = "section", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Product> productList = new ArrayList<>();
 
 }
