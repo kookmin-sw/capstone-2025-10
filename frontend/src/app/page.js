@@ -1,10 +1,11 @@
 "use client";
 import React, { useState } from "react";
-import styles from "./page.module.css";
+import styles from "./page.module.scss";
 import Image from "next/image";
 import Link from "next/link";
 import Header from "@/components/Header/components/Header";
 import CardContainer from "@/components/Card/CardContainer";
+import Pagination from "@/components/Pagination";
 
 // 예시용 방문객 데이터
 const dummyVisitors = [
@@ -22,6 +23,23 @@ export default function VisitorPage() {
   // 체크박스 상태 관리
   const [checkedItems, setCheckedItems] = useState({});
   const [allChecked, setAllChecked] = useState(false);
+  
+  // 페이지네이션 상태
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5; // 페이지당 표시할 아이템 수
+  
+  // 현재 페이지의 데이터 계산
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = dummyVisitors.slice(indexOfFirstItem, indexOfLastItem);
+  
+  // 전체 페이지 수 계산
+  const totalPages = Math.ceil(dummyVisitors.length / itemsPerPage);
+  
+  // 페이지 변경 핸들러
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
   
   // 개별 체크박스 클릭 핸들러
   const handleCheckboxClick = (id) => {
@@ -113,7 +131,7 @@ export default function VisitorPage() {
                 </tr>
               </thead>
               <tbody>
-                {dummyVisitors.map((visitor) => (
+                {currentItems.map((visitor) => (
                   <tr key={visitor.id}>
                     <td>
                       <Image 
@@ -142,6 +160,13 @@ export default function VisitorPage() {
               </tbody>
             </table>
           </div>
+          
+          {/* 페이지네이션 추가 */}
+          <Pagination 
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
         </CardContainer>
       </div>
     </div>
