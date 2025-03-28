@@ -16,4 +16,4 @@ const LogoutButton = ({ onLogout }) => {
     );
 };
 
-export default LogoutButton; 
+export default LogoutButton;

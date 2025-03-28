@@ -13,4 +13,4 @@ const Button = ({ variant = "default", size = "medium", children, ...props }) =>
     );
 };
 
-export default Button; 
+export default Button;
