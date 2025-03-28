@@ -2,8 +2,7 @@
   display: flex;
   align-items: center;
   justify-items: center;
-  min-height: 100svh;
-  height: 100%;
+  height: calc(100% - 62px);
 }
 
 .main {

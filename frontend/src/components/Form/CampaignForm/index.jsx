@@ -1,14 +1,25 @@
+"use client"
+
 import CardSlider from "@/components/Slider";
 import styles from "./index.module.scss";
 import BlueprintCard from "@/components/Card/BlueprintCard";
 import ProductCard from "@/components/Card/ProductCard";
 import SectionCard from "@/components/Card/SectionCard";
+import {useModal} from "@/contexts/ModalContext";
+import {useState} from "react";
+import useImageUpload from "@/hooks/useImageUpload";
 
 const CampaignForm = () => {
+    const [sections, setSections] = useState([]);
+    const [products, setProducts] = useState([]);
+    const upload = useImageUpload();
 
     return (
         <form className={styles.form}>
-            <CardSlider cards={[<SectionCard key="3" />, <BlueprintCard key="1"/>, <ProductCard key="2"/>]} />
+            <CardSlider cards={[<BlueprintCard key="1" sections={sections} setSections={setSections} upload={upload}/>,
+                <ProductCard products={products} setProducts={setProducts} key="2"/>,
+                <SectionCard key="2" sections={sections} setSections={setSections} image={upload.file}/>,
+            ]}/>
         </form>
     );
 };

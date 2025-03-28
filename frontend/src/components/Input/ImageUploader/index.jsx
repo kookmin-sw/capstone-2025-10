@@ -1,36 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import styles from "./index.module.scss";
 import Image from "next/image";
 
-const ImageUploader = () => {
-    const [file, setFile] = useState(null);
-    const [uploadProgress, setUploadProgress] = useState(0);
-    const [isUploading, setIsUploading] = useState(false);
-
-    const handleFileChange = (event) => {
-        const selectedFile = event.target.files[0];
-        if (selectedFile) {
-            setFile(selectedFile);
-            setIsUploading(true);
-            simulateUpload();
-        }
-    };
-
-    const simulateUpload = () => {
-        // TODO: File Upload API 연동
-        let progress = 0;
-        const interval = setInterval(() => {
-            progress += 10;
-            setUploadProgress(progress);
-            if (progress >= 100) {
-                clearInterval(interval);
-                setIsUploading(false);
-            }
-        }, 500); // 0.5초마다 10% 증가
-    };
-
+const ImageUploader = ({
+                           file,
+                           isUploading,
+                           uploadProgress,
+                           handleFileChange,
+                       }) => {
     return (
         <div className={styles.uploadContainer}>
             {file ? (

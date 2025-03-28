@@ -1,5 +1,9 @@
 .slider-wrapper {
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  //position: relative;
   width: 100%;
   height: 100%;
   margin: 0 auto;
@@ -9,7 +13,7 @@
   display: flex;
   justify-content: center;
   gap: 6px;
-  margin: 40px 0 20px 0;
+  margin-bottom: 24px;
 
   .dot {
     width: 8px;
@@ -27,8 +31,10 @@
 }
 
 .slider {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: relative;
-  padding: 260px 80px;
 }
 
 .card {
@@ -36,18 +42,14 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  position: absolute;
-  top: 0;
-  left: 50%;
   width: 1140px;
-  height: 632px;
+  height: 600px;
   transition: transform 0.4s ease, opacity 0.4s;
   z-index: 0;
   pointer-events: none;
 }
 
 .card.active {
-  transform: translateX(-50%) scale(1);
   display: flex;
   flex: 1;
   opacity: 1;
@@ -56,12 +58,14 @@
 }
 
 .card.left {
-  transform: translateX(-65%) scale(.8);
+  position: absolute;
+  transform: translateX(-15%) scale(.8);
   z-index: 1;
 }
 
 .card.right {
-  transform: translateX(-35%) scale(.8);
+  position: absolute;
+  transform: translateX(15%) scale(.8);
   z-index: 1;
 }
 

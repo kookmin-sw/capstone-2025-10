@@ -4,6 +4,7 @@ const Button = ({ variant = "default", size = "medium", children, ...props }) =>
     const variantClass = {
         default: styles.default,
         outline: styles.outline,
+        cancel: styles.cancel,
     };
 
     return (

@@ -7,17 +7,17 @@ import Modal from "@/components/Modal";
 const ModalContext = createContext();
 
 export const ModalProvider = ({ children }) => {
-    const [modalContent, setModalContent] = useState(null);
+  const [modalContent, setModalContent] = useState(null);
 
-    const openModal = (content) => setModalContent(content);
-    const closeModal = () => setModalContent(null);
+  const openModal = (content) => setModalContent(content);
+  const closeModal = () => setModalContent(null);
 
-    return (
-        <ModalContext.Provider value={{ openModal, closeModal }}>
-            {children}
-            {modalContent && <Modal isOpen={true} onClose={closeModal}>{modalContent}</Modal>}
-        </ModalContext.Provider>
-    );
+  return (
+    <ModalContext.Provider value={{ openModal, closeModal }}>
+      {children}
+      {modalContent && <Modal isOpen={true} onClose={closeModal}>{modalContent}</Modal>}
+    </ModalContext.Provider>
+  );
 };
 
 export const useModal = () => useContext(ModalContext);
