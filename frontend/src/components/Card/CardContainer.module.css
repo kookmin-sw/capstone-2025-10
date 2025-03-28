@@ -2,6 +2,9 @@
 
 /* 카드 */
 .card {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
   background-color: white;
   border-radius: 40px;
   padding: 52px;
@@ -34,4 +37,4 @@
   height: 1px;
   background-color: #6e6e6e;
   margin: 0;
-} 
+}

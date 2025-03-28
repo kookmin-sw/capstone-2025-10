@@ -2,10 +2,10 @@
 import React, { useState } from "react";
 import styles from "./page.module.scss";
 import Image from "next/image";
-import Link from "next/link";
-import Header from "@/components/Header/components/Header";
-import CardContainer from "@/components/Card/CardContainer";
+import CardContainer from "@/components/CardContainer";
 import Pagination from "@/components/Pagination";
+import Button from "@/components/Button";
+import Link from "next/link";
 
 // 예시용 방문객 데이터
 const dummyVisitors = [
@@ -23,47 +23,47 @@ export default function VisitorPage() {
   // 체크박스 상태 관리
   const [checkedItems, setCheckedItems] = useState({});
   const [allChecked, setAllChecked] = useState(false);
-  
+
   // 페이지네이션 상태
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5; // 페이지당 표시할 아이템 수
-  
+
   // 현재 페이지의 데이터 계산
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = dummyVisitors.slice(indexOfFirstItem, indexOfLastItem);
-  
+
   // 전체 페이지 수 계산
   const totalPages = Math.ceil(dummyVisitors.length / itemsPerPage);
-  
+
   // 페이지 변경 핸들러
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-  
+
   // 개별 체크박스 클릭 핸들러
   const handleCheckboxClick = (id) => {
     setCheckedItems(prev => {
       const newState = { ...prev, [id]: !prev[id] };
-      
+
       // 모든 체크박스가 선택되었는지 확인
       const allSelected = dummyVisitors.every(visitor => newState[visitor.id]);
       setAllChecked(allSelected);
-      
+
       return newState;
     });
   };
-  
+
   // 전체 체크박스 클릭 핸들러
   const handleSelectAll = () => {
     const newAllChecked = !allChecked;
     setAllChecked(newAllChecked);
-    
+
     const newCheckedItems = {};
     dummyVisitors.forEach(visitor => {
       newCheckedItems[visitor.id] = newAllChecked;
     });
-    
+
     setCheckedItems(newCheckedItems);
   };
 
@@ -81,38 +81,35 @@ export default function VisitorPage() {
           placeholder="방문객명 검색"
           className={styles.searchInput}
         />
-        <svg 
-          className={styles.searchIcon} 
-          xmlns="http://www.w3.org/2000/svg" 
-          width="17" 
-          height="17" 
-          viewBox="0 0 24 24" 
-          fill="none" 
-          stroke="#6e6e6e" 
-          strokeWidth="1.2" 
-          strokeLinecap="round" 
+        <svg
+          className={styles.searchIcon}
+          xmlns="http://www.w3.org/2000/svg"
+          width="17"
+          height="17"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#6e6e6e"
+          strokeWidth="1.2"
+          strokeLinecap="round"
           strokeLinejoin="round"
         >
           <circle cx="11" cy="11" r="8"></circle>
           <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
         </svg>
       </div>
-      
-      <button className={styles.createButton}>계정 생성</button>
-      <button className={styles.primaryButton}>계정 삭제</button>
+
+      <Button className={styles.createButton}><Link href="/member/create">계정 생성</Link></Button>
+      <Button className={styles.primaryButton}>계정 삭제</Button>
     </>
   );
 
   return (
     <div className={styles.layout}>
-      {/* 헤더 */}
-      <Header />
-      
       {/* 메인 콘텐츠 */}
       <div className={styles.mainContent}>
         {/* 방문객 관리 카드 - 컴포넌트로 변경 */}
-        <CardContainer 
-          title="방문객 관리" 
+        <CardContainer
+          title="방문객 관리"
           headerActions={headerActions}
         >
           {/* 방문객 테이블 */}
@@ -134,11 +131,11 @@ export default function VisitorPage() {
                 {currentItems.map((visitor) => (
                   <tr key={visitor.id}>
                     <td>
-                      <Image 
-                        src={checkedItems[visitor.id] ? "/checkblue.svg" : "/checkgray.svg"} 
-                        alt="체크박스" 
-                        width={20} 
-                        height={20} 
+                      <Image
+                        src={checkedItems[visitor.id] ? "/checkblue.svg" : "/checkgray.svg"}
+                        alt="체크박스"
+                        width={20}
+                        height={20}
                         className={styles.checkbox}
                         onClick={() => handleCheckboxClick(visitor.id)}
                       />
@@ -160,9 +157,9 @@ export default function VisitorPage() {
               </tbody>
             </table>
           </div>
-          
+
           {/* 페이지네이션 추가 */}
-          <Pagination 
+          <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
             onPageChange={handlePageChange}

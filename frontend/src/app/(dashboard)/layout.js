@@ -1,6 +1,7 @@
 import Header from "@/components/Header";
 import {ModalProvider} from "@/contexts/ModalContext";
 import SideNavigation from "@/components/SideNavigation";
+import styles from "./layout.module.scss";
 
 export const metadata = {
   title: "Create Next App",
@@ -12,7 +13,7 @@ export default function DashboardLayout({children}) {
     <html lang="en">
       <body>
         <ModalProvider>
-          <div>
+          <div className={styles.content}>
             <SideNavigation/>
             {children}
           </div>

@@ -1,8 +1,9 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import styles from "./page.module.scss";
-import Header from "../../components/Header";
-import CardContainer from "../../components/CardContainer";
+import Header from "@/components/Header";
+import CardContainer from "@/components/CardContainer";
+import TextInput from "@/components/Input/TextInput";
 
 export default function MemberCreatePage() {
   // 회원 정보 상태
@@ -44,7 +45,7 @@ export default function MemberCreatePage() {
   // 저장 버튼 핸들러
   const handleSave = () => {
     if (!isValid) return;
-    
+
     // 실제 저장 로직 구현
     console.log("저장된 회원 정보:", memberInfo);
     alert("방문객 계정이 생성되었습니다.");
@@ -62,13 +63,13 @@ export default function MemberCreatePage() {
   // 헤더 액션 요소
   const headerActions = (
     <>
-      <button 
+      <button
         className={styles.cancelButton}
         onClick={handleCancel}
       >
         취소
       </button>
-      <button 
+      <button
         className={`${styles.createButton} ${isValid ? styles.active : ''}`}
         onClick={handleSave}
         disabled={!isValid}
@@ -80,19 +81,16 @@ export default function MemberCreatePage() {
 
   return (
     <div className={styles.layout}>
-      {/* 헤더 */}
-      <Header />
-      
       {/* 메인 콘텐츠 */}
       <div className={styles.mainContent}>
         {/* 회원 생성 카드 */}
-        <CardContainer 
-          title="방문객 계정 생성" 
+        <CardContainer
+          title="방문객 계정 생성"
           headerActions={headerActions}
         >
           <div className={styles.formSection}>
             <h3 className={styles.sectionTitle}>기본 정보</h3>
-            
+
             <div className={styles.formGrid}>
               <div className={styles.formRow}>
                 <label className={styles.formLabel}>방문객명</label>
@@ -107,7 +105,7 @@ export default function MemberCreatePage() {
                   />
                 </div>
               </div>
-              
+
               <div className={styles.formRow}>
                 <label className={styles.formLabel}>아이디</label>
                 <div className={styles.formInput}>
@@ -121,7 +119,7 @@ export default function MemberCreatePage() {
                   />
                 </div>
               </div>
-              
+
               <div className={styles.formRow}>
                 <label className={styles.formLabel}>비밀번호</label>
                 <div className={styles.formInput}>
@@ -135,7 +133,7 @@ export default function MemberCreatePage() {
                   />
                 </div>
               </div>
-              
+
               <div className={styles.formRow}>
                 <label className={styles.formLabel}>비밀번호 재입력</label>
                 <div className={styles.formInput}>
@@ -152,7 +150,7 @@ export default function MemberCreatePage() {
                   )}
                 </div>
               </div>
-              
+
               <div className={styles.formRow}>
                 <label className={styles.formLabel}>전화번호</label>
                 <div className={styles.formInput}>

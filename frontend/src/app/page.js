@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import styles from "./page.module.css";
-import CardContainer from "@/app/components/CardContainer";
+import styles from "./page.module.scss";
+import LoginFormFields from "@/components/Login/LoginFormFields";
 
 export default function LoginPage() {
   const [userId, setUserId] = useState("");

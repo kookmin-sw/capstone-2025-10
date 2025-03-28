@@ -2,6 +2,7 @@
 
 /* 메인 레이아웃 */
 .layout {
+  flex: 1;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -18,6 +19,7 @@
 
 /* 버튼 스타일 */
 .cancelButton {
+  text-align: center;
   width: 110px;
   height: 40px;
   background-color: white;
@@ -30,7 +32,7 @@
   font-weight: 500;
   font-size: 14px;
   transition: all 0.2s ease-in-out;
-  
+
   &:hover {
     background-color: #f5f8ff;
     color: #003cad;
@@ -39,6 +41,7 @@
 }
 
 .createButton {
+  text-align: center;
   width: 110px;
   height: 40px;
   background-color: #cccccc;
@@ -51,11 +54,11 @@
   font-weight: 500;
   font-size: 14px;
   transition: all 0.2s ease-in-out;
-  
+
   &.active {
     background-color: #004bd6;
     cursor: pointer;
-    
+
     &:hover {
       background-color: #003cad;
     }
@@ -87,7 +90,7 @@
   display: flex;
   align-items: center;
   border-bottom: 1px solid var(--grey02, #E8E8E8);
-  
+
   &:last-child {
     border-bottom: none;
   }
@@ -129,16 +132,16 @@
   font-weight: 400;
   font-size: 14px;
   color: #333;
-  
+
   &::placeholder {
     color: #aaa;
   }
-  
+
   &:focus {
     outline: none;
     border-color: #004bd6;
   }
-  
+
   &.error {
     border: 1px solid #DF373C;
   }
