@@ -1,0 +1,138 @@
+.card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex : 1;
+  width: 100%;
+  height: 100%;
+  background: var(--white);
+  border-radius: 20px;
+  box-shadow: 0px 10px 40px 0px #00000026;
+  padding: 60px;
+  gap: 32px;
+}
+
+.content {
+  width: 720px;
+  height: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  .header {
+    width: 100%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+
+    .step-badge {
+      font-family: Noto Sans KR;
+      font-weight: 500;
+      font-size: 16px;
+
+      display: inline-block;
+      color: var(--primary-blue);
+      border: 1px solid var(--primary-blue);
+      background: var(--white);
+      padding: 4px 16px;
+      border-radius: 20px;
+      margin-right: 12px;
+    }
+
+    .title {
+      font-family: Noto Sans KR;
+      font-weight: 700;
+      font-size: 28px;
+    }
+  }
+
+  .image-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 32px;
+    height: 160px;
+
+    img {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+    }
+
+    label > div {
+      padding: 0;
+      width: 160px;
+      gap: 12px;
+    }
+  }
+
+  .input-group {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+
+.submit {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-left: auto;
+
+  & > button {
+    font-family: Noto Sans KR;
+    font-weight: 500;
+    font-size: 16px;
+    width: 120px;
+    padding: 12px 0;
+  }
+}
+
+.list-wrapper {
+  width: 320px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--gray-3);
+  border-radius: 12px;
+  overflow: hidden;
+  overflow-y: scroll;
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--black);
+
+  -ms-overflow-style: none; /* 인터넷 익스플로러 */
+  scrollbar-width: none; /* 파이어폭스 */
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  & > div {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 24px;
+
+    & > input {
+      background: transparent;
+      background: var(--white);
+      padding: 8px;
+      font-size: 18px;
+      font-weight: bold;
+      color: var(--black);
+
+      &:disabled {
+        background: transparent;
+        border: none;
+      }
+    }
+  }
+
+  & > div + div {
+    border-top: 1px solid var(--gray-3);
+  }
+}

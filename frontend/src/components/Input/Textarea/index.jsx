@@ -1,11 +1,10 @@
 import styles from "./index.module.scss";
 
-const TextInput = ({ label, type = "text", placeholder, value, onChange, disabled = false }) => {
+const Textarea = ({ label, placeholder, value, onChange, disabled = false }) => {
     return (
         <div className={styles.container}>
             {label && <label className={styles.label}>{label}</label>}
-            <input
-                type={type}
+            <textarea
                 className={styles.input}
                 placeholder={placeholder}
                 value={value}
@@ -16,4 +15,4 @@ const TextInput = ({ label, type = "text", placeholder, value, onChange, disable
     );
 };
 
-export default TextInput;
+export default Textarea;
