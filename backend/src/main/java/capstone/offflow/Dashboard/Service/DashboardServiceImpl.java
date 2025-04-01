@@ -30,7 +30,7 @@ public class DashboardServiceImpl implements DashboardService{
         dashboard.setUser(user);
 
         if (dashboardDto.getMetadataDto() != null) {
-            DashboardMetadata metadata = MetadataDto.convertToDto(dashboardDto.getMetadataDto());
+            DashboardMetadata metadata = MetadataDto.convertToEntity(dashboardDto.getMetadataDto());
             dashboard.setMetadata(metadata);
         } else {
             dashboard.setMetadata(null); // 명시적으로 null 처리 (선택사항)

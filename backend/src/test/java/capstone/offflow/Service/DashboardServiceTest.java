@@ -2,6 +2,7 @@ package capstone.offflow.Service;
 
 import capstone.offflow.Dashboard.Domain.Dashboard;
 import capstone.offflow.Dashboard.Dto.DashboardDto;
+import capstone.offflow.Dashboard.Dto.MetadataDto;
 import capstone.offflow.Dashboard.Repository.DashboardRepository;
 import capstone.offflow.Dashboard.Service.DashboardServiceImpl;
 import capstone.offflow.User.Domain.User;
@@ -46,9 +47,17 @@ public class DashboardServiceTest {
     @DisplayName("대시보드 생성 테스트 - 성공")
     void createDashboardTest(){
         //given
+        MetadataDto metadataDto = MetadataDto.builder()
+                .popupName("testPopup")
+                .address("서울시 강남구")
+                .topic("트렌드")
+                .popupPurpose("홍보용")
+                .build();
+
         DashboardDto dto  = DashboardDto.builder()
                 .dashboardName("testname")
                 .startDate(new Date())
+                .metadataDto(metadataDto) //메타데이터 추가
                 .build();
 
         when(dashboardRepository.save(any(Dashboard.class)))
