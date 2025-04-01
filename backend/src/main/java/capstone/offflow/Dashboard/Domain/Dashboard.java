@@ -24,6 +24,11 @@ public class Dashboard {
     private Long id;
     private String dashboardName;
 
+    //낙관적 락 구현 -> 조회쪽에서 사용
+    //동시 수정 불가능
+    @Version
+    private Long version;
+
     private Date startDate;
     private Date endDate;
 
