@@ -1,6 +1,7 @@
 package capstone.offflow.Service;
 
 import capstone.offflow.Dashboard.Domain.Dashboard;
+import capstone.offflow.Dashboard.Domain.DashboardMetadata;
 import capstone.offflow.Dashboard.Dto.DashboardDto;
 import capstone.offflow.Dashboard.Dto.MetadataDto;
 import capstone.offflow.Dashboard.Repository.DashboardRepository;
@@ -17,6 +18,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Date;
+import java.util.Optional;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -68,68 +73,101 @@ public class DashboardServiceTest {
 
         //then
         verify(dashboardRepository, times(1)).save(any(Dashboard.class));
-
     }
 
     @Test
-    @DisplayName("대시보드 조회 테스트 - 성공")
-    void getDashboardTest(){
-        //given
+    @DisplayName("대시보드 조회 테스트 - 성공 (메타데이터 포함)")
+    void getDashboardTest() {
+        // given
+        DashboardMetadata metadata = new DashboardMetadata(
+                "testPopup",
+                "서울시 강남구",
+                "트렌드",
+                "홍보용"
+        );
 
-        //when
+        Dashboard dashboard = new Dashboard();
+        dashboard.setId(1L);
+        dashboard.setDashboardName("testname");
+        dashboard.setStartDate(new Date());
+        dashboard.setMetadata(metadata);
+        dashboard.setUser(testUser); // user도 꼭 넣어줘야 findByIdAndUser 매칭됨
 
-        //then
+        when(dashboardRepository.findByIdAndUser(1L, testUser))
+                .thenReturn(Optional.of(dashboard));
 
+        // when
+        DashboardDto result = dashboardService.getDashboardById(1L, testUser);
 
+        // then
+        assertThat(result).isNotNull();
+        assertThat(result.getDashboardName()).isEqualTo("testname");
+        assertThat(result.getMetadataDto()).isNotNull();
+        assertThat(result.getMetadataDto().getPopupName()).isEqualTo("testPopup");
+
+        log.info("조회된 DTO: {}", result);
     }
 
 
     @Test
-    @DisplayName("대시보드 조회 테스트 - 실패 : 존재하지않음")
-    void getDashboard_NotfoundTest(){
-        //given
+    @DisplayName("대시보드 조회 실패 - 존재하지 않는 ID")
+    void getDashboard_NotFound() {
+        // given
+        when(dashboardRepository.findByIdAndUser(999L, testUser))
+                .thenReturn(Optional.empty());
 
-        //when
-
-        //then
-
-
+        // when & then
+        assertThatThrownBy(() -> dashboardService.getDashboardById(999L, testUser))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessageContaining("해당 id의 유저를 찾을 수 없습니다.");
     }
+
 
     @Test
-    @DisplayName("대시보드 조회 테스트 - 실패 : 다른 사용자 대시보드접근")
-    void getDashboard_WrongUserTest(){
-        //given
+    @DisplayName("대시보드 조회 실패 - 다른 유저의 대시보드 접근")
+    void getDashboard_WrongUserTest() {
+        // given
+        when(dashboardRepository.findByIdAndUser(1L, testUser))
+                .thenReturn(Optional.empty()); // user 조건 안 맞음
 
-        //when
-
-        //then
-
-
+        // when & then
+        assertThatThrownBy(() -> dashboardService.getDashboardById(1L, testUser))
+                .isInstanceOf(RuntimeException.class);
     }
+
 
     @Test
     @DisplayName("대시보드 삭제 테스트 - 성공")
-    void deleteDashboardTest(){
-        //given
+    void deleteDashboardTest() {
+        // given
+        Dashboard dashboard = new Dashboard();
+        dashboard.setId(1L);
+        dashboard.setDashboardName("삭제할 대시보드");
+        dashboard.setUser(testUser);
 
-        //when
+        when(dashboardRepository.findByIdAndUser(1L, testUser))
+                .thenReturn(Optional.of(dashboard));
 
-        //then
+        // when
+        dashboardService.deleteDashboard(1L, testUser);
 
-
+        // then
+        verify(dashboardRepository, times(1)).delete(dashboard);
     }
+
 
     @Test
-    @DisplayName("대시보드 삭제 테스트 - 실패 : 다른사용자 대시보드 삭제")
-    void deleteDashboard_WrongUserTest(){
-        //given
+    @DisplayName("대시보드 삭제 테스트 - 실패 : 다른 사용자 대시보드 삭제시도")
+    void deleteDashboard_WrongUserTest() {
+        // given
+        when(dashboardRepository.findByIdAndUser(1L, testUser))
+                .thenReturn(Optional.empty());
 
-        //when
-
-        //then
-
-
+        // when & then
+        assertThatThrownBy(() -> dashboardService.deleteDashboard(1L, testUser))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("삭제할 대시보드를 찾을 수 없습니다");
     }
+
 
 }
