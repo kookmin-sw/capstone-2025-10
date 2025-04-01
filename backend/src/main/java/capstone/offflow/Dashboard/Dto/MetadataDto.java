@@ -6,8 +6,8 @@ import lombok.*;
 
 @Builder
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED) //외부에서 new 못하게 제한
+@AllArgsConstructor
 public class MetadataDto {
 
     private String popupName;
@@ -22,5 +22,15 @@ public class MetadataDto {
                 .topic(metadata.getTopic())
                 .popupPurpose(metadata.getPopupPurpose())
                 .build();
+    }
+
+    public static DashboardMetadata convertToEntity(MetadataDto dto) {
+        if (dto == null) return null;
+        return new DashboardMetadata(
+                dto.getPopupName(),
+                dto.getAddress(),
+                dto.getTopic(),
+                dto.getPopupPurpose()
+        );
     }
 }

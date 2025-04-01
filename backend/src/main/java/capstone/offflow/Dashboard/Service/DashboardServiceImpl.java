@@ -2,7 +2,9 @@ package capstone.offflow.Dashboard.Service;
 
 
 import capstone.offflow.Dashboard.Domain.Dashboard;
+import capstone.offflow.Dashboard.Domain.DashboardMetadata;
 import capstone.offflow.Dashboard.Dto.DashboardDto;
+import capstone.offflow.Dashboard.Dto.MetadataDto;
 import capstone.offflow.Dashboard.Repository.DashboardRepository;
 import capstone.offflow.User.Domain.User;
 import capstone.offflow.User.Repository.UserRepository;
@@ -26,7 +28,13 @@ public class DashboardServiceImpl implements DashboardService{
         dashboard.setDashboardName(dashboardDto.getDashboardName());
         dashboard.setStartDate(dashboardDto.getStartDate());
         dashboard.setUser(user);
-        dashboard.setMetadata(dashboard.getMetadata());
+
+        if (dashboardDto.getMetadataDto() != null) {
+            DashboardMetadata metadata = MetadataDto.convertToDto(dashboardDto.getMetadataDto());
+            dashboard.setMetadata(metadata);
+        } else {
+            dashboard.setMetadata(null); // 명시적으로 null 처리 (선택사항)
+        }
 
         dashboardRepository.save(dashboard);
         log.info("Dashboard 생성 완료 - {}", dashboard.getId());
