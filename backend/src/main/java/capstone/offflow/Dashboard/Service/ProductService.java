@@ -12,8 +12,9 @@ public interface ProductService {
     //상품 수정
     void updateProduct(ProductDto dto, User user);
 
-    //상품 조회
-    ProductDto getProduct(Long id, User user);
+    //상품 조회 (상품 Id 기준)
+    ProductDto getProductById(Long id, User user);
+
 
     //상품 삭제
     void deleteProduct(Long id, User user);

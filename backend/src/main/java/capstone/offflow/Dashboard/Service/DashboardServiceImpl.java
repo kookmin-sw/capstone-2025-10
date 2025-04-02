@@ -7,7 +7,7 @@ import capstone.offflow.Dashboard.Dto.DashboardDto;
 import capstone.offflow.Dashboard.Dto.MetadataDto;
 import capstone.offflow.Dashboard.Repository.DashboardRepository;
 import capstone.offflow.User.Domain.User;
-import capstone.offflow.User.Repository.UserRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class DashboardServiceImpl implements DashboardService{
 
     private final DashboardRepository dashboardRepository;
-    private final UserRepository userRepository;
 
     @Override
     public void createDashboard(DashboardDto dashboardDto, User user) {
@@ -41,7 +40,7 @@ public class DashboardServiceImpl implements DashboardService{
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true) //flush, dirty checking (변경감지) 생략
     public DashboardDto getDashboardById(Long id, User user) {
         Dashboard dashboard = dashboardRepository.findByIdAndUser(id, user)
                 .orElseThrow(() -> new RuntimeException("해당 id의 유저를 찾을 수 없습니다."));

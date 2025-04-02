@@ -35,6 +35,7 @@ public class ProductDto {
     }
 
     //DTO -> Entity (생성/수정용)
+    //static -> 클래스명.메서드명 호출 가능
     public static Product convertToEntity(ProductDto productDto, Dashboard dashboard){
         Product product = new Product();
         product.setName(productDto.getName());
