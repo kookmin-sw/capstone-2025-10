@@ -2,10 +2,10 @@ import cv2
 import time
 import torch
 import numpy as np
-from torchvision import transforms
 from ultralytics import YOLO
 from PIL import Image, ImageDraw, ImageFont
-from visitor_detect import MultiTaskEfficientNet  # 귀하의 모델 클래스
+from torchvision import transforms
+from visitor_detect import MultiTaskEfficientNet  # 귀하의 모델
 
 # Device 설정
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -24,18 +24,18 @@ group_names = {0: "0~10", 1: "10~20", 2: "20~30", 3: "30~40", 4: "40~50", 5: "50
 # YOLOv8 얼굴 감지 모델 로드 (얼굴 전용 모델)
 face_detector = YOLO("/Users/seongjeongkyu/capstone-2025-10/ai/model/yolov8n-face.pt")
 
-# MultiTaskEfficientNet 모델 로드 (저장된 checkpoint 사용)
+# MultiTaskEfficientNet 모델 로드 (체크포인트 사용)
 model = MultiTaskEfficientNet(num_gender_classes=2, num_age_groups=6)
 checkpoint_path = "/Users/seongjeongkyu/capstone-2025-10/ai/model/model_checkpoint.pt"
 model.load_state_dict(torch.load(checkpoint_path, map_location=device))
 model.to(device)
 model.eval()
 
-# 방문자 추적 관련 변수
-tracked_visitors = {}  # key: visitor_id, value: dict with center, box, start_time, last_seen, predictions, data_sent
-TRACKING_THRESHOLD = 75  # 방문자 매칭 임계값 (픽셀)
-MIN_VISIT_DURATION = 30  # 방문으로 간주하는 최소 지속 시간 (초)
-EXPIRE_TIME = 60         # 방문자가 60초 이상 보이지 않으면 삭제
+# 방문자(객체) 추적을 위한 간단한 딕셔너리
+tracked_visitors = {}  # key: visitor_id, value: dict with center, start_time, last_seen, predictions
+TRACKING_THRESHOLD = 75  # 픽셀 단위, 중심 좌표 차이 임계값
+MIN_DETECTION_DURATION = 30  # 30초 이상 머무른 방문자에 대해 서버에 전송
+EXPIRE_TIME = 60  # 60초 이상 보이지 않으면 해당 방문자 삭제
 
 def get_face_center(box):
     x1, y1, x2, y2 = box
@@ -47,40 +47,41 @@ def is_same_visitor(center, tracked_center, threshold=TRACKING_THRESHOLD):
     return np.sqrt(dx**2 + dy**2) < threshold
 
 def send_to_server(visitor_data):
-    # 실제 서버 API 호출 코드를 여기에 작성 (예: requests.post())
+    # 실제 서버 API 호출 코드 (예: requests.post 등)
     print("Sending data to server:", visitor_data)
 
-def process_frame(frame, face_detector, model, transform, device, tracked_visitors):
+# 추적 업데이트 및 검출 실행 함수 (추가: 10프레임마다 YOLO 검출 실행)
+def process_frame(frame, face_detector, model, transform, device, tracked_visitors, run_detection=True):
     # frame: OpenCV BGR 이미지
     img_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     pil_img = Image.fromarray(img_rgb)
     draw = ImageDraw.Draw(pil_img)
     current_time = time.time()
-   
-    # YOLO 얼굴 감지
-    results = face_detector(img_rgb)
     detected_faces = []
-    for result in results:
-        boxes = result.boxes.xyxy.cpu().numpy()  # 각 박스: [x1, y1, x2, y2]
-        confidences = result.boxes.conf.cpu().numpy()
-        for box, conf in zip(boxes, confidences):
-            if conf < 0.5:
-                continue
-            x1, y1, x2, y2 = box.astype(int)
-            # 마진 추가 (10% 마진)
-            w = x2 - x1
-            h = y2 - y1
-            margin = 0.1
-            new_x1 = max(0, int(x1 - margin * w))
-            new_y1 = max(0, int(y1 - margin * h))
-            new_x2 = int(x2 + margin * w)
-            new_y2 = int(y2 + margin * h)
-            detected_faces.append({
-                "box": (new_x1, new_y1, new_x2, new_y2),
-                "center": get_face_center((new_x1, new_y1, new_x2, new_y2))
-            })
+    if run_detection:
+        # YOLO 얼굴 감지 실행
+        results = face_detector(img_rgb)
+        for result in results:
+            boxes = result.boxes.xyxy.cpu().numpy()
+            confidences = result.boxes.conf.cpu().numpy()
+            for box, conf in zip(boxes, confidences):
+                if conf < 0.5:
+                    continue
+                x1, y1, x2, y2 = box.astype(int)
+                # 마진 추가 (10%)
+                w = x2 - x1
+                h = y2 - y1
+                margin = 0.1
+                new_x1 = max(0, int(x1 - margin * w))
+                new_y1 = max(0, int(y1 - margin * h))
+                new_x2 = int(x2 + margin * w)
+                new_y2 = int(y2 + margin * h)
+                detected_faces.append({
+                    "box": (new_x1, new_y1, new_x2, new_y2),
+                    "center": get_face_center((new_x1, new_y1, new_x2, new_y2))
+                })
     
-    # 방문자 트래킹 및 분류
+    # 트래킹: 새로운 객체에 대해서만 모델 추론 실행
     for face in detected_faces:
         center = face["center"]
         matched_id = None
@@ -89,7 +90,7 @@ def process_frame(frame, face_detector, model, transform, device, tracked_visito
                 matched_id = visitor_id
                 break
         if matched_id is None:
-            # 새 방문자: 모델 추론 실행
+            # 새로운 방문자: 모델 추론 실행
             x1, y1, x2, y2 = face["box"]
             face_crop = pil_img.crop((x1, y1, x2, y2))
             face_input = transform(face_crop).unsqueeze(0).to(device)
@@ -109,22 +110,21 @@ def process_frame(frame, face_detector, model, transform, device, tracked_visito
             }
             matched_id = new_id
         else:
-            # 기존 방문자: 정보 업데이트 (예: 중심 좌표와 박스 업데이트)
+            # 기존 방문자: 정보 업데이트 (중심 좌표, 박스)
             tracked_visitors[matched_id]["last_seen"] = current_time
-            # Optionally, 평균 내거나 박스 업데이트 (여기서는 현재 감지된 박스를 유지)
             tracked_visitors[matched_id]["center"] = center
             tracked_visitors[matched_id]["box"] = face["box"]
-
-        # 화면에 박스 및 라벨 그리기 (이미 추론된 결과 사용)
-        pred = tracked_visitors[matched_id]
-        gender_label = "Male" if pred["gender"] == 1 else "Female"
-        age_label = group_names.get(pred["age_group"], "Unknown")
-        label_text = f"{gender_label}, {age_label}"
-        x1, y1, x2, y2 = tracked_visitors[matched_id]["box"]
-        draw.rectangle((x1, y1, x2, y2), outline="red", width=2)
-        draw.text((x1, y1 - 20), label_text, fill="red")
     
-    # 방문자 처리: 30초 이상 머문 방문자는 서버 전송, 오래 보이지 않는 방문자는 삭제
+    # 시각화: 방문자들의 박스와 라벨 표시 (모델 추론은 최초 한번만)
+    for visitor_id, info in tracked_visitors.items():
+        gender_label = "Male" if info["gender"] == 1 else "Female"
+        age_label = group_names.get(info["age_group"], "Unknown")
+        label_text = f"{gender_label}, {age_label}"
+        box = info["box"]
+        draw.rectangle(box, outline="red", width=2)
+        draw.text((box[0], box[1] - 20), label_text, fill="red")
+    
+    # 방문자 처리: 30초 이상 머문 방문자는 서버 전송, 60초 이상 보이지 않으면 삭제
     for visitor_id in list(tracked_visitors.keys()):
         duration = current_time - tracked_visitors[visitor_id]["start_time"]
         if duration >= MIN_VISIT_DURATION and not tracked_visitors[visitor_id]["data_sent"]:
@@ -143,21 +143,22 @@ def process_frame(frame, face_detector, model, transform, device, tracked_visito
 
 # 메인 루프: 실시간 영상 처리 및 시각화
 cap = cv2.VideoCapture(0)
-last_process_time = 0
+frame_count = 0
+DETECTION_INTERVAL = 10  # 예: 10프레임마다 YOLO 검출 실행
 
 while True:
     ret, frame = cap.read()
     if not ret:
         break
-
-    current_time = time.time()
-    # 1초에 한 번만 처리 (추가 프레임은 화면에 출력만)
-    if current_time - last_process_time >= 1:
-        processed_frame = process_frame(frame, face_detector, model, face_transform, device, tracked_visitors)
-        last_process_time = current_time
+    frame_count += 1
+    
+    # YOLO 검출은 매 DETECTION_INTERVAL 프레임마다 수행
+    if frame_count % DETECTION_INTERVAL == 0:
+        processed_frame = process_frame(frame, face_detector, model, face_transform, device, tracked_visitors, run_detection=True)
     else:
-        processed_frame = frame
-
+        # 이전 검출 결과(트래킹)만 업데이트: run_detection=False이면 새 검출은 수행하지 않고, 기존 방문자 정보만 업데이트 (예: 타임스탬프 갱신)
+        processed_frame = process_frame(frame, face_detector, model, face_transform, device, tracked_visitors, run_detection=False)
+    
     cv2.imshow("Real-Time Visitor Tracking", processed_frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
