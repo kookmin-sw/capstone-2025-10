@@ -5,7 +5,7 @@ import numpy as np
 from ultralytics import YOLO
 from PIL import Image, ImageDraw, ImageFont
 from torchvision import transforms
-from visitor_detect import MultiTaskEfficientNet  # 귀하의 모델
+from visitor_detect import MultiTaskEfficientNet  
 
 # Device 설정
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -22,11 +22,11 @@ face_transform = transforms.Compose([
 group_names = {0: "0~10", 1: "10~20", 2: "20~30", 3: "30~40", 4: "40~50", 5: "50+"}
 
 # YOLOv8 얼굴 감지 모델 로드 (얼굴 전용 모델)
-face_detector = YOLO("/Users/seongjeongkyu/capstone-2025-10/ai/model/yolov8n-face.pt")
+face_detector = YOLO("./ai/model/yolov8n-face.pt")
 
 # MultiTaskEfficientNet 모델 로드 (체크포인트 사용)
 model = MultiTaskEfficientNet(num_gender_classes=2, num_age_groups=6)
-checkpoint_path = "/Users/seongjeongkyu/capstone-2025-10/ai/model/model_checkpoint.pt"
+checkpoint_path = "./ai/model/model_checkpoint.pt"
 model.load_state_dict(torch.load(checkpoint_path, map_location=device))
 model.to(device)
 model.eval()
@@ -34,7 +34,7 @@ model.eval()
 # 방문자(객체) 추적을 위한 간단한 딕셔너리
 tracked_visitors = {}  # key: visitor_id, value: dict with center, start_time, last_seen, predictions
 TRACKING_THRESHOLD = 75  # 픽셀 단위, 중심 좌표 차이 임계값
-MIN_DETECTION_DURATION = 30  # 30초 이상 머무른 방문자에 대해 서버에 전송
+MIN_DETECTION_DURATION = 10  # 30초 이상 머무른 방문자에 대해 서버에 전송
 EXPIRE_TIME = 60  # 60초 이상 보이지 않으면 해당 방문자 삭제
 
 def get_face_center(box):
@@ -57,10 +57,11 @@ def process_frame(frame, face_detector, model, transform, device, tracked_visito
     pil_img = Image.fromarray(img_rgb)
     draw = ImageDraw.Draw(pil_img)
     current_time = time.time()
+    
     detected_faces = []
     if run_detection:
         # YOLO 얼굴 감지 실행
-        results = face_detector(img_rgb)
+        results = face_detector(img_rgb, verbose=False)
         for result in results:
             boxes = result.boxes.xyxy.cpu().numpy()
             confidences = result.boxes.conf.cpu().numpy()
@@ -110,16 +111,25 @@ def process_frame(frame, face_detector, model, transform, device, tracked_visito
             }
             matched_id = new_id
         else:
-            # 기존 방문자: 정보 업데이트 (중심 좌표, 박스)
+            # 기존 방문자: 정보 업데이트 (좌표 스무딩 적용)
+            old_center = tracked_visitors[matched_id]["center"]
+            new_center = face["center"]
+            smoothed_center = ((old_center[0] + new_center[0]) // 2,
+                               (old_center[1] + new_center[1]) // 2)
+            tracked_visitors[matched_id]["center"] = smoothed_center
             tracked_visitors[matched_id]["last_seen"] = current_time
-            tracked_visitors[matched_id]["center"] = center
             tracked_visitors[matched_id]["box"] = face["box"]
     
+    if run_detection:
+        for visitor_id in list(tracked_visitors.keys()):
+            if tracked_visitors[visitor_id]["last_seen"] < current_time:
+                del tracked_visitors[visitor_id]
+
     # 시각화: 방문자들의 박스와 라벨 표시 (모델 추론은 최초 한번만)
     for visitor_id, info in tracked_visitors.items():
         gender_label = "Male" if info["gender"] == 1 else "Female"
         age_label = group_names.get(info["age_group"], "Unknown")
-        label_text = f"{gender_label}, {age_label}"
+        label_text = f"{gender_label}, {age_label}, {visitor_id}"
         box = info["box"]
         draw.rectangle(box, outline="red", width=2)
         draw.text((box[0], box[1] - 20), label_text, fill="red")
@@ -127,7 +137,7 @@ def process_frame(frame, face_detector, model, transform, device, tracked_visito
     # 방문자 처리: 30초 이상 머문 방문자는 서버 전송, 60초 이상 보이지 않으면 삭제
     for visitor_id in list(tracked_visitors.keys()):
         duration = current_time - tracked_visitors[visitor_id]["start_time"]
-        if duration >= MIN_VISIT_DURATION and not tracked_visitors[visitor_id]["data_sent"]:
+        if duration >= MIN_DETECTION_DURATION and not tracked_visitors[visitor_id]["data_sent"]:
             visitor_data = {
                 "visitor_id": visitor_id,
                 "gender": "Male" if tracked_visitors[visitor_id]["gender"] == 1 else "Female",
@@ -159,7 +169,8 @@ while True:
         # 이전 검출 결과(트래킹)만 업데이트: run_detection=False이면 새 검출은 수행하지 않고, 기존 방문자 정보만 업데이트 (예: 타임스탬프 갱신)
         processed_frame = process_frame(frame, face_detector, model, face_transform, device, tracked_visitors, run_detection=False)
     
-    cv2.imshow("Real-Time Visitor Tracking", processed_frame)
+    processed_frame_bgr = cv2.cvtColor(processed_frame, cv2.COLOR_RGB2BGR)
+    cv2.imshow("Real-Time Visitor Tracking", processed_frame_bgr)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
