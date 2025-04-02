@@ -8,6 +8,7 @@ import capstone.offflow.Dashboard.Dto.MetadataDto;
 import capstone.offflow.Dashboard.Repository.DashboardRepository;
 import capstone.offflow.User.Domain.User;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -43,7 +44,7 @@ public class DashboardServiceImpl implements DashboardService{
     @Transactional(readOnly = true) //flush, dirty checking (변경감지) 생략
     public DashboardDto getDashboardById(Long id, User user) {
         Dashboard dashboard = dashboardRepository.findByIdAndUser(id, user)
-                .orElseThrow(() -> new RuntimeException("해당 id의 유저를 찾을 수 없습니다."));
+                .orElseThrow(() -> new EntityNotFoundException("해당 id의 유저를 찾을 수 없습니다."));
 
         //fetch join을 통해 섹션 + 상품까지 함꼐 조회한 경우
         return DashboardDto.convertToDto(dashboard);
@@ -52,7 +53,7 @@ public class DashboardServiceImpl implements DashboardService{
     @Override
     public void deleteDashboard(Long id, User user) {
         Dashboard dashboard = dashboardRepository.findByIdAndUser(id, user)
-                .orElseThrow(() -> new IllegalArgumentException("삭제할 대시보드를 찾을 수 없습니다."));
+                .orElseThrow(() -> new EntityNotFoundException("삭제할 대시보드를 찾을 수 없습니다."));
 
         dashboardRepository.delete(dashboard);
         log.info("Dashboard 삭제완료 {}", dashboard.getId());

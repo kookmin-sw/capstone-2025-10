@@ -2,7 +2,6 @@ package capstone.offflow.Dashboard.Dto;
 
 import capstone.offflow.Dashboard.Domain.Dashboard;
 import capstone.offflow.Dashboard.Domain.Product;
-import jakarta.annotation.Nonnull;
 import lombok.*;
 
 
@@ -13,11 +12,12 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProductDto {
 
+    @NonNull
     private Long id;
     private String name;
     private int price;
 
-    @Nonnull
+    @NonNull
     private Long dashboardId;
     private String description;
     private String imageUrl;
