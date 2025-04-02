@@ -26,10 +26,8 @@ public class Section {
 
     private String name;
 
-
-    @ElementCollection //java collection을 jpa에 저장하려면 필요한 애노테이션
-    @Column(name="position")
-    private List<String> positionList;
+    @Column(unique = true) // 좌표 중복방지
+    private String position;
 
     @ManyToOne
     @JoinColumn(name = "dashborad_id") //대시보드 전용 칼럼 생성

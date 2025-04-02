@@ -2,7 +2,6 @@ package capstone.offflow.Dashboard.Controller;
 
 
 import capstone.offflow.Dashboard.Dto.ProductDto;
-import capstone.offflow.Dashboard.Repository.ProductRepository;
 import capstone.offflow.Dashboard.Service.ProductService;
 import capstone.offflow.User.Service.UserPrincipal;
 import lombok.RequiredArgsConstructor;
