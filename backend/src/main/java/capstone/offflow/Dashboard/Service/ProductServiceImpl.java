@@ -59,6 +59,6 @@ public class ProductServiceImpl implements ProductService{
                 .orElseThrow(() -> new EntityNotFoundException("해당 Id의 상품을 찾을 수 없습니다."));
 
         productRepository.delete(product);
-        log.info("Dashboard 삭제완료 {}", product.getId());
+        log.info("Product 삭제완료 {}", product.getId());
     }
 }

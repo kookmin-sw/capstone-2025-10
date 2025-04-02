@@ -26,8 +26,9 @@ public class Section {
 
     private String name;
 
-    @Column(unique = true) // 좌표 중복방지
-    private String position;
+    @ElementCollection
+    @Column(name = "position", unique = true)
+    private List<String> positionList;
 
     @ManyToOne
     @JoinColumn(name = "dashborad_id") //대시보드 전용 칼럼 생성

@@ -1,7 +1,10 @@
 package capstone.offflow.Dashboard.Dto;
 
+import capstone.offflow.Dashboard.Domain.Dashboard;
 import capstone.offflow.Dashboard.Domain.Section;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -9,9 +12,16 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class SectionDto {
+    @NonNull
     private Long id;
+
     private String name;
-    private String position;
+
+    @NonNull
+    private List<String> positionList;
+
+    @NonNull
+    private Long dashboardId;
 
 
     //Entity -> Dto
@@ -19,14 +29,17 @@ public class SectionDto {
         return SectionDto.builder()
                 .id(section.getId())
                 .name(section.getName())
+                .positionList(section.getPositionList())
+                .dashboardId(section.getDashboard().getId())
                 .build();
     }
 
     //Dto -> Entity (생성/수정용)
-    public static
-
-
-
-
-
+    public static Section convertToEntity(SectionDto sectionDto, Dashboard dashboard){
+        Section section = new Section();
+        section.setName(sectionDto.getName());
+        section.setPositionList(sectionDto.getPositionList());
+        section.setDashboard(dashboard);
+        return section;
+    }
 }
