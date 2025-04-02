@@ -10,7 +10,7 @@ public interface ProductService {
     void createProduct(ProductDto dto, User user);
 
     //상품 수정
-    void updateProduct(ProductDto dto, User user);
+    void updateProduct(Long id, ProductDto dto, User user);
 
     //상품 조회 (상품 Id 기준)
     ProductDto getProductById(Long id, User user);

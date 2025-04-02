@@ -32,10 +32,11 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public void updateProduct(ProductDto dto, User user) {
-        Dashboard dashboard = dashboardRepository.findByIdAndUser(dto.getDashboardId(), user)
-                .orElseThrow(() -> new EntityNotFoundException("대시보드를 찾을 수 없습니다."));
-        Product product = ProductDto.convertToEntity(dto, dashboard);
+    public void updateProduct(Long id, ProductDto dto, User user) {
+
+        //상품조회
+        Product product = productRepository.findByIdAndDashboard_User(id, user)
+                .orElseThrow(() -> new EntityNotFoundException("해당 상품을 찾을 수 없습니다."));
 
         product.setName(dto.getName());
         product.setPrice(dto.getPrice());
