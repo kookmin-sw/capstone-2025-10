@@ -115,11 +115,26 @@ def process_frame(frame, face_detector, model, transform, device, tracked_visito
 
 # 실시간 영상 처리
 cap = cv2.VideoCapture(0)
+
+last_process_time = 0
+
 while True:
     ret, frame = cap.read()
     if not ret:
         break
-    processed_frame = process_frame(frame, face_detector, model, face_transform, device, tracked_visitors)
-    cv2.imshow("Visitor Tracking", processed_frame)
+
+    current_time = time.time()
+    # 1초 이상 지난 경우에만 얼굴 감지 및 추적 처리
+    if current_time - last_process_time >= 1:
+        processed_frame = process_frame(frame, face_detector, model, face_transform, device, tracked_visitors)
+        last_process_time = current_time
+    else:
+        # 처리하지 않은 프레임은 원본 프레임을 그대로 사용 (또는 이전 처리 결과를 재사용)
+        processed_frame = frame
+
+    cv2.imshow("Real-Time Visitor Tracking", processed_frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
+
+cap.release()
+cv2.destroyAllWindows()
