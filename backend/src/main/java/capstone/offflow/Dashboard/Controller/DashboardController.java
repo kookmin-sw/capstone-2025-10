@@ -31,21 +31,10 @@ public class DashboardController {
     @PostMapping("/create")
     public ResponseEntity<?> createDashboard(
             @RequestBody @Validated DashboardDto dashboardDto,
-            BindingResult result,
             @AuthenticationPrincipal UserPrincipal userPrincipal){
 
-        if (result.hasErrors()){
-            Map<String, String> errors = new HashMap<>();
-            result.getFieldErrors().forEach(error -> errors.put(error.getField(),
-                    error.getDefaultMessage()));
-            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
-        }
-        try{
-            dashboardService.createDashboard(dashboardDto, userPrincipal.getUser());
-            return new ResponseEntity<>("Dashboard created Successfully", HttpStatus.CREATED);
-        } catch (Exception e){
-              return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        dashboardService.createDashboard(dashboardDto, userPrincipal.getUser());
+        return new ResponseEntity<>("Dashboard created Successfully", HttpStatus.CREATED);
     }
 
 
@@ -76,12 +65,8 @@ public class DashboardController {
             @PathVariable(name = "id") Long id,
             @AuthenticationPrincipal UserPrincipal userPrincipal){
 
-        try{
-            dashboardService.deleteDashboard(id, userPrincipal.getUser());
-            return ResponseEntity.ok("dashboard delete Successfully");
-        } catch (Exception e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        dashboardService.deleteDashboard(id, userPrincipal.getUser());
+        return ResponseEntity.ok("dashboard delete Successfully");
 
     }
 

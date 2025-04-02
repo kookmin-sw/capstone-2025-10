@@ -4,19 +4,15 @@ package capstone.offflow.Dashboard.Controller;
 import capstone.offflow.Dashboard.Dto.ProductDto;
 import capstone.offflow.Dashboard.Repository.ProductRepository;
 import capstone.offflow.Dashboard.Service.ProductService;
-import capstone.offflow.User.Domain.User;
 import capstone.offflow.User.Service.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
 
 
 @RestController
@@ -25,7 +21,6 @@ import java.util.Map;
 @Slf4j
 public class ProductController {
 
-    private final ProductRepository productRepository;
     private final ProductService productService;
 
 
