@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
         log.warn("잘못된 요청: {}", e.getMessage());
         return ResponseEntity
                 .badRequest()
-                .body(ExceptionResponse.of(e.getMessage(), HttpStatus.BAD_REQUEST.value());
+                .body(ExceptionResponse.of(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
     }
 
 
