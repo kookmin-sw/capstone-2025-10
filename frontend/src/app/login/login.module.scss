@@ -4,6 +4,7 @@
   align-items: center;
   min-height: 100vh;
   background-color: #f6f7fb; // 배경색 (연한 회색 느낌)
+  overflow: hidden; /* 오버플로우 숨김 */
 }
 
 .card {
