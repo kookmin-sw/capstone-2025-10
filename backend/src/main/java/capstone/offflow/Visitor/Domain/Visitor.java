@@ -45,7 +45,7 @@ public class Visitor {
     //다:다 관계이므로 중간에 history entity 추가
     //방문객은 여러개의 팝업스토어 갈 수 있음
     @OneToMany(mappedBy = "visitor", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<VisitHistory> visitHistories = new ArrayList<>();
+    private List<VisitHistory> visitHistories = new ArrayList<>(); //빈 리스트 초기화 -> NPE 방지
 
 
 
