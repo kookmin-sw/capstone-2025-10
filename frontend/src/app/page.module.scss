@@ -1,121 +1,59 @@
 .container {
   display: flex;
-  flex-direction: column;
-  height: 100vh; /* 전체 화면 높이를 차지 */
-}
-
-.content {
-  display: flex;
-  flex: 1; /* 헤더 아래 영역 전체를 차지 */
-}
-
-.main {
-  flex: 1;
-  padding: 24px;
-  background-color: #f6f7fb; /* 연한 배경색 */
-}
-
-/* 페이지 제목 */
-.title {
-  font-size: 24px;
-  font-weight: 600;
-  margin-bottom: 16px;
-}
-
-/* 상단 탭 (일괄 전송 / 개별 전송) */
-.tabMenu {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 24px;
-}
-
-.tabButton {
-  padding: 8px 16px;
-  border: 1px solid #ddd;
-  background: #fff;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.tabButton.active {
-  background: #0070f3;
-  color: #fff;
-}
-
-/* 메인 그리드 레이아웃: 왼쪽(설정) / 오른쪽(미리보기) */
-.gridContainer {
-  display: grid;
-  grid-template-columns: 1fr 360px; /* 왼쪽 넓게, 오른쪽 360px 고정 */
-  gap: 16px;
-}
-
-/* 왼쪽, 오른쪽 영역 */
-.leftColumn,
-.rightColumn {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-/* 카드 스타일 */
-.card {
-  background: #fff;
-  border-radius: 8px;
-  padding: 16px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-}
-
-.formGroup {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 16px;
-
-  label {
-    font-weight: 500;
-    margin-bottom: 8px;
-  }
-
-  input,
-  textarea {
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 8px;
-    outline: none;
-  }
-}
-
-.checkboxes {
-  display: flex;
-  gap: 16px;
-}
-
-/* 미리보기 영역 */
-.previewBox {
-  min-height: 120px;
-  background: #f2f2f2;
-  border-radius: 4px;
-  padding: 8px;
-  display: flex;
-  align-items: center;
   justify-content: center;
-  color: #999;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f6f7fb;
 }
 
-/* 하단 전송 버튼 */
-.sendButtonWrapper {
-  margin-top: 24px;
-  text-align: right;
+.card {
+  background-color: #fff;
+  padding: 60px 63px;
+  border-radius: 20px;
+  box-shadow: 0 5px 30px rgba(0, 0, 0, 0.15);
+  width: 500px;
+  height: 520px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.sendButton {
-  padding: 12px 24px;
-  background-color: #0070f3;
+.logo {
+  width: 153px;
+  height: 27.2px;
+  margin-bottom: 54px;
+}
+
+.form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 에러 메시지 스타일 */
+.errorMessage {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 400; /* Regular */
+  font-size: 8px;
+  color: #DF373C;
+  height: 30px;
+  line-height: 30px; /* 수직 중앙 정렬 */
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.loginButton {
+  padding: 14px;
+  background-color: #004bd6;
   color: #fff;
   border: none;
-  border-radius: 4px;
+  border-radius: 10px;
   cursor: pointer;
-}
+  font-size: 18px;
+  font-weight: 500;
+  transition: background-color 0.2s;
 
-.sendButton:hover {
-  background-color: #005bb5;
+  &:hover {
+    background-color: #003bb5;
+  }
 }

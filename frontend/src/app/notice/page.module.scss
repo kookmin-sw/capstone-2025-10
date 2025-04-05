@@ -1,0 +1,486 @@
+.container {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f8f8f8;
+}
+
+.content {
+  display: flex;
+  min-height: calc(100vh - 70px); /* Header 높이 고려 */
+}
+
+.mainContent {
+  flex: 1;
+  padding: 40px 0 0 58px; /* 상단 40px, 왼쪽 58px 패딩 */
+}
+
+.pageTitle {
+  font-size: 28px;
+  font-weight: 700;
+  color: #000;
+  margin-bottom: 40px; /* 알림 전송 텍스트와 첫 번째 카드 사이 간격 40px */
+}
+
+.cardSection {
+  width: 100%;
+}
+
+/* 카드 컨테이너 공통 스타일 */
+.messageCountCard, .messageSendCard {
+  width: 100%;
+  background: #FFF;
+  border-radius: 40px;
+  box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.10);
+  
+  :global(.contentHeader) {
+    padding: 24px 32px 0; /* 패딩 상단 24px, 좌우 32px */
+    
+    :global(.pageTitle) {
+      color: #000;
+      font-family: "Noto Sans KR";
+      font-size: 18px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 18px; /* 100% */
+      letter-spacing: -0.36px;
+    }
+  }
+  
+  :global(.divider) {
+    background-color: #d9d9d9;
+    margin: 12px 0;
+  }
+}
+
+/* 메시지 잔여 건수 카드 스타일 */
+.messageCountCardWrapper {
+  margin: 0 0 32px 0; /* 하단만 32px, 나머지 방향은 0 */
+  padding: 0;
+}
+
+/* 메시지 발송 설정 카드 스타일 */
+.messageSendCardWrapper {
+  margin: 0; /* 모든 방향 0 */
+  padding: 0;
+}
+
+/* 커스텀 카드 스타일 */
+.customCard {
+  width: 100%;
+  background: #FFF;
+  border-radius: 40px;
+  box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.10);
+  padding: 0;
+  margin: 0;
+}
+
+.customCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 32px 0;
+}
+
+.customCardTitle {
+  color: #000;
+  font-family: "Noto Sans KR";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 18px;
+  letter-spacing: -0.36px;
+  margin: 0 0 12px 0;
+}
+
+.dividerContainer {
+  padding: 0 32px;
+}
+
+.customDivider {
+  height: 1px;
+  background-color: #d9d9d9;
+  margin: 12px 0;
+  width: 100%;
+}
+
+// 메시지 잔여 건수 카드 내부 스타일
+.messageCountSection {
+  padding: 0 32px 24px; /* 좌우 32px, 하단 24px 패딩 */
+  
+  .messageStatusBox {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .countDisplay {
+    display: flex;
+    align-items: baseline;
+    margin-right: 12px;
+
+    .count {
+      color: #000;
+      text-align: center;
+      font-family: "Noto Sans KR", sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.28px;
+      margin-right: 4px;
+    }
+
+    .unit {
+      font-size: 21px;
+      color: #666;
+    }
+    
+    .loading {
+      color: #0056fd;
+      font-family: "Noto Sans KR", sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      animation: pulse 1s infinite;
+    }
+  }
+
+  .refreshButton {
+    display: flex;
+    width: 28px;
+    height: 28px;
+    padding: 4px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 5px;
+    border: 1px solid #E8E8E8;
+    background: #FAFAFA;
+    cursor: pointer;
+    margin-right: 8px;
+    
+    &:hover {
+      background: #f0f0f0;
+    }
+    
+    &:disabled {
+      cursor: default;
+      opacity: 0.7;
+    }
+    
+    &.spinning img {
+      animation: spin 1s linear infinite;
+    }
+    
+    img {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  .chargeButton {
+    padding: 6px 12px;
+    background-color: #0056fd;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 18px;
+    cursor: pointer;
+    font-weight: 400;
+    transition: all 0.2s;
+    
+    &:hover {
+      background-color: #0048d4;
+    }
+  }
+
+  .infoMessage {
+    display: flex;
+    align-items: flex-start;
+    padding: 12px;
+    background-color: #f8f8f8;
+    border-radius: 4px;
+    border: 1px solid #eee;
+
+    .infoIcon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: #0056fd;
+      color: white;
+      font-size: 12px;
+      margin-right: 8px;
+      flex-shrink: 0;
+    }
+
+    p {
+      font-size: 14px;
+      color: #666;
+      white-space: pre-line;
+      margin: 0;
+    }
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+// 메시지 발송 설정 카드 스타일
+.sendSettingsSection {
+  padding: 0 32px 24px; /* 좌우 32px, 하단 24px 패딩 */
+
+  .inputGroup {
+    margin-bottom: 20px;
+    position: relative;
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: #333;
+    }
+
+    .titleInput {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+
+      &:focus {
+        outline: none;
+        border-color: #0056fd;
+      }
+    }
+
+    .contentTextarea {
+      width: 100%;
+      min-height: 150px;
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+      resize: vertical;
+      margin-bottom: 10px;
+
+      &:focus {
+        outline: none;
+        border-color: #0056fd;
+      }
+    }
+
+    .previewButton {
+      position: absolute;
+      right: 0;
+      bottom: -40px;
+      padding: 6px 12px;
+      background-color: white;
+      color: #0056fd;
+      border: 1px solid #0056fd;
+      border-radius: 4px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+
+      &:hover {
+        background-color: #f0f7ff;
+      }
+    }
+  }
+
+  .typeSelection {
+    margin-bottom: 24px;
+    margin-top: 40px;
+
+    h3 {
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 12px;
+      color: #333;
+    }
+
+    .radioGroup {
+      display: flex;
+      gap: 16px;
+
+      .radioLabel {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        font-size: 14px;
+        position: relative;
+
+        input[type="radio"] {
+          position: absolute;
+          opacity: 0;
+          width: 0;
+          height: 0;
+          
+          &:checked + .radioText:before {
+            border-color: #0056fd;
+            background-color: #0056fd;
+          }
+          
+          &:checked + .radioText:after {
+            transform: scale(1);
+          }
+        }
+
+        .radioText {
+          padding-left: 28px;
+          position: relative;
+          
+          &:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            border: 2px solid #ccc;
+            border-radius: 50%;
+            background-color: white;
+            transition: all 0.2s;
+          }
+          
+          &:after {
+            content: '';
+            position: absolute;
+            left: 6px;
+            top: 50%;
+            transform: translateY(-50%) scale(0);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: white;
+            transition: all 0.2s;
+          }
+        }
+      }
+    }
+  }
+
+  .buttonGroup {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 32px;
+    margin-bottom: 0;
+
+    button {
+      padding: 10px 24px;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .sendButton {
+      background-color: #0056fd;
+      color: white;
+      border: none;
+
+      &:hover {
+        background-color: #0048d4;
+      }
+    }
+
+    .cancelButton {
+      background-color: white;
+      color: #333;
+      border: 1px solid #ddd;
+
+      &:hover {
+        background-color: #f1f1f1;
+      }
+    }
+  }
+}
+
+// 팝업 스타일
+.popupOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.popup {
+  position: relative;
+  background-color: white;
+  border-radius: 8px;
+  padding: 32px;
+  width: 490px;
+  height: 212px;
+  max-width: 90%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.closeButton {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  
+  &:hover {
+    svg path {
+      fill: #666;
+    }
+  }
+}
+
+.popupContent {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  
+  .popupTitle {
+    font-size: 21px;
+    font-weight: 700; /* Bold */
+    color: #333;
+    margin: 0 0 12px 0;
+    font-family: "Noto Sans KR", sans-serif;
+  }
+  
+  .popupDesc {
+    font-size: 14px;
+    font-weight: 400; /* Regular */
+    color: #666;
+    margin: 0;
+    font-family: "Noto Sans KR", sans-serif;
+  }
+}
