@@ -17,7 +17,7 @@ export default function AlarmSendPage() {
   // 메시지 발송 설정 상태
   const [messageTitle, setMessageTitle] = useState('');
   const [messageContent, setMessageContent] = useState('');
-  const [messageType2, setMessageType2] = useState('일반형 메시지');
+  const [messageType2, setMessageType2] = useState('정보성 메시지');
 
   // 잔여 메시지 새로고침 핸들러
   const handleRefresh = () => {
@@ -45,41 +45,72 @@ export default function AlarmSendPage() {
           <h1 className={styles.pageTitle}>알림 전송</h1>
 
           <div className={styles.cardSection}>
-            {/* 메시지 잔여 건수 카드 */}
-            <div className={styles.messageCountCardWrapper}>
-              <div className={styles.customCard}>
-                <div className={styles.customCardHeader}>
-                  <h2 className={styles.customCardTitle}>메시지 잔여 건수</h2>
-                </div>
-                <div className={styles.dividerContainer}>
-                  <div className={styles.customDivider}></div>
-                </div>
-                <div className={styles.messageCountSection}>
-                  <div className={styles.messageStatusBox}>
-                    <div className={styles.countDisplay}>
-                      {isLoading ? (
-                        <span className={styles.loading}>새로고침침 중...</span>
-                      ) : (
-                        <>
-                          <span className={styles.count}>{messageCount}</span>
-                          <span className={styles.unit}>건</span>
-                        </>
-                      )}
+            <div className={styles.topCardsContainer}>
+              {/* 메시지 잔여 건수 카드 */}
+              <div className={styles.messageCountCardWrapper}>
+                <div className={styles.customCard}>
+                  <div className={styles.customCardHeader}>
+                    <h2 className={styles.customCardTitle}>메시지 잔여 건수</h2>
+                  </div>
+                  <div className={styles.dividerContainer}>
+                    <div className={styles.customDivider}></div>
+                  </div>
+                  <div className={styles.messageCountSection}>
+                    <div className={styles.messageStatusBox}>
+                      <div className={styles.countDisplay}>
+                        {isLoading ? (
+                          <span className={styles.loading}>새로고침침 중...</span>
+                        ) : (
+                          <>
+                            <span className={styles.count}>{messageCount}</span>
+                            <span className={styles.unit}>건</span>
+                          </>
+                        )}
+                      </div>
+                      <button 
+                        className={`${styles.refreshButton} ${isLoading ? styles.spinning : ''}`} 
+                        onClick={handleRefresh}
+                        disabled={isLoading}
+                      >
+                        <img src="/refresh.svg" alt="새로고침" />
+                      </button>
+                      <button className={styles.chargeButton} onClick={togglePopup}>
+                        충전하기
+                      </button>
                     </div>
+                    <div className={styles.infoMessage}>
+                      <span className={styles.infoIcon}>i</span>
+                      <p>{messageInfo}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* 메시지 미리보기 카드 */}
+              <div className={styles.messagePreviewCardWrapper}>
+                <div className={styles.customCard}>
+                  <div className={styles.customCardHeader}>
+                    <h2 className={styles.customCardTitle}>메시지 미리보기</h2>
                     <button 
-                      className={`${styles.refreshButton} ${isLoading ? styles.spinning : ''}`} 
-                      onClick={handleRefresh}
-                      disabled={isLoading}
+                      className={`${styles.previewSendButton} ${messageContent ? styles.active : ''}`}
+                      disabled={!messageContent}
                     >
-                      <img src="/refresh.svg" alt="새로고침" />
-                    </button>
-                    <button className={styles.chargeButton} onClick={togglePopup}>
-                      충전하기
+                      전송
                     </button>
                   </div>
-                  <div className={styles.infoMessage}>
-                    <span className={styles.infoIcon}>i</span>
-                    <p>{messageInfo}</p>
+                  <div className={styles.dividerContainer}>
+                    <div className={styles.customDivider}></div>
+                  </div>
+                  <div className={styles.previewSection}>
+                    {messageTitle && (
+                      <div className={styles.previewTitle}>{messageTitle}</div>
+                    )}
+                    <div className={styles.previewContent}>
+                      {messageContent || "메시지 내용이 여기에 표시됩니다."}
+                    </div>
+                    <div className={styles.previewType}>
+                      {messageType2}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -114,7 +145,6 @@ export default function AlarmSendPage() {
                       placeholder="메시지 내용을 입력해주세요."
                       className={styles.contentTextarea}
                     />
-                    <button className={styles.previewButton}>메시지 미리보기</button>
                   </div>
 
                   <div className={styles.typeSelection}>
@@ -124,10 +154,10 @@ export default function AlarmSendPage() {
                         <input 
                           type="radio" 
                           name="messageType" 
-                          checked={messageType2 === '일반형 메시지'} 
-                          onChange={() => setMessageType2('일반형 메시지')}
+                          checked={messageType2 === '정보성 메시지'} 
+                          onChange={() => setMessageType2('정보성 메시지')}
                         />
-                        <span className={styles.radioText}>일반형 메시지</span>
+                        <span className={styles.radioText}>정보성 메시지</span>
                       </label>
                       <label className={styles.radioLabel}>
                         <input 

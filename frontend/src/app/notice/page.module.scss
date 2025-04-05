@@ -25,6 +25,14 @@
   width: 100%;
 }
 
+/* 상단 카드 컨테이너 (잔여 건수와 미리보기를 가로로 배치) */
+.topCardsContainer {
+  display: flex;
+  gap: 32px;
+  width: 100%;
+  margin-bottom: 32px;
+}
+
 /* 카드 컨테이너 공통 스타일 */
 .messageCountCard, .messageSendCard {
   width: 100%;
@@ -54,7 +62,13 @@
 
 /* 메시지 잔여 건수 카드 스타일 */
 .messageCountCardWrapper {
-  margin: 0 0 32px 0; /* 하단만 32px, 나머지 방향은 0 */
+  flex: 1;
+  padding: 0;
+}
+
+/* 메시지 미리보기 카드 스타일 */
+.messagePreviewCardWrapper {
+  flex: 1;
   padding: 0;
 }
 
@@ -92,6 +106,34 @@
   margin: 0 0 12px 0;
 }
 
+/* 미리보기 전송 버튼 */
+.previewSendButton {
+  padding: 6px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  background-color: transparent;
+  color: #959199;
+  border: 1px solid #959199;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  
+  &.active {
+    background-color: #004BD6;
+    color: white;
+    border: 1px solid #004BD6;
+    
+    &:hover {
+      background-color: darken(#004BD6, 5%);
+    }
+  }
+}
+
 .dividerContainer {
   padding: 0 32px;
 }
@@ -101,6 +143,44 @@
   background-color: #d9d9d9;
   margin: 12px 0;
   width: 100%;
+}
+
+/* 미리보기 섹션 스타일 */
+.previewSection {
+  padding: 24px 32px;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  
+  .previewTitle {
+    font-size: 16px;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 12px;
+    font-family: "Noto Sans KR", sans-serif;
+  }
+  
+  .previewContent {
+    flex: 1;
+    font-size: 14px;
+    color: #333;
+    font-family: "Noto Sans KR", sans-serif;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    background-color: #FAFAFA;
+    border: 1px solid #E8E8E8;
+    border-radius: 4px;
+    padding: 16px;
+    margin-bottom: 12px;
+    min-height: 100px;
+  }
+  
+  .previewType {
+    font-size: 12px;
+    color: #666;
+    font-family: "Noto Sans KR", sans-serif;
+    text-align: right;
+  }
 }
 
 // 메시지 잔여 건수 카드 내부 스타일
@@ -257,15 +337,20 @@
       font-size: 14px;
       font-weight: 500;
       margin-bottom: 8px;
-      color: #333;
+      color: #000;
+      font-family: "Noto Sans KR", sans-serif;
     }
 
     .titleInput {
       width: 100%;
       padding: 10px 12px;
-      border: 1px solid #ddd;
+      border: 1px solid #E8E8E8;
       border-radius: 4px;
       font-size: 14px;
+      background-color: #FAFAFA;
+      color: #000;
+      font-family: "Noto Sans KR", sans-serif;
+      font-weight: 400;
 
       &:focus {
         outline: none;
@@ -277,46 +362,35 @@
       width: 100%;
       min-height: 150px;
       padding: 10px 12px;
-      border: 1px solid #ddd;
+      border: 1px solid #E8E8E8;
       border-radius: 4px;
       font-size: 14px;
+      background-color: #FAFAFA;
+      color: #000;
+      font-family: "Noto Sans KR", sans-serif;
+      font-weight: 400;
       resize: vertical;
-      margin-bottom: 10px;
 
       &:focus {
         outline: none;
         border-color: #0056fd;
       }
     }
-
-    .previewButton {
-      position: absolute;
-      right: 0;
-      bottom: -40px;
-      padding: 6px 12px;
-      background-color: white;
-      color: #0056fd;
-      border: 1px solid #0056fd;
-      border-radius: 4px;
-      font-size: 13px;
-      cursor: pointer;
-      transition: all 0.2s;
-
-      &:hover {
-        background-color: #f0f7ff;
-      }
-    }
   }
 
   .typeSelection {
     margin-bottom: 24px;
-    margin-top: 40px;
+
+    font-family: "Noto Sans KR", sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: #000;
 
     h3 {
       font-size: 14px;
       font-weight: 500;
       margin-bottom: 12px;
-      color: #333;
+      color: #000;
     }
 
     .radioGroup {
@@ -331,18 +405,17 @@
         position: relative;
 
         input[type="radio"] {
-          position: absolute;
-          opacity: 0;
-          width: 0;
-          height: 0;
+          display: none;
           
-          &:checked + .radioText:before {
-            border-color: #0056fd;
-            background-color: #0056fd;
-          }
-          
-          &:checked + .radioText:after {
-            transform: scale(1);
+          &:checked + .radioText {
+            &:before {
+              box-shadow: inset 0 0 0 4px #fff;
+              border-color: #004BD6;
+            }
+            
+            &:after {
+              transform: translate(-50%, -50%) scale(1);
+            }
           }
         }
 
@@ -356,25 +429,28 @@
             left: 0;
             top: 50%;
             transform: translateY(-50%);
-            width: 18px;
-            height: 18px;
-            border: 2px solid #ccc;
+            width: 19px;
+            height: 19px;
             border-radius: 50%;
-            background-color: white;
-            transition: all 0.2s;
+            background: #004BD6;
+            box-shadow: inset 0 0 0 18px white;
+            border: 2px solid #E8E8E8;
+            transition: all 0.3s ease;
           }
           
           &:after {
             content: '';
             position: absolute;
-            left: 6px;
             top: 50%;
-            transform: translateY(-50%) scale(0);
-            width: 8px;
-            height: 8px;
+            left: 11px;
+            width: 11px;
+            height: 10px;
             border-radius: 50%;
-            background-color: white;
-            transition: all 0.2s;
+            background: #004BD6;
+            border: 2px solid #004BD6;
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(0);
+            transition: all 0.3s ease;
           }
         }
       }
@@ -417,6 +493,11 @@
       }
     }
   }
+}
+
+@keyframes ripple {
+  5%, 100% { opacity: 0; }
+  5% { opacity: 1; }
 }
 
 // 팝업 스타일
