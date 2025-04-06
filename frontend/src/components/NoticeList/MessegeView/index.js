@@ -5,7 +5,10 @@ const MessegeView = ({
   messageTitle, 
   messageContent, 
   messageType, 
-  isButtonActive 
+  isButtonActive,
+  onMessageSent = () => {},
+  onSendClick = () => {},
+  isSending = false
 }) => {
   return (
     <div className={styles.messagePreviewCardWrapper}>
@@ -14,9 +17,10 @@ const MessegeView = ({
           <h2 className={styles.customCardTitle}>메시지 미리보기</h2>
           <button 
             className={`${styles.previewSendButton} ${isButtonActive() ? styles.active : styles.inactive}`}
-            disabled={!isButtonActive()}
+            disabled={!isButtonActive() || isSending}
+            onClick={onSendClick}
           >
-            전송
+            {isSending ? '전송 중...' : '전송'}
           </button>
         </div>
         <div className={styles.dividerContainer}>
