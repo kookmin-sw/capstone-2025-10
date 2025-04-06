@@ -23,6 +23,8 @@
 
 .cardSection {
   width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 /* 상단 카드 컨테이너 (잔여 건수와 미리보기를 가로로 배치) */
@@ -30,7 +32,32 @@
   display: flex;
   gap: 32px;
   width: 100%;
+  align-items: flex-start; /* 상단 정렬로 변경 */
   margin-bottom: 32px;
+  position: relative; /* 상대 위치 설정 */
+  z-index: 1; /* z-index 설정 */
+}
+
+/* 새로운 레이아웃 구조 */
+.layoutContainer {
+  display: flex;
+  gap: 32px;
+  width: 100%;
+}
+
+.leftContainer {
+  flex: 7; /* 70% 차지하도록 변경 */
+  display: flex;
+  flex-direction: column;
+  gap: 32px; /* 메시지 잔여 건수 카드와 메시지 발송 설정 카드 사이 간격 - 32px에서 16px로 축소 */
+}
+
+.rightContainer {
+  flex: 3; /* 30% 차지하도록 변경 */
+  display: flex;
+  height: 100%;
+  position: sticky;
+  top: 0;
 }
 
 /* 카드 컨테이너 공통 스타일 */
@@ -64,21 +91,58 @@
 .messageCountCardWrapper {
   flex: 1;
   padding: 0;
+  min-height: 231px;
+  width: 100%;
+  margin: 0; /* 마진 초기화 */
 }
 
 /* 메시지 미리보기 카드 스타일 */
 .messagePreviewCardWrapper {
-  flex: 1;
+  width: 100%;
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
-/* 메시지 발송 설정 카드 스타일 */
-.messageSendCardWrapper {
-  margin: 0; /* 모든 방향 0 */
-  padding: 0;
+.messagePreviewCardWrapper .customCard {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
-/* 커스텀 카드 스타일 */
+.messagePreviewCardWrapper .previewSection {
+  padding: 24px 32px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  
+  .previewTitle {
+    font-size: 16px;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 12px;
+    font-family: "Noto Sans KR", sans-serif;
+  }
+  
+  .previewContent {
+    font-size: 14px;
+    color: #333;
+    font-family: "Noto Sans KR", sans-serif;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    background-color: #FAFAFA;
+    border: 1px solid #E8E8E8;
+    border-radius: 4px;
+    padding: 16px;
+    margin-bottom: 12px;
+    flex: 1;
+    min-height: 400px; /* 최소 높이 설정 */
+    max-height: 600px; /* 최대 높이 제한 */
+    overflow-y: auto; /* 내용이 많을 경우 스크롤 */
+  }
+}
+
 .customCard {
   width: 100%;
   background: #FFF;
@@ -86,6 +150,9 @@
   box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.10);
   padding: 0;
   margin: 0;
+  height: 100%; /* 부모 요소 높이에 맞추기 */
+  display: flex;
+  flex-direction: column;
 }
 
 .customCardHeader {
@@ -104,6 +171,61 @@
   line-height: 18px;
   letter-spacing: -0.36px;
   margin: 0 0 12px 0;
+}
+
+.dividerContainer {
+  padding: 0 32px;
+}
+
+.customDivider {
+  height: 1px;
+  background-color: #d9d9d9;
+  margin: 12px 0;
+  width: 100%;
+}
+
+/* 미리보기 섹션 스타일 */
+.previewSection {
+  padding: 24px 32px;
+  display: flex;
+  flex-direction: column;
+  
+  .previewTitle {
+    font-size: 16px;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 12px;
+    font-family: "Noto Sans KR", sans-serif;
+  }
+  
+  .previewContent {
+    font-size: 14px;
+    color: #333;
+    font-family: "Noto Sans KR", sans-serif;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    background-color: #FAFAFA;
+    border: 1px solid #E8E8E8;
+    border-radius: 4px;
+    padding: 16px;
+    margin-bottom: 12px;
+    min-height: 100px;
+  }
+  
+  .previewType {
+    font-size: 12px;
+    color: #666;
+    font-family: "Noto Sans KR", sans-serif;
+    text-align: right;
+    margin-bottom: 0;
+  }
+}
+
+/* 메시지 발송 설정 카드 스타일 */
+.messageSendCardWrapper {
+  width: 100%;
+  margin: 0; /* 마진 초기화 */
+  padding: 0;
 }
 
 /* 미리보기 전송 버튼 */
@@ -131,55 +253,6 @@
     &:hover {
       background-color: darken(#004BD6, 5%);
     }
-  }
-}
-
-.dividerContainer {
-  padding: 0 32px;
-}
-
-.customDivider {
-  height: 1px;
-  background-color: #d9d9d9;
-  margin: 12px 0;
-  width: 100%;
-}
-
-/* 미리보기 섹션 스타일 */
-.previewSection {
-  padding: 24px 32px;
-  min-height: 150px;
-  display: flex;
-  flex-direction: column;
-  
-  .previewTitle {
-    font-size: 16px;
-    font-weight: 700;
-    color: #000;
-    margin-bottom: 12px;
-    font-family: "Noto Sans KR", sans-serif;
-  }
-  
-  .previewContent {
-    flex: 1;
-    font-size: 14px;
-    color: #333;
-    font-family: "Noto Sans KR", sans-serif;
-    line-height: 1.5;
-    white-space: pre-wrap;
-    background-color: #FAFAFA;
-    border: 1px solid #E8E8E8;
-    border-radius: 4px;
-    padding: 16px;
-    margin-bottom: 12px;
-    min-height: 100px;
-  }
-  
-  .previewType {
-    font-size: 12px;
-    color: #666;
-    font-family: "Noto Sans KR", sans-serif;
-    text-align: right;
   }
 }
 
@@ -563,5 +636,223 @@
     color: #666;
     margin: 0;
     font-family: "Noto Sans KR", sans-serif;
+  }
+}
+
+/* 메시지 발송 대상 카드 스타일 */
+.messageTargetCardWrapper {
+  width: 100%;
+  margin: 0; /* 마진 초기화 */
+  padding: 0;
+}
+
+.targetSection {
+  padding: 0 32px 24px; /* 좌우 32px, 하단 24px 패딩 */
+  
+  .inputGroup {
+    display: flex;
+    margin-bottom: 16px;
+    position: relative;
+    width: 100%;
+    
+    .phoneInputContainer {
+      display: flex;
+      flex: 1;
+      margin-right: 8px;
+      
+      .phoneInput {
+        flex: 1;
+        padding: 10px 12px;
+        border: 1px solid #E8E8E8;
+        border-radius: 4px 0 0 4px;
+        font-size: 14px;
+        background-color: #FAFAFA;
+        color: #000;
+        font-family: "Noto Sans KR", sans-serif;
+        font-weight: 400;
+        
+        &:focus {
+          outline: none;
+          border-color: #0056fd;
+        }
+      }
+      
+      .addButton {
+        padding: 10px 12px;
+        background-color: #0056fd;
+        color: white;
+        border: none;
+        border-radius: 0 4px 4px 0;
+        font-size: 14px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.2s;
+        
+        &:hover {
+          background-color: #0048d4;
+        }
+      }
+    }
+    
+    .groupButton {
+      padding: 10px 16px;
+      background-color: #FAFAFA;
+      color: #333;
+      border: 1px solid #E8E8E8;
+      border-radius: 4px;
+      font-size: 14px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s;
+      white-space: nowrap;
+      
+      &:hover {
+        background-color: #f0f0f0;
+        border-color: #ddd;
+      }
+    }
+  }
+  
+  .recipientListContainer {
+    width: 100%;
+    min-height: 120px;
+    max-height: 200px;
+    border: 1px solid #E8E8E8;
+    background-color: #FAFAFA;
+    border-radius: 4px;
+    padding: 12px;
+    margin-bottom: 16px;
+    overflow-y: auto;
+    
+    .recipientList {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      
+      .recipientItem {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 10px;
+        background-color: rgba(0, 86, 253, 0.1);
+        border-radius: 4px;
+        margin-bottom: 8px;
+        color: #333;
+        font-size: 14px;
+        font-family: "Noto Sans KR", sans-serif;
+        
+        .removeButton {
+          background-color: transparent;
+          color: #666;
+          border: none;
+          font-size: 16px;
+          font-weight: bold;
+          cursor: pointer;
+          padding: 0 4px;
+          margin-left: 8px;
+          
+          &:hover {
+            color: #ff3b30;
+          }
+        }
+      }
+    }
+    
+    .emptyList {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      min-height: 80px;
+      color: #999;
+      font-size: 14px;
+      font-family: "Noto Sans KR", sans-serif;
+      text-align: center;
+    }
+  }
+  
+  .totalRecipients {
+    font-size: 14px;
+    color: #333;
+    font-family: "Noto Sans KR", sans-serif;
+    text-align: right;
+    
+    strong {
+      font-weight: 700;
+    }
+  }
+}
+
+/* 그룹 선택 팝업 스타일 */
+.groupPopup {
+  position: relative;
+  background-color: white;
+  border-radius: 8px;
+  padding: 32px;
+  width: 600px;
+  height: 500px;
+  max-width: 90%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.groupPopupContent {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  
+  h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 16px;
+    font-family: "Noto Sans KR", sans-serif;
+  }
+  
+  .groupList {
+    flex: 1;
+    overflow-y: auto;
+    border: 1px solid #E8E8E8;
+    border-radius: 4px;
+    padding: 16px;
+    margin-bottom: 16px;
+    background-color: #FAFAFA;
+  }
+  
+  .groupPopupButtons {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    
+    button {
+      padding: 10px 24px;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .confirmButton {
+      background-color: #0056fd;
+      color: white;
+      border: none;
+      
+      &:hover {
+        background-color: #0048d4;
+      }
+    }
+    
+    .cancelButton {
+      background-color: white;
+      color: #333;
+      border: 1px solid #ddd;
+      
+      &:hover {
+        background-color: #f1f1f1;
+      }
+    }
   }
 }
