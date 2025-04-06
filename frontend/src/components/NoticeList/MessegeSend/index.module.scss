@@ -1,0 +1,180 @@
+/* 메시지 발송 설정 카드 스타일 */
+.messageSendCardWrapper {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.customCard {
+  width: 100%;
+  background: #FFF;
+  border-radius: 40px;
+  box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.10);
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.customCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 32px 0;
+}
+
+.customCardTitle {
+  color: #000;
+  font-family: "Noto Sans KR";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 18px;
+  letter-spacing: -0.36px;
+  margin: 0 0 12px 0;
+}
+
+.dividerContainer {
+  padding: 0 32px;
+}
+
+.customDivider {
+  height: 1px;
+  background-color: #d9d9d9;
+  margin: 12px 0;
+  width: 100%;
+}
+
+/* 메시지 발송 설정 카드 내부 스타일 */
+.sendSettingsSection {
+  padding: 0 32px 24px; /* 좌우 32px, 하단 24px 패딩 */
+
+  .inputGroup {
+    margin-bottom: 20px;
+    position: relative;
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: #000;
+      font-family: "Noto Sans KR", sans-serif;
+    }
+
+    .titleInput {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #E8E8E8;
+      border-radius: 4px;
+      font-size: 14px;
+      background-color: #FAFAFA;
+      color: #000;
+      font-family: "Noto Sans KR", sans-serif;
+      font-weight: 400;
+
+      &:focus {
+        outline: none;
+        border-color: #0056fd;
+      }
+    }
+
+    .contentTextarea {
+      width: 100%;
+      min-height: 150px;
+      padding: 10px 12px;
+      border: 1px solid #E8E8E8;
+      border-radius: 4px;
+      font-size: 14px;
+      background-color: #FAFAFA;
+      color: #000;
+      font-family: "Noto Sans KR", sans-serif;
+      font-weight: 400;
+      resize: vertical;
+
+      &:focus {
+        outline: none;
+        border-color: #0056fd;
+      }
+    }
+  }
+
+  .typeSelection {
+    margin-bottom: 24px;
+    font-family: "Noto Sans KR", sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: #000;
+
+    h3 {
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 12px;
+      color: #000;
+    }
+
+    .radioGroup {
+      display: flex;
+      gap: 16px;
+
+      .radioLabel {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        font-size: 14px;
+        position: relative;
+
+        input[type="radio"] {
+          display: none;
+          
+          &:checked + .radioText {
+            &:before {
+              box-shadow: inset 0 0 0 4px #fff;
+              border-color: #004BD6;
+            }
+            
+            &:after {
+              transform: translate(-50%, -50%) scale(1);
+            }
+          }
+        }
+
+        .radioText {
+          padding-left: 28px;
+          position: relative;
+          
+          &:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 19px;
+            height: 19px;
+            border-radius: 50%;
+            background: #004BD6;
+            box-shadow: inset 0 0 0 18px white;
+            border: 2px solid #E8E8E8;
+            transition: all 0.3s ease;
+          }
+          
+          &:after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 11px;
+            width: 11px;
+            height: 10px;
+            border-radius: 50%;
+            background: #004BD6;
+            border: 2px solid #004BD6;
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(0);
+            transition: all 0.3s ease;
+          }
+        }
+      }
+    }
+  }
+}

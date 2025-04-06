@@ -4,6 +4,11 @@ import React, { useState } from 'react';
 import SideNavigation from '@/components/SideNavigation';
 import CardContainer from '@/components/CardContainer';
 import MessegeCount from '@/components/NoticeList/MessegeCount';
+import NoticeChargePopup from '@/components/NoticePopup/NoticeChargePopup/index.js';
+import NoticeCustomList from '@/components/NoticePopup/NoticeCoustomList';
+import MessegeCustomer from '@/components/NoticeList/MessegeCustomer';
+import MessegeSend from '@/components/NoticeList/MessegeSend';
+import MessegeView from '@/components/NoticeList/MessegeView';
 import styles from './page.module.scss';
 
 export default function AlarmSendPage() {
@@ -85,31 +90,83 @@ export default function AlarmSendPage() {
     setShowGroupPopup(!showGroupPopup);
   };
   
-  // 전화번호 추가 핸들러
-  const handleAddPhoneNumber = () => {
-    if (!phoneNumber) return;
-    
-    // 간단한 전화번호 유효성 검사 (숫자와 하이픈만 허용)
-    const phoneRegex = /^[0-9-]+$/;
-    if (!phoneRegex.test(phoneNumber)) {
-      alert('유효한 전화번호를 입력해주세요.');
-      return;
-    }
-    
-    // 중복 검사
-    if (recipientList.includes(phoneNumber)) {
-      alert('이미 추가된 전화번호입니다.');
-      return;
-    }
-    
-    // 리스트에 추가
-    setRecipientList([...recipientList, phoneNumber]);
-    setPhoneNumber(''); // 입력 필드 초기화
+  // 더미 회원 그룹 데이터
+  const dummyMemberGroups = [
+    { id: 1, name: "일반 회원", count: 120, date: "2025.01.15" },
+    { id: 2, name: "VIP 회원", count: 45, date: "2025.01.20" },
+    { id: 3, name: "신규 가입자", count: 78, date: "2025.02.05" },
+    { id: 4, name: "휴면 계정", count: 32, date: "2025.02.10" },
+    { id: 5, name: "임직원", count: 18, date: "2025.02.15" },
+  ];
+  
+  // 그룹 체크박스 상태 관리
+  const [checkedGroups, setCheckedGroups] = useState({});
+  
+  // 개별 그룹 체크박스 클릭 핸들러
+  const handleGroupCheckboxClick = (id) => {
+    setCheckedGroups(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
   };
   
-  // 전화번호 삭제 핸들러
-  const handleRemovePhoneNumber = (indexToRemove) => {
-    setRecipientList(recipientList.filter((_, index) => index !== indexToRemove));
+  // 선택한 그룹 추가 핸들러
+  const handleAddSelectedGroups = () => {
+    // 선택된 그룹 ID 배열
+    const selectedGroupIds = Object.keys(checkedGroups)
+      .filter(id => checkedGroups[id])
+      .map(id => parseInt(id));
+    
+    // 선택된 그룹 정보 가져오기
+    const selectedGroups = dummyMemberGroups.filter(group => 
+      selectedGroupIds.includes(group.id)
+    );
+    
+    // 선택된 그룹 처리 (예: 발송 대상에 추가)
+    selectedGroups.forEach(group => {
+      // 여기서는 간단하게 그룹 이름을 전화번호 목록에 추가하는 것으로 시뮬레이션
+      // 실제로는 그룹에 속한 회원 전화번호를 모두 추가하는 로직이 필요
+      if (!recipientList.includes(`그룹: ${group.name} (${group.count}명)`)) {
+        setRecipientList([...recipientList, `그룹: ${group.name} (${group.count}명)`]);
+      }
+    });
+    
+    // 팝업 닫기
+    toggleGroupPopup();
+    
+    // 체크박스 상태 초기화
+    setCheckedGroups({});
+  };
+
+  // 메시지 타입 변경 핸들러
+  const handleMessageTypeChange = (type) => {
+    setMessageType2(type);
+    
+    // 타입이 광고성 메시지로 변경되면 "(광고)" 텍스트 추가
+    if (type === '광고성 메시지') {
+      // 이미 "(광고)"로 시작하지 않는 경우에만 추가
+      if (!messageContent.startsWith('(광고)')) {
+        setMessageContent(`(광고) ${messageContent}`);
+      }
+    } else {
+      // 정보성 메시지로 변경 시 "(광고)" 텍스트 제거
+      if (messageContent.startsWith('(광고) ')) {
+        setMessageContent(messageContent.substring(5));
+      }
+    }
+  };
+
+  // 전송 버튼 활성화 여부 체크 함수
+  const isButtonActive = () => {
+    if (!messageContent || recipientList.length === 0) return false;
+    
+    // 메시지 잔여 건수를 숫자로 변환 (콤마 제거 후 숫자로 변환)
+    const availableCount = parseFloat(messageCount.replace(/,/g, ''));
+    
+    // 발송 대상 인원수가 메시지 잔여 건수보다 많으면 비활성화
+    if (recipientList.length > availableCount) return false;
+    
+    return true;
   };
 
   return (
@@ -132,163 +189,36 @@ export default function AlarmSendPage() {
                   togglePopup={togglePopup}
                 />
                 
-                {/* 메시지 발송 대상 카드 (NEW) */}
-                <div className={styles.messageTargetCardWrapper}>
-                  <div className={styles.customCard}>
-                    <div className={styles.customCardHeader}>
-                      <h2 className={styles.customCardTitle}>메시지 발송 대상</h2>
-                    </div>
-                    <div className={styles.dividerContainer}>
-                      <div className={styles.customDivider}></div>
-                    </div>
-                    <div className={styles.targetSection}>
-                      <div className={styles.inputGroup}>
-                        <div className={styles.phoneInputContainer}>
-                          <input 
-                            type="text" 
-                            value={phoneNumber} 
-                            onChange={(e) => setPhoneNumber(e.target.value)}
-                            placeholder="휴대폰 번호를 입력해주세요."
-                            className={styles.phoneInput}
-                          />
-                          <button 
-                            className={styles.addButton}
-                            onClick={handleAddPhoneNumber}
-                          >
-                            추가
-                          </button>
-                        </div>
-                        <button 
-                          className={styles.groupButton}
-                          onClick={toggleGroupPopup}
-                        >
-                          그룹 선택
-                        </button>
-                      </div>
-                      
-                      <div className={styles.recipientListContainer}>
-                        {recipientList.length > 0 ? (
-                          <ul className={styles.recipientList}>
-                            {recipientList.map((recipient, index) => (
-                              <li key={index} className={styles.recipientItem}>
-                                <span>{recipient}</span>
-                                <button 
-                                  className={styles.removeButton}
-                                  onClick={() => handleRemovePhoneNumber(index)}
-                                >
-                                  ×
-                                </button>
-                              </li>
-                            ))}
-                          </ul>
-                        ) : (
-                          <div className={styles.emptyList}>
-                            발송 대상이 없습니다. 전화번호를 추가하거나 그룹을 선택해주세요.
-                          </div>
-                        )}
-                      </div>
-                      
-                      <div className={styles.totalRecipients}>
-                        <strong>총 발송 대상:</strong> {recipientList.length}명
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                {/* 메시지 발송 대상 카드 (컴포넌트화) */}
+                <MessegeCustomer
+                  phoneNumber={phoneNumber}
+                  setPhoneNumber={setPhoneNumber}
+                  recipientList={recipientList}
+                  setRecipientList={setRecipientList}
+                  showGroupPopup={showGroupPopup}
+                  toggleGroupPopup={toggleGroupPopup}
+                />
 
                 {/* 메시지 발송 설정 카드 */}
-                <div className={styles.messageSendCardWrapper}>
-                  <div className={styles.customCard}>
-                    <div className={styles.customCardHeader}>
-                      <h2 className={styles.customCardTitle}>메시지 발송 설정</h2>
-                    </div>
-                    <div className={styles.dividerContainer}>
-                      <div className={styles.customDivider}></div>
-                    </div>
-                    <div className={styles.sendSettingsSection}>
-                      <div className={styles.inputGroup}>
-                        <label>메시지 제목</label>
-                        <input 
-                          type="text" 
-                          value={messageTitle} 
-                          onChange={(e) => setMessageTitle(e.target.value)}
-                          placeholder="메시지 제목을 입력해주세요. 단문에서는 표시되지 않습니다."
-                          className={styles.titleInput}
-                        />
-                      </div>
-                      
-                      <div className={styles.inputGroup}>
-                        <label>메시지 내용</label>
-                        <textarea 
-                          value={messageContent} 
-                          onChange={(e) => setMessageContent(e.target.value)}
-                          placeholder="메시지 내용을 입력해주세요."
-                          className={styles.contentTextarea}
-                        />
-                      </div>
-
-                      <div className={styles.typeSelection}>
-                        <h3>메시지 타입</h3>
-                        <div className={styles.radioGroup}>
-                          <label className={styles.radioLabel}>
-                            <input 
-                              type="radio" 
-                              name="messageType" 
-                              checked={messageType2 === '정보성 메시지'} 
-                              onChange={() => setMessageType2('정보성 메시지')}
-                            />
-                            <span className={styles.radioText}>정보성 메시지</span>
-                          </label>
-                          <label className={styles.radioLabel}>
-                            <input 
-                              type="radio" 
-                              name="messageType" 
-                              checked={messageType2 === '광고성 메시지'} 
-                              onChange={() => setMessageType2('광고성 메시지')}
-                            />
-                            <span className={styles.radioText}>광고성 메시지</span>
-                          </label>
-                        </div>
-                      </div>
-
-                      <div className={styles.buttonGroup}>
-                        <button className={styles.sendButton}>전송</button>
-                        <button className={styles.cancelButton}>취소</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <MessegeSend 
+                  messageTitle={messageTitle}
+                  setMessageTitle={setMessageTitle}
+                  messageContent={messageContent}
+                  setMessageContent={setMessageContent}
+                  messageType={messageType2}
+                  handleMessageTypeChange={handleMessageTypeChange}
+                />
               </div>
 
               {/* 우측 컨테이너 - 메시지 미리보기 */}
               <div className={styles.rightContainer}>
                 {/* 메시지 미리보기 카드 */}
-                <div className={styles.messagePreviewCardWrapper}>
-                  <div className={styles.customCard}>
-                    <div className={styles.customCardHeader}>
-                      <h2 className={styles.customCardTitle}>메시지 미리보기</h2>
-                      <button 
-                        className={`${styles.previewSendButton} ${messageContent ? styles.active : ''}`}
-                        disabled={!messageContent}
-                      >
-                        전송
-                      </button>
-                    </div>
-                    <div className={styles.dividerContainer}>
-                      <div className={styles.customDivider}></div>
-                    </div>
-                    <div className={styles.previewSection}>
-                      {messageTitle && (
-                        <div className={styles.previewTitle}>{messageTitle}</div>
-                      )}
-                      <div className={styles.previewContent}>
-                        {messageContent || "메시지 내용이 여기에 표시됩니다."}
-                      </div>
-                      <div className={styles.previewType}>
-                        {messageType2}
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <MessegeView 
+                  messageTitle={messageTitle}
+                  messageContent={messageContent}
+                  messageType={messageType2}
+                  isButtonActive={isButtonActive}
+                />
               </div>
             </div>
           </div>
@@ -296,45 +226,22 @@ export default function AlarmSendPage() {
       </div>
 
       {/* 충전하기 팝업 */}
-      {showPopup && (
-        <div className={styles.popupOverlay}>
-          <div className={styles.popup}>
-            <button className={styles.closeButton} onClick={togglePopup}>
-              <svg width="16" height="16" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M14 1.41L12.59 0L7 5.59L1.41 0L0 1.41L5.59 7L0 12.59L1.41 14L7 8.41L12.59 14L14 12.59L8.41 7L14 1.41Z" fill="#333333"/>
-              </svg>
-            </button>
-            <div className={styles.popupContent}>
-              <p className={styles.popupTitle}>관리자에게 문의 바랍니다.</p>
-              <p className={styles.popupDesc}>메시지 건수 충전은 관리자에게 문의 후 충전이 가능합니다.</p>
-            </div>
-          </div>
-        </div>
-      )}
+      {showPopup && <NoticeChargePopup onClose={togglePopup} />}
       
       {/* 그룹 선택 팝업 */}
-      {showGroupPopup && (
-        <div className={styles.popupOverlay}>
-          <div className={styles.groupPopup}>
-            <button className={styles.closeButton} onClick={toggleGroupPopup}>
-              <svg width="16" height="16" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M14 1.41L12.59 0L7 5.59L1.41 0L0 1.41L5.59 7L0 12.59L1.41 14L7 8.41L12.59 14L14 12.59L8.41 7L14 1.41Z" fill="#333333"/>
-              </svg>
-            </button>
-            <div className={styles.groupPopupContent}>
-              <h3>회원 그룹 선택</h3>
-              <div className={styles.groupList}>
-                <p>회원 관리 페이지 내용이 여기에 표시됩니다.</p>
-                <p>이 부분은 실제 회원 관리 데이터와 연동되어야 합니다.</p>
-              </div>
-              <div className={styles.groupPopupButtons}>
-                <button className={styles.confirmButton} onClick={toggleGroupPopup}>확인</button>
-                <button className={styles.cancelButton} onClick={toggleGroupPopup}>취소</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <NoticeCustomList 
+        isOpen={showGroupPopup}
+        onClose={toggleGroupPopup}
+        memberGroups={dummyMemberGroups}
+        onSelectGroups={(selectedGroups) => {
+          // 선택된 그룹 처리
+          selectedGroups.forEach(group => {
+            if (!recipientList.includes(`그룹: ${group.name} (${group.count}명)`)) {
+              setRecipientList([...recipientList, `그룹: ${group.name} (${group.count}명)`]);
+            }
+          });
+        }}
+      />
     </div>
   );
 }
