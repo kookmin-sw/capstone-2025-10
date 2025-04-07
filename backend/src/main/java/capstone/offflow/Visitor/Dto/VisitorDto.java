@@ -23,22 +23,25 @@ public class VisitorDto {
     private Boolean privacyAccepted;
     private Boolean serviceAccepted;
     private Boolean marketingAccepted;
+    private Boolean phoneVerified;
 
-    private Long userId; // 등록용 - User기준
+    private String userId; // 등록용 - User기준
+    private Long dashboardId; //등록용 - Dashboard 확인
+
     private Date registerDate;
     private Date reservationDate;
 
     private List<String> visitedDashboards; // 응답용: 방문한 대시보드 이름 목록
 
     // Entity → DTO
-    public static VisitorDto fromEntity(Visitor visitor) {
+    public static VisitorDto convertToDto(Visitor visitor) {
 
         //NPE 고려
         List<String> dashboards = Optional.ofNullable(visitor.getVisitHistories())
                 .orElse(Collections.emptyList())
                 .stream()
-                .map(h -> h.getDashboard().getDashboardName())
-                .distinct()
+                .map(history -> history.getDashboard().getDashboardName()) // 방문했던 대시보드 이름 (기준)
+                .distinct() //중복제거
                 .collect(Collectors.toList());
 
         return VisitorDto.builder()
@@ -48,20 +51,22 @@ public class VisitorDto {
                 .privacyAccepted(visitor.getPrivacyAccepted())
                 .serviceAccepted(visitor.getServiceAccepted())
                 .marketingAccepted(visitor.getMarketingAccepted())
+                .phoneVerified(visitor.getPhoneVerified())
                 .registerDate(visitor.getRegisterDate())
                 .reservationDate(visitor.getReservationDate())
-                .visitedDashboards(dashboards)
+                .visitedDashboards(dashboards) //방문했던 대시보드 이름 추가
                 .build();
     }
 
     // DTO → Entity (등록 시)
-    public static Visitor toEntity(VisitorDto dto, User user) {
+    public static Visitor convertToEntity(VisitorDto dto, User user) {
         Visitor visitor = new Visitor();
         visitor.setVisitorName(dto.getVisitorName());
         visitor.setPhoneNumber(dto.getPhoneNumber());
         visitor.setPrivacyAccepted(dto.getPrivacyAccepted());
         visitor.setServiceAccepted(dto.getServiceAccepted());
         visitor.setMarketingAccepted(dto.getMarketingAccepted());
+        visitor.setPhoneVerified(dto.getPhoneVerified());
         visitor.setRegisterDate(new Date());
         visitor.setUser(user);
         return visitor;

@@ -2,14 +2,12 @@ package capstone.offflow.Visitor.Domain;
 
 import capstone.offflow.Dashboard.Domain.Dashboard;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor

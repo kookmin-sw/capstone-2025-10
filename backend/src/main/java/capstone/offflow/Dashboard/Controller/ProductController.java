@@ -24,7 +24,7 @@ public class ProductController {
 
 
     //상품 생성
-    // 별도 예외처리 필요없음 -> 예외 핸들러가 예외발생시 중간 개입후 처리
+    //별도 예외처리 필요없음 -> 예외 핸들러가 예외발생시 중간 개입후 처리
     @PostMapping("/create")
     public ResponseEntity<?> createProduct(
             @RequestBody @Validated ProductDto productDto,
@@ -66,7 +66,7 @@ public class ProductController {
             @AuthenticationPrincipal UserPrincipal userPrincipal){
 
         productService.deleteProduct(id, userPrincipal.getUser());
-        return ResponseEntity.ok("Product delete successfully");
+        return ResponseEntity.ok("Product delete Successfully");
     }
 
 }
