@@ -21,6 +21,7 @@ public interface DashboardRepository extends JpaRepository<Dashboard, Long> {
     @EntityGraph(attributePaths = {"sections", "sections.products"}) //대시보드 + 섹션 + 상품 join을 통해 한번의 쿼리로 가져옴
     Optional<Dashboard> findByIdAndUser(Long id, User user);
 
+    //여러건 조회
     List<Dashboard> findAllByUser(User user);
 
 }
