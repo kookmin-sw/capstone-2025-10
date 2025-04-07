@@ -43,10 +43,13 @@ public class Dashboard {
     //한대시보드가 여러개의 섹션 보유가능
     //Cascade = 부모 저장/삭제시 자식도 자동 저장/삭제
     // orphanRemoval = 부모의 리스트에서 빠진 자식 -> DB 삭제
-    @OneToMany(mappedBy = "Dashboard", cascade = CascadeType.ALL, orphanRemoval = true)
+    //대시보드 -> 섹션 연결
+    @OneToMany(mappedBy = "dashboard", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Section> sections = new ArrayList<>();
 
-    @OneToMany(mappedBy = "Dashboard", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Section> products = new ArrayList<>();
+
+    //대시보드 -> product 연결
+    @OneToMany(mappedBy = "dashboard", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Product> products = new ArrayList<>();
 
 }
