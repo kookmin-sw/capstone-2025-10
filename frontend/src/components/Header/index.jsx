@@ -47,7 +47,7 @@ export default function Header() {
         },
         {
             title:"회원 관리",
-            path: "/user",
+            path: "/member",
         },
         {
             title:"알림 전송",

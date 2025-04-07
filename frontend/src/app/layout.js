@@ -1,5 +1,14 @@
 import "./styles/globals.scss";
 import Header from "@/components/Header";
+import {ModalProvider} from "@/contexts/ModalContext";
+import { Noto_Sans_KR } from 'next/font/google'
+
+const notoSansKr = Noto_Sans_KR({
+  // preload: true, 기본값
+  subsets: ["latin"], // 또는 preload: false
+  weight: ["400", "500", "600", "700", "900"], // 가변 폰트가 아닌 경우, 사용할 fontWeight 배열
+  variable: "--font-primary",
+});
 
 export const metadata = {
   title: "Create Next App",
@@ -8,10 +17,12 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="ko" className={notoSansKr.variable}>
       <body>
-        <Header />
-        {children}
+        <ModalProvider>
+          <Header/>
+          {children}
+        </ModalProvider>
       </body>
     </html>
   );

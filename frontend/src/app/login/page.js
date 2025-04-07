@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import styles from "./login.module.scss";
-import LoginFormFields from "../../components/loginformfields.js";
+import LoginFormFields from "@/components/Login/LoginFormFields";
 
 export default function LoginPage() {
   const [userId, setUserId] = useState("");
@@ -38,8 +38,12 @@ export default function LoginPage() {
           />
 
           {/* 로그인 버튼 */}
-          <button type="submit" className={styles.loginButton}>
-            로그인
+          <button 
+            type="submit" 
+            className={styles.loginButton} 
+            style={{ textAlign: 'center', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+          >
+            <span style={{ width: '100%', textAlign: 'center' }}>로그인</span>
           </button>
         </form>
       </div>

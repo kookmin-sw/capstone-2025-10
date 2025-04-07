@@ -19,6 +19,11 @@
   &:active {
     //background-color: ;
   }
+
+  &:disabled {
+    background: var(--gray-2);
+    border: 1px solid var(--gray-2);
+  }
 }
 
 .outline {
@@ -28,7 +33,13 @@
 }
 
 .default {
-  background: 1px solid var(--primary-blue);
+  background: var(--primary-blue);
   border: 1px solid var(--primary-blue);
+  color: var(--white);
+}
+
+.cancel {
+  background: var(--primary-red);
+  border: 1px solid var(--primary-red);
   color: var(--white);
 }
