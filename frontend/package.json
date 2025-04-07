@@ -9,17 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-<<<<<<< HEAD
-    "next": "15.2.1",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "sass": "^1.86.3"
-  },
-  "devDependencies": {
-    "@eslint/eslintrc": "^3",
-    "eslint": "^9",
-    "eslint-config-next": "15.2.1"
-=======
     "@svgr/webpack": "^8.1.0",
     "next": "15.2.1",
     "react": "^19.0.0",
@@ -34,6 +23,5 @@
     "eslint-config-prettier": "^10.1.1",
     "prettier": "^3.5.3",
     "typescript": "^5.8.2"
->>>>>>> 1aabaa64eea56786bc5a7bfe65d590909e43b4f7
   }
 }
