@@ -39,13 +39,6 @@ public class UserController {
             return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
         }
 
-        //userId 존재하는지 체크
-        if (userRepository.existsByUserId(user.getUserId())){
-            Map<String, String> errors = new HashMap<>();
-            errors.put("userId", "UserId is alreay exist");
-            return new ResponseEntity<>(errors, HttpStatus.CONFLICT);
-        }
-
         try{
             User registeredUser = userService.registerUser(user);
             Map<String, String> response = new HashMap<>();
@@ -56,12 +49,6 @@ public class UserController {
         }
 
     }
-
-
-    //로그인
-
-
-
 
 
     //회원조회
