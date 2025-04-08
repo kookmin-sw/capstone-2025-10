@@ -1,6 +1,6 @@
 package capstone.offflow.Common;
 
-import capstone.offflow.User.Service.UserServiceImpl;
+import capstone.offflow.User.Service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +20,9 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final UserServiceImpl userService;
+    //SecurityConfig에서는 UserDetailsService 인터페이스만 봄
+    //UserServiceImpl은 SecurityConfig를 몰라야함 -> 순환참조 현상 제거
+    private final UserService userService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -60,12 +62,6 @@ public class SecurityConfig {
     }
 
 
-
-    //PW encoding
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
 }
 
 
