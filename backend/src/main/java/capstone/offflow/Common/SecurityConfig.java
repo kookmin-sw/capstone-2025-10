@@ -27,22 +27,20 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) //SPA방식 react (front)와 api 통신위해 -> 토큰 받을방법 X
-                .cors(cors -> {}) // 필요에 따라 CORS 설정 추가
+                .csrf(csrf -> csrf.disable()) // API 통신만 하면 disable (프론트에서 토큰 넘기면 따로 설정 가능)
+                .cors(cors -> {})
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/users/login", "/api/users/join").permitAll()
-                        .anyRequest().authenticated()) // 나머지 요청은 인증 필요
-                .logout((logout) -> logout
+                        .requestMatchers("/api/users/login", "/api/users/join", "/api/users/register").permitAll() // 여기 register 추가!
+                        .anyRequest().authenticated())
+                .logout(logout -> logout
                         .logoutSuccessUrl("/login")
-                        .invalidateHttpSession(true)) //로그아웃 이후 전체 세션 삭제
+                        .invalidateHttpSession(true))
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //세션생성 및 사용여부에 대한 정책
-                .formLogin((formLogin) -> formLogin
-                        .loginPage("/login") //Login URL
-                        .defaultSuccessUrl("/")  //성공시에 이동하는 페이지 루트 URL
-                );
-
-
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)) // 세션 기반
+                .formLogin(formLogin -> formLogin
+                        .loginPage("/login") // 프론트엔드 로그인 페이지
+                        .loginProcessingUrl("/api/users/login") // 이걸 추가하면 됨: 로그인 submit하는 API 엔드포인트
+                        .defaultSuccessUrl("/", true)); // 로그인 성공하면 어디로 보낼지
         return http.build();
     }
 
