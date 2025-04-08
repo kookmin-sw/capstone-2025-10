@@ -27,22 +27,20 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // API 통신만 하면 disable (프론트에서 토큰 넘기면 따로 설정 가능)
+                .csrf(csrf -> csrf.disable())
                 .cors(cors -> {})
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/users/login", "/api/users/join", "/api/users/register").permitAll() // 여기 register 추가!
+                        .requestMatchers("/api/users/login", "/api/users/register").permitAll()
                         .anyRequest().authenticated())
                 .logout(logout -> logout
                         .logoutSuccessUrl("/login")
                         .invalidateHttpSession(true))
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)) // 세션 기반
-                .formLogin(formLogin -> formLogin
-                        .loginPage("/login") // 프론트엔드 로그인 페이지
-                        .loginProcessingUrl("/api/users/login") // 이걸 추가하면 됨: 로그인 submit하는 API 엔드포인트
-                        .defaultSuccessUrl("/", true)); // 로그인 성공하면 어디로 보낼지
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED));
+
         return http.build();
     }
+
 
     /**
      * 내부에서 비밀번호 검증

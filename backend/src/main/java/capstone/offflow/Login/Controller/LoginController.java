@@ -18,7 +18,6 @@ public class LoginController {
 
     private final LoginService loginService;
 
-
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequest,
                                    HttpServletRequest request){

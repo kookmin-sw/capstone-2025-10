@@ -69,8 +69,6 @@ public class UserController {
 
     }
 
-
-
     //회원삭제
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteUser(
