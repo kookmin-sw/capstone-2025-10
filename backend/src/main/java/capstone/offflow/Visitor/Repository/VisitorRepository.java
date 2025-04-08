@@ -23,7 +23,7 @@ public interface VisitorRepository extends JpaRepository<Visitor, Long> {
     //여러건 조회 (사용자 기반 방문객 찾기)
     //방문객 -> 방문이력 -> 대시보드를 통해 대시보드 이름도 가져오기
     @EntityGraph(attributePaths = {"visitHistories", "visitHistories.dashboard"})
-    List<Visitor> findAllByUserId(String userId);
+    List<Visitor> findAllByUserId(Long userId);
 
 
 }

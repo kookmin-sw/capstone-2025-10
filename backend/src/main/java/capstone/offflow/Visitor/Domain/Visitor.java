@@ -35,7 +35,7 @@ public class Visitor {
     //방문객과 유저사이의 관계
     //유저는 여러명의 방문객 보유 가능
     @ManyToOne(fetch = FetchType.LAZY) //ManyToOne defaulte => 즉시로딩이므로 지연로딩으로짆랭
-    @JoinColumn(name="user_id", referencedColumnName = "userId") //FK컬럼, 참조대상 명확하게 지정
+    @JoinColumn(name="user_id") //Long id PK를 FK로 쓰는것이 구조적으로 쉬움
     private User user;
 
 

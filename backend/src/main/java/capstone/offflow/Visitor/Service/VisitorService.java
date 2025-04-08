@@ -11,7 +11,7 @@ public interface VisitorService {
     void createVisitor(VisitorDto visitorDto);
 
     //방문객 전체 조회
-    List<VisitorDto> getVisitorByUserId(String userId);
+    List<VisitorDto> getVisitorByUserId(Long id);
 
     //방문객 수정
     void updateVisitor(Long id, VisitorDto visitorDto);
