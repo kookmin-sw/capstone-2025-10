@@ -34,7 +34,7 @@ public class Dashboard {
 
     //한유저가 여러개의 대시보드 보유가능
     @ManyToOne
-    @JoinColumn(name="user_id", referencedColumnName = "userId") //FK컬럼, 참조대상
+    @JoinColumn(name="user_id", referencedColumnName = "userId") //FK컬럼, 참조대상 명확하게 지정
     private User user;
 
     @Embedded
