@@ -31,7 +31,7 @@ public class Section {
     private List<String> positionList;
 
     @ManyToOne
-    @JoinColumn(name = "dashborad_id") //대시보드 전용 칼럼 생성
+    @JoinColumn(name = "dashboard_id") //대시보드 전용 칼럼 생성
     private Dashboard dashboard;
 
     @OneToMany(mappedBy = "section", cascade = CascadeType.ALL, orphanRemoval = true)
