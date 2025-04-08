@@ -4,6 +4,7 @@ package capstone.offflow.Login.Service;
 import capstone.offflow.Login.Dto.LoginRequestDto;
 import capstone.offflow.User.Repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,7 +28,7 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public String login(LoginRequestDto loginRequest, HttpServletRequest request) {
-        try{
+        try {
             //spring security 활용해 토큰 객체 생성 (userId, password 기반)
             UsernamePasswordAuthenticationToken token =
                     new UsernamePasswordAuthenticationToken(loginRequest.getUserId(), loginRequest.getPassword());
@@ -39,15 +40,17 @@ public class LoginServiceImpl implements LoginService {
             userRepository.findByUserId(loginRequest.getUserId())
                     .orElseThrow(() -> new RuntimeException("사용자 없음"));
 
-
-            //세션을 생성하거나 이미 있으면 유지
+            // 인증 성공 시 SecurityContext에 세팅
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            request.getSession(true); // 세션 생성 (true : 없으면 새로 만든다는 뜻)
+
+            // ★ 세션 생성 및 SecurityContext를 세션에 저장
+            HttpSession session = request.getSession(true); // 세션 생성 (true : 없으면 새로 만든다는 뜻)
+            session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
 
             return loginRequest.getUserId();
-        } catch (AuthenticationException e){
+        } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "아이디 또는 비밀번호가 틀렸습니다."); //401 error 보냄
         }
-
     }
+
 }
