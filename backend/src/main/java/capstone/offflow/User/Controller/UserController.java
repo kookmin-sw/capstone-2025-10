@@ -72,7 +72,7 @@ public class UserController {
     }
 
     //회원삭제
-    @DeleteMapping("/delete")
+    @DeleteMapping("/{userId}")
     public ResponseEntity<?> deleteUser(
             @PathVariable(name = "userId") String userId){
         if (!userRepository.existsByUserId(userId)){
