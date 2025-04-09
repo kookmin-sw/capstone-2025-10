@@ -63,27 +63,32 @@ public class SectionServiceImpl implements SectionService{
 
     //섹션 수정
     @Override
-    public void updateSection(Long id, SectionDto dto, User user) {
-
+    public Section updateSection(Long id, SectionDto dto, User user) {
         // 대시보드는 조회할 필요 없음 -> findById method 로 이미 유저, 대시보드 권한 검증
-        // 1. 섹션 조회 (해당 유저의 섹션인지 확인)
+        // 1. 섹션 조회
         Section section = sectionRepository.findByIdAndDashboard_User(id, user)
                 .orElseThrow(() -> new EntityNotFoundException("해당 섹션을 찾을 수 없습니다."));
 
-        // 2. 중복 좌표 체크
-        if (gridConfig.hasDuplicate(dto.getPositionList())) {
-            throw new IllegalArgumentException("중복된 좌표가 포함되어 있습니다.");
+        // 2. 이름 수정 (이름 수정 요청올때)
+        if (!dto.getName().isEmpty()) {
+            section.setName(dto.getName());
         }
+        log.info("여기는 통과4");
+        // 3. 포지션 리스트 수정 (포지션 수정 요청올때)
+        if (dto.getPositionList() != null && !dto.getPositionList().isEmpty()) {
+            log.info("여기는 통과6");
 
-        // 3. 유효한 좌표 범위 체크
-        if (!gridConfig.areAllPositionsValid(dto.getPositionList())) {
-            throw new IllegalArgumentException("좌표 범위를 벗어난 값이 포함되어 있습니다.");
+            if (gridConfig.hasDuplicate(dto.getPositionList())) {
+                throw new IllegalArgumentException("중복된 좌표가 포함되어 있습니다.");
+            }
+            if (!gridConfig.areAllPositionsValid(dto.getPositionList())) {
+                throw new IllegalArgumentException("좌표 범위를 벗어난 값이 포함되어 있습니다.");
+            }
+
+            section.setPositionList(dto.getPositionList());
         }
-
-        // 4. 필드만 setter로 수정
-        section.setName(dto.getName());
-        section.setPositionList(dto.getPositionList());
-
+        log.info("여기는 통과5");
+        return sectionRepository.save(section);
     }
 
     //섹션 조회

@@ -11,7 +11,7 @@ public interface SectionService {
     Section createSection(SectionDto dto, User user);
 
     //섹션 수정
-    void updateSection(Long id, SectionDto dto, User user);
+    Section updateSection(Long id, SectionDto dto, User user);
 
     //섹션 조회
     SectionDto getSectionById(Long id,  User user);
