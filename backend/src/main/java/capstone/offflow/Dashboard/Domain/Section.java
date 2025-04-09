@@ -34,7 +34,8 @@ public class Section {
     @JoinColumn(name = "dashboard_id") //대시보드 전용 칼럼 생성
     private Dashboard dashboard;
 
+    //new로 생성시 JPA에서 관리 불가능
     @OneToMany(mappedBy = "section", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Product> productList = new ArrayList<>();
+    private List<Product> productList;
 
 }

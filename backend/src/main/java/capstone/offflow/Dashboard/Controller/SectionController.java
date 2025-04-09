@@ -1,6 +1,8 @@
 package capstone.offflow.Dashboard.Controller;
 
 
+import capstone.offflow.Dashboard.Domain.Section;
+import capstone.offflow.Dashboard.Dto.ProductDto;
 import capstone.offflow.Dashboard.Dto.SectionDto;
 import capstone.offflow.Dashboard.Service.SectionService;
 import capstone.offflow.User.Service.UserPrincipal;
@@ -25,8 +27,9 @@ public class SectionController {
             @RequestBody SectionDto sectionDto,
             @AuthenticationPrincipal UserPrincipal userPrincipal){
 
-        sectionService.createSection(sectionDto, userPrincipal.getUser());
-        return ResponseEntity.status(HttpStatus.CREATED).body("Section create Successfully");
+        Section section = sectionService.createSection(sectionDto, userPrincipal.getUser());
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(SectionDto.convertToDto(section));
     }
 
 

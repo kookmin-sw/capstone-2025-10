@@ -1,18 +1,30 @@
 package capstone.offflow.Dashboard.Service;
 
+import capstone.offflow.Dashboard.Domain.Product;
 import capstone.offflow.Dashboard.Dto.ProductDto;
 import capstone.offflow.User.Domain.User;
+
+import java.util.List;
 
 
 public interface ProductService {
     //상품 생성
-    void createProduct(ProductDto dto, User user);
+    Product createProduct(ProductDto dto, User user);
 
     //상품 수정
-    void updateProduct(Long id, ProductDto dto, User user);
+    Product updateProduct(Long id, ProductDto dto, User user);
 
-    //상품 조회 (상품 Id 기준)
+    //상품 조회 (Product Id 기준)
     ProductDto getProductById(Long id, User user);
+
+    //상품 조회 (Dashboard Id 기준)
+    List<ProductDto> getProductByDashboard(Long id, User user);
+
+    //상품 조회 (Section Id 기준)
+    List<ProductDto> getProductBySection(Long id, User user);
+
+    //상품 - 섹션 연결
+    Product assignSectionToProduct(Long productId, Long sectionId, User user);
 
 
     //상품 삭제

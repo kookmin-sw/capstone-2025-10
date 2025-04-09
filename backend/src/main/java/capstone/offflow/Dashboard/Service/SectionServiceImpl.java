@@ -14,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -27,11 +29,14 @@ public class SectionServiceImpl implements SectionService{
 
     //섹션 생성
     @Override
-    public void createSection(SectionDto dto, User user) {
+    @Transactional
+    public Section createSection(SectionDto dto, User user) {
         Dashboard dashboard = dashboardRepository.findByIdAndUser(dto.getDashboardId(), user)
                 .orElseThrow(() -> new EntityNotFoundException("대시보드를 찾을 수 없습니다."));
 
-        // 1. 중복 좌표 체크
+        log.info("요청 positionList: {}", dto.getPositionList());
+
+        // 1. 요청 내부 중복 체크
         if (gridConfig.hasDuplicate(dto.getPositionList())) {
             throw new IllegalArgumentException("중복된 좌표가 포함되어 있습니다.");
         }
@@ -41,10 +46,20 @@ public class SectionServiceImpl implements SectionService{
             throw new IllegalArgumentException("좌표 범위를 벗어난 값이 포함되어 있습니다.");
         }
 
+        // 3. 대시보드 내 다른 섹션들과 좌표 충돌 체크 (GridConfig 위임)
+        List<Section> sections = sectionRepository.findByDashboard(dashboard);
+        if (gridConfig.hasConflictWithExistingSections(dto.getPositionList(), sections)) {
+            throw new IllegalArgumentException("이미 사용 중인 좌표가 포함되어 있습니다.");
+        }
+
+        // 4. 저장
         Section section = SectionDto.convertToEntity(dto, dashboard);
-        sectionRepository.save(section);
-        log.info("Product 생성 완료 - {}", section.getId());
+        Section savedSection = sectionRepository.save(section);
+
+        log.info("Section 생성 완료 - {}", savedSection.getId());
+        return savedSection;
     }
+
 
     //섹션 수정
     @Override

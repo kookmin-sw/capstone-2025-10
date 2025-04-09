@@ -19,7 +19,7 @@ public class DashboardDto {
     private Date endDate;
 
     //metadata
-    private MetadataDto metadataDto;
+    private MetadataDto metadata;
 
     //section
     private List<SectionDto> sections;
@@ -30,7 +30,7 @@ public class DashboardDto {
                 .dashboardName(dashboard.getDashboardName())
                 .startDate(dashboard.getStartDate())
                 .endDate(dashboard.getEndDate())
-                .metadataDto(MetadataDto.convertToDto(dashboard.getMetadata()))
+                .metadata(MetadataDto.convertToDto(dashboard.getMetadata()))
                 .sections(dashboard.getSections().stream()
                         .map(SectionDto::convertToDto)
                         .collect(Collectors.toList()))

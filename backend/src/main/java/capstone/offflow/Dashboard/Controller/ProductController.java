@@ -1,6 +1,7 @@
 package capstone.offflow.Dashboard.Controller;
 
 
+import capstone.offflow.Dashboard.Domain.Product;
 import capstone.offflow.Dashboard.Dto.ProductDto;
 import capstone.offflow.Dashboard.Service.ProductService;
 import capstone.offflow.User.Service.UserPrincipal;
@@ -12,6 +13,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 
 
 @RestController
@@ -30,20 +32,54 @@ public class ProductController {
             @RequestBody @Validated ProductDto productDto,
             @AuthenticationPrincipal UserPrincipal userPrincipal
     ) {
-        productService.createProduct(productDto, userPrincipal.getUser());
-        return ResponseEntity.status(HttpStatus.CREATED).body("Product created Successfully");
+        Product product = productService.createProduct(productDto, userPrincipal.getUser());
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ProductDto.convertToDto(product));
     }
 
-    //상품 조회
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getProduct(
-            @PathVariable(name = "id") Long id,
+    //상품 조회 (product Id)
+    @GetMapping("/{productId}")
+    public ResponseEntity<?> getProductById(
+            @PathVariable(name = "productId") Long productId,
             @AuthenticationPrincipal UserPrincipal userPrincipal) {
 
-        ProductDto dto = productService.getProductById(id, userPrincipal.getUser());
+        ProductDto dto = productService.getProductById(productId, userPrincipal.getUser());
         return ResponseEntity.ok(dto);
-
     }
+
+    //상품 조회 (Dashboard Id)
+    @GetMapping("/dashboard/{dashboardId}")
+    public ResponseEntity<?> getProductByDashboard(
+            @PathVariable(name = "dashboardId") Long dashboardId,
+            @AuthenticationPrincipal UserPrincipal userPrincipal) {
+
+        List<ProductDto> dto = productService.getProductByDashboard(dashboardId, userPrincipal.getUser());
+        return ResponseEntity.ok(dto);
+    }
+
+
+    //상품 조회 (Section Id)
+    @GetMapping("/section/{sectionId}")
+    public ResponseEntity<?> getProductBySection(
+            @PathVariable(name = "sectionId") Long sectionId,
+            @AuthenticationPrincipal UserPrincipal userPrincipal) {
+
+        List<ProductDto> dto = productService.getProductBySection(sectionId, userPrincipal.getUser());
+        return ResponseEntity.ok(dto);
+    }
+
+
+    //상품 수정 (상품 - 섹션 매칭)
+    @PatchMapping("/{productId}/assign-section/{sectionId}")
+    public ResponseEntity<?> assginSectionToProduct(
+            @PathVariable(name = "productId") Long productId,
+            @PathVariable(name = "sectionId") Long sectionId,
+            @AuthenticationPrincipal UserPrincipal userPrincipal){
+
+        Product product = productService.assignSectionToProduct(productId,sectionId, userPrincipal.getUser());
+        return ResponseEntity.ok(ProductDto.convertToDto(product)); //객체 자체 내보내기 X
+    }
+
 
 
     //상품 수정

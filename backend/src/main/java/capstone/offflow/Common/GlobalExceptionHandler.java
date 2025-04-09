@@ -5,9 +5,11 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
 
 @RestControllerAdvice
 @Slf4j
@@ -52,6 +54,18 @@ public class GlobalExceptionHandler {
                 .badRequest()
                 .body(ExceptionResponse.of("요청 값이 유효하지않습니다 : " + sb, HttpStatus.BAD_REQUEST.value()));
     }
+
+    /**
+     * 권한 거부 예외처리
+     */
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ExceptionResponse> handleAccessDenied(AccessDeniedException e) {
+        log.warn("권한 거부: {}", e.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body(ExceptionResponse.of(e.getMessage(), HttpStatus.FORBIDDEN.value()));
+    }
+
 
     /**
      * 그 외 모든 예외 처리 (예상 못한 서버 오류)

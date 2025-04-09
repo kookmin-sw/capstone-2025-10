@@ -60,7 +60,8 @@ public class DashboardController {
 
 
     //dashboard 삭제
-    @DeleteMapping("/delete/{id}")
+    //UserPrincipal은 세션 쿠키 기반 인증 결과로 주입된 사용자 정보
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteDashboard(
             @PathVariable(name = "id") Long id,
             @AuthenticationPrincipal UserPrincipal userPrincipal){
@@ -69,6 +70,4 @@ public class DashboardController {
         return ResponseEntity.ok("dashboard delete Successfully");
 
     }
-
-
 }
