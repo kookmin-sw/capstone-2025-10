@@ -30,7 +30,7 @@ const TrafficMapSection = () => {
       color: generateRandomColor(),
     },
   ]);
-  const [image, setImage] = useState("file.svg");
+  const [image, setImage] = useState("test.png");
 
   useEffect(() => {
     const ctx = canvasRef.current.getContext("2d");

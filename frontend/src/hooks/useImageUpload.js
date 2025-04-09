@@ -31,6 +31,7 @@ const useImageUpload = () => {
 
   return {
     file,
+    setFile,
     uploadProgress,
     isUploading,
     handleFileChange,

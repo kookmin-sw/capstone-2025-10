@@ -89,3 +89,58 @@
     object-fit: cover;
   }
 }
+
+
+// PRODUCT LIST
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding: 0 8px;
+}
+
+.card {
+  display: flex;
+  gap: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 12px;
+  cursor: pointer;
+  background-color: #fff;
+
+  &.selected {
+    border: 2px solid #d83c3c;
+  }
+}
+
+.index {
+  font-weight: bold;
+  color: #555;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+}
+
+.titleLine {
+  display: flex;
+  gap: 6px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.name {
+  color: #111;
+}
+
+.price {
+  color: #333;
+}
+
+.description {
+  font-size: 13px;
+  color: #666;
+}
