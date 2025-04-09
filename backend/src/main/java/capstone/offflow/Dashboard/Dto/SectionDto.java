@@ -4,6 +4,7 @@ import capstone.offflow.Dashboard.Domain.Dashboard;
 import capstone.offflow.Dashboard.Domain.Section;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -40,6 +41,7 @@ public class SectionDto {
         section.setName(sectionDto.getName());
         section.setPositionList(sectionDto.getPositionList());
         section.setDashboard(dashboard);
+        section.setProductList(new ArrayList<>());  //빈 상품리스트로 만들기
         return section;
     }
 }

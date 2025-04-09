@@ -1,8 +1,11 @@
 package capstone.offflow.Common;
 
+import capstone.offflow.Dashboard.Domain.Section;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -27,7 +30,7 @@ public class GridConfig {
     public boolean areAllPositionsValid(List<String> positions) {
         return positions.stream().allMatch(pos -> {
             try {
-                int val = Integer.parseInt(pos);
+                int val = Integer.parseInt(pos.trim()); //trim으로 공백 제거
                 return isValidPosition(val);
             } catch (NumberFormatException e) {
                 return false;
@@ -35,8 +38,30 @@ public class GridConfig {
         });
     }
 
-    //중복 좌표 체크
+    //body안에 중복 좌표 체크
     public boolean hasDuplicate(List<String> positions) {
-        return positions.size() != positions.stream().distinct().count();
+        Set<String> seen = new HashSet<>();
+        for (String pos : positions) {
+            String trimmed = pos.trim();
+            if (!seen.add(trimmed)) {
+                return true; // 이미 본 값이면 중복 발견
+            }
+        }
+        return false;
+    }
+
+    //대시보드 내 좌표 중복 체크 로직
+    public boolean hasConflictWithExistingSections(List<String> newPositions, List<Section> existingSections) {
+        Set<String> occupied = new HashSet<>();
+        for (Section section : existingSections) {
+            occupied.addAll(section.getPositionList());
+        }
+
+        for (String pos : newPositions) {
+            if (occupied.contains(pos.trim())) {
+                return true; // 이미 존재하는 좌표와 충돌
+            }
+        }
+        return false; // 충돌 없음
     }
 }
