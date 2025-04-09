@@ -11,6 +11,7 @@ import capstone.offflow.User.Domain.User;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,11 +52,15 @@ public class DashboardServiceImpl implements DashboardService{
 
     @Override
     public void deleteDashboard(Long id, User user) {
-        Dashboard dashboard = dashboardRepository.findByIdAndUser(id, user)
+        Dashboard dashboard = dashboardRepository.findById(id) // 여기!! user 조건 빼기
                 .orElseThrow(() -> new EntityNotFoundException("삭제할 대시보드를 찾을 수 없습니다."));
 
-        dashboardRepository.delete(dashboard);
-        log.info("Dashboard 삭제완료 {}", dashboard.getId());
+        if (!dashboard.getUser().equals(user)) {
+            throw new AccessDeniedException("이 대시보드를 삭제할 권한이 없습니다.");
+        }
 
+        dashboardRepository.delete(dashboard);
+        log.info("Dashboard 삭제 완료: {}", dashboard.getId());
     }
+
 }
