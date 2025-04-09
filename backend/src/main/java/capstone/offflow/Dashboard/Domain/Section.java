@@ -35,6 +35,6 @@ public class Section {
     private Dashboard dashboard;
 
     @OneToMany(mappedBy = "section", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Product> productList = new ArrayList<>();
+    private List<Product> productList;
 
 }

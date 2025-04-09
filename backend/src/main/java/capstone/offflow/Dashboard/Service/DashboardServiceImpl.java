@@ -23,7 +23,7 @@ public class DashboardServiceImpl implements DashboardService{
     private final DashboardRepository dashboardRepository;
 
     @Override
-    public void createDashboard(DashboardDto dashboardDto, User user) {
+    public Dashboard createDashboard(DashboardDto dashboardDto, User user) {
         Dashboard dashboard = new Dashboard();
         dashboard.setDashboardName(dashboardDto.getDashboardName());
         dashboard.setStartDate(dashboardDto.getStartDate());
@@ -36,8 +36,7 @@ public class DashboardServiceImpl implements DashboardService{
             dashboard.setMetadata(null); // 명시적으로 null 처리 (선택사항)
         }
 
-        dashboardRepository.save(dashboard);
-        log.info("Dashboard 생성 완료 - {}", dashboard.getId());
+        return dashboardRepository.saveAndFlush(dashboard);
     }
 
     @Override
@@ -46,7 +45,7 @@ public class DashboardServiceImpl implements DashboardService{
         Dashboard dashboard = dashboardRepository.findByIdAndUser(id, user)
                 .orElseThrow(() -> new EntityNotFoundException("해당 id의 유저를 찾을 수 없습니다."));
 
-        //fetch join을 통해 섹션 + 상품까지 함꼐 조회한 경우
+        //fetch join을 통해 섹션까지 함꼐 조회한 경우
         return DashboardDto.convertToDto(dashboard);
     }
 
