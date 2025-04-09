@@ -10,7 +10,7 @@ public interface ProductService {
     Product createProduct(ProductDto dto, User user);
 
     //상품 수정
-    void updateProduct(Long id, ProductDto dto, User user);
+    Product updateProduct(Long id, ProductDto dto, User user);
 
     //상품 조회 (Product Id 기준)
     ProductDto getProductById(Long id, User user);
@@ -22,7 +22,7 @@ public interface ProductService {
     ProductDto getProductBySection(Long id, User user);
 
     //상품 - 섹션 연결
-    void assignSectionToProduct(Long productId, Long sectionId, User user);
+    Product assignSectionToProduct(Long productId, Long sectionId, User user);
 
 
     //상품 삭제

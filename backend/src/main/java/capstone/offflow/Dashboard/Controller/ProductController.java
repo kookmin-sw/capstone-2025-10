@@ -67,6 +67,7 @@ public class ProductController {
         return ResponseEntity.ok(dto);
     }
 
+
     //상품 수정 (상품 - 섹션 매칭)
     @PatchMapping("/{productId}/assign-section/{sectionId}")
     public ResponseEntity<?> assginSectionToProduct(
@@ -74,8 +75,8 @@ public class ProductController {
             @PathVariable(name = "sectionId") Long sectionId,
             @AuthenticationPrincipal UserPrincipal userPrincipal){
 
-        productService.assignSectionToProduct(productId,sectionId, userPrincipal.getUser());
-        return ResponseEntity.ok("Product assigned section");
+        Product product = productService.assignSectionToProduct(productId,sectionId, userPrincipal.getUser());
+        return ResponseEntity.ok(ProductDto.convertToDto(product)); //객체 자체 내보내기 X
     }
 
 

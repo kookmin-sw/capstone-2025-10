@@ -64,27 +64,31 @@ public class ProductServiceImpl implements ProductService{
 
     //상품에 섹션Id값 부여
     @Override
-    public void assignSectionToProduct(Long productId, Long sectionId, User user) {
+    public Product assignSectionToProduct(Long productId, Long sectionId, User user) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new EntityNotFoundException("상품을 찾을 수 없습니다."));
 
         Section section = sectionRepository.findById(sectionId)
                 .orElseThrow(() -> new EntityNotFoundException("섹션을 찾을 수 없습니다."));
 
+
         // 보안: 본인 소속 대시보드, 섹션인지 검증
-        if (!product.getDashboard().getUser().equals(user)) {
+        if (!product.getDashboard().getUser().getUserId().equals(user.getUserId())){
             throw new AccessDeniedException("상품 접근 권한이 없습니다.");
         }
-        if (!section.getDashboard().getUser().equals(user)) {
+
+        if (!section.getDashboard().getUser().getUserId().equals(user.getUserId())){
             throw new AccessDeniedException("섹션 접근 권한이 없습니다.");
         }
 
         product.setSection(section);
+
+        return productRepository.save(product); //수정 후 save하기
     }
 
     //상품 수정
     @Override
-    public void updateProduct(Long id, ProductDto dto, User user) {
+    public Product updateProduct(Long id, ProductDto dto, User user) {
 
         //상품조회
         Product product = productRepository.findByIdAndDashboard_User(id, user)
@@ -95,6 +99,7 @@ public class ProductServiceImpl implements ProductService{
         product.setDescription(dto.getDescription());
         product.setImageUrl(dto.getImageUrl());
 
+        return product;
     }
 
     //상품 삭제
