@@ -13,6 +13,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 
 
 @RestController
@@ -52,7 +53,7 @@ public class ProductController {
             @PathVariable(name = "dashboardId") Long dashboardId,
             @AuthenticationPrincipal UserPrincipal userPrincipal) {
 
-        ProductDto dto = productService.getProductById(dashboardId, userPrincipal.getUser());
+        List<ProductDto> dto = productService.getProductByDashboard(dashboardId, userPrincipal.getUser());
         return ResponseEntity.ok(dto);
     }
 
@@ -63,7 +64,7 @@ public class ProductController {
             @PathVariable(name = "sectionId") Long sectionId,
             @AuthenticationPrincipal UserPrincipal userPrincipal) {
 
-        ProductDto dto = productService.getProductById(sectionId, userPrincipal.getUser());
+        List<ProductDto> dto = productService.getProductBySection(sectionId, userPrincipal.getUser());
         return ResponseEntity.ok(dto);
     }
 

@@ -15,6 +15,9 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -52,14 +55,22 @@ public class ProductServiceImpl implements ProductService{
 
     //Dashboard Id 기반 조회
     @Override
-    public ProductDto getProductByDashboard(Long id, User user) {
-        return null;
+    public List<ProductDto> getProductByDashboard(Long id, User user) {
+        List<Product> products = productRepository.findAllByDashboard_User(id, user);
+
+        return products.stream()
+                .map(ProductDto::convertToDto)
+                .collect(Collectors.toList());
     }
 
     //Section Id 기반 조회
     @Override
-    public ProductDto getProductBySection(Long id, User user) {
-        return null;
+    public List<ProductDto> getProductBySection(Long id, User user) {
+        List<Product> products = productRepository.findAllBySection_User(id, user);
+
+        return products.stream()
+                .map(ProductDto::convertToDto)
+                .collect(Collectors.toList());
     }
 
     //상품에 섹션Id값 부여
