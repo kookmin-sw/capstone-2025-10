@@ -70,24 +70,35 @@ public class SectionServiceImpl implements SectionService{
                 .orElseThrow(() -> new EntityNotFoundException("해당 섹션을 찾을 수 없습니다."));
 
         // 2. 이름 수정 (이름 수정 요청올때)
-        if (!dto.getName().isEmpty()) {
+        if (dto.getName() != null && !dto.getName().isEmpty()) {
             section.setName(dto.getName());
         }
-        log.info("여기는 통과4");
+
         // 3. 포지션 리스트 수정 (포지션 수정 요청올때)
         if (dto.getPositionList() != null && !dto.getPositionList().isEmpty()) {
-            log.info("여기는 통과6");
 
-            if (gridConfig.hasDuplicate(dto.getPositionList())) {
-                throw new IllegalArgumentException("중복된 좌표가 포함되어 있습니다.");
+            // 1. 대시보드 내 다른 섹션들 조회
+            Dashboard dashboard = section.getDashboard();
+            List<Section> sections = sectionRepository.findByDashboard(dashboard);
+
+            // 2. 포지션 충돌 체크 (본인 제외하고)
+            if (gridConfig.hasConflictWithExistingSections(dto.getPositionList(), sections)) {
+                throw new IllegalArgumentException("이미 사용 중인 좌표가 포함되어 있습니다.");
             }
+
+            // 3. 중복 체크
+            if (gridConfig.hasDuplicate(dto.getPositionList())) {
+                throw new IllegalArgumentException("요청된 포지션 리스트에 중복된 좌표가 포함되어 있습니다.");
+            }
+
+            // 4. 범위 체크
             if (!gridConfig.areAllPositionsValid(dto.getPositionList())) {
                 throw new IllegalArgumentException("좌표 범위를 벗어난 값이 포함되어 있습니다.");
             }
 
             section.setPositionList(dto.getPositionList());
         }
-        log.info("여기는 통과5");
+
         return sectionRepository.save(section);
     }
 

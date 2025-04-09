@@ -19,4 +19,5 @@ public interface SectionRepository extends JpaRepository<Section, Long> {
     Optional<Section> findByIdAndDashboard_User(@Param("id") Long id, @Param("user") User user);
 
     List<Section> findByDashboard(Dashboard dashboard);
+
 }
