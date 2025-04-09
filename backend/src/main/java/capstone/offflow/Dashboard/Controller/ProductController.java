@@ -1,6 +1,7 @@
 package capstone.offflow.Dashboard.Controller;
 
 
+import capstone.offflow.Dashboard.Domain.Product;
 import capstone.offflow.Dashboard.Dto.ProductDto;
 import capstone.offflow.Dashboard.Service.ProductService;
 import capstone.offflow.User.Service.UserPrincipal;
@@ -30,38 +31,39 @@ public class ProductController {
             @RequestBody @Validated ProductDto productDto,
             @AuthenticationPrincipal UserPrincipal userPrincipal
     ) {
-        productService.createProduct(productDto, userPrincipal.getUser());
-        return ResponseEntity.status(HttpStatus.CREATED).body("Product created Successfully");
+        Product product = productService.createProduct(productDto, userPrincipal.getUser());
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ProductDto.convertToDto(product));
     }
 
     //상품 조회 (product Id)
-    @GetMapping("/{id}")
+    @GetMapping("/{productId}")
     public ResponseEntity<?> getProductById(
-            @PathVariable(name = "id") Long id,
+            @PathVariable(name = "productId") Long productId,
             @AuthenticationPrincipal UserPrincipal userPrincipal) {
 
-        ProductDto dto = productService.getProductById(id, userPrincipal.getUser());
+        ProductDto dto = productService.getProductById(productId, userPrincipal.getUser());
         return ResponseEntity.ok(dto);
     }
 
-    //상품 조회 (Dashboar Id)
-    @GetMapping("/{id}")
+    //상품 조회 (Dashboard Id)
+    @GetMapping("/{dashboardId}")
     public ResponseEntity<?> getProductByDashboard(
-            @PathVariable(name = "id") Long id,
+            @PathVariable(name = "dashboardId") Long dashboardId,
             @AuthenticationPrincipal UserPrincipal userPrincipal) {
 
-        ProductDto dto = productService.getProductById(id, userPrincipal.getUser());
+        ProductDto dto = productService.getProductById(dashboardId, userPrincipal.getUser());
         return ResponseEntity.ok(dto);
     }
 
 
     //상품 조회 (Section Id)
-    @GetMapping("/{id}")
+    @GetMapping("/{sectionId}")
     public ResponseEntity<?> getProductBySection(
-            @PathVariable(name = "id") Long id,
+            @PathVariable(name = "sectionId") Long sectionId,
             @AuthenticationPrincipal UserPrincipal userPrincipal) {
 
-        ProductDto dto = productService.getProductById(id, userPrincipal.getUser());
+        ProductDto dto = productService.getProductById(sectionId, userPrincipal.getUser());
         return ResponseEntity.ok(dto);
     }
 

@@ -1,12 +1,13 @@
 package capstone.offflow.Dashboard.Service;
 
+import capstone.offflow.Dashboard.Domain.Product;
 import capstone.offflow.Dashboard.Dto.ProductDto;
 import capstone.offflow.User.Domain.User;
 
 
 public interface ProductService {
     //상품 생성
-    void createProduct(ProductDto dto, User user);
+    Product createProduct(ProductDto dto, User user);
 
     //상품 수정
     void updateProduct(Long id, ProductDto dto, User user);

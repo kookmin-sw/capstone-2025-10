@@ -25,14 +25,18 @@ public class ProductServiceImpl implements ProductService{
     private final DashboardRepository dashboardRepository;
     private final SectionRepository sectionRepository;
 
+
     @Override
-    public void createProduct(ProductDto dto, User user) {
+    public Product createProduct(ProductDto dto, User user) {
         Dashboard dashboard = dashboardRepository.findByIdAndUser(dto.getDashboardId(), user)
                 .orElseThrow(() -> new EntityNotFoundException("대시보드를 찾을 수 없습니다."));
 
         Product product = ProductDto.convertToEntity(dto, dashboard);
-        productRepository.save(product);
-        log.info("Product 생성 완료 - {}", product.getId());
+        Product savedProduct = productRepository.save(product);
+
+        log.info("Product 생성 완료 - {}", savedProduct.getId());
+        log.info("Product 생성 완료 - {}", savedProduct.getDashboard());
+        return savedProduct; //product 리턴
     }
 
 

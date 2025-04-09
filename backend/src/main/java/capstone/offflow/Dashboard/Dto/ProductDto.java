@@ -19,6 +19,9 @@ public class ProductDto {
 
     @NonNull
     private Long dashboardId;
+
+    private Long sectionId; //null값 가능
+
     private String description;
     private String imageUrl;
 
@@ -28,10 +31,11 @@ public class ProductDto {
                 .id(product.getId())
                 .name(product.getName())
                 .price(product.getPrice())
+                .dashboardId(product.getDashboard().getId()) //dashboard id추가
+                .sectionId(product.getSection() != null ? product.getSection().getId() : null) // 섹션이 있으면 ID, 없으면 null
                 .description(product.getDescription())
                 .imageUrl(product.getImageUrl())
                 .build();
-
     }
 
     //DTO -> Entity (생성/수정용)
