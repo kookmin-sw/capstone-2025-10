@@ -2,13 +2,16 @@ package capstone.offflow.Dashboard.Service;
 
 import capstone.offflow.Dashboard.Domain.Dashboard;
 import capstone.offflow.Dashboard.Domain.Product;
+import capstone.offflow.Dashboard.Domain.Section;
 import capstone.offflow.Dashboard.Dto.ProductDto;
 import capstone.offflow.Dashboard.Repository.DashboardRepository;
 import capstone.offflow.Dashboard.Repository.ProductRepository;
+import capstone.offflow.Dashboard.Repository.SectionRepository;
 import capstone.offflow.User.Domain.User;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +23,7 @@ public class ProductServiceImpl implements ProductService{
 
     private final ProductRepository productRepository;
     private final DashboardRepository dashboardRepository;
+    private final SectionRepository sectionRepository;
 
     @Override
     public void createProduct(ProductDto dto, User user) {
@@ -31,6 +35,50 @@ public class ProductServiceImpl implements ProductService{
         log.info("Product 생성 완료 - {}", product.getId());
     }
 
+
+    //Product Id 기반 조회
+    @Override
+    @Transactional(readOnly = true)
+    public ProductDto getProductById(Long id, User user) {
+        Product product = productRepository.findByIdAndDashboard_User(id, user)
+                .orElseThrow(() -> new EntityNotFoundException("해당 Id의 상품을 찾을 수 없습니다."));
+
+        return ProductDto.convertToDto(product);
+    }
+
+    //Dashboard Id 기반 조회
+    @Override
+    public ProductDto getProductByDashboard(Long id, User user) {
+        return null;
+    }
+
+    //Section Id 기반 조회
+    @Override
+    public ProductDto getProductBySection(Long id, User user) {
+        return null;
+    }
+
+    //상품에 섹션Id값 부여
+    @Override
+    public void assignSectionToProduct(Long productId, Long sectionId, User user) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new EntityNotFoundException("상품을 찾을 수 없습니다."));
+
+        Section section = sectionRepository.findById(sectionId)
+                .orElseThrow(() -> new EntityNotFoundException("섹션을 찾을 수 없습니다."));
+
+        // 보안: 본인 소속 대시보드, 섹션인지 검증
+        if (!product.getDashboard().getUser().equals(user)) {
+            throw new AccessDeniedException("상품 접근 권한이 없습니다.");
+        }
+        if (!section.getDashboard().getUser().equals(user)) {
+            throw new AccessDeniedException("섹션 접근 권한이 없습니다.");
+        }
+
+        product.setSection(section);
+    }
+
+    //상품 수정
     @Override
     public void updateProduct(Long id, ProductDto dto, User user) {
 
@@ -45,15 +93,7 @@ public class ProductServiceImpl implements ProductService{
 
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public ProductDto getProductById(Long id, User user) {
-        Product product = productRepository.findByIdAndDashboard_User(id, user)
-                .orElseThrow(() -> new EntityNotFoundException("해당 Id의 상품을 찾을 수 없습니다."));
-
-        return ProductDto.convertToDto(product);
-    }
-
+    //상품 삭제
     @Override
     public void deleteProduct(Long id, User user) {
         Product product = productRepository.findByIdAndDashboard_User(id, user)

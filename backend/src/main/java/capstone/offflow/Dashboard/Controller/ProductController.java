@@ -34,16 +34,48 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Product created Successfully");
     }
 
-    //상품 조회
+    //상품 조회 (product Id)
     @GetMapping("/{id}")
-    public ResponseEntity<?> getProduct(
+    public ResponseEntity<?> getProductById(
             @PathVariable(name = "id") Long id,
             @AuthenticationPrincipal UserPrincipal userPrincipal) {
 
         ProductDto dto = productService.getProductById(id, userPrincipal.getUser());
         return ResponseEntity.ok(dto);
-
     }
+
+    //상품 조회 (Dashboar Id)
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getProductByDashboard(
+            @PathVariable(name = "id") Long id,
+            @AuthenticationPrincipal UserPrincipal userPrincipal) {
+
+        ProductDto dto = productService.getProductById(id, userPrincipal.getUser());
+        return ResponseEntity.ok(dto);
+    }
+
+
+    //상품 조회 (Section Id)
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getProductBySection(
+            @PathVariable(name = "id") Long id,
+            @AuthenticationPrincipal UserPrincipal userPrincipal) {
+
+        ProductDto dto = productService.getProductById(id, userPrincipal.getUser());
+        return ResponseEntity.ok(dto);
+    }
+
+    //상품 수정 (상품 - 섹션 매칭)
+    @PatchMapping("/{productId}/assign-section/{sectionId}")
+    public ResponseEntity<?> assginSectionToProduct(
+            @PathVariable(name = "productId") Long productId,
+            @PathVariable(name = "sectionId") Long sectionId,
+            @AuthenticationPrincipal UserPrincipal userPrincipal){
+
+        productService.assignSectionToProduct(productId,sectionId, userPrincipal.getUser());
+        return ResponseEntity.ok("Product assigned section");
+    }
+
 
 
     //상품 수정
