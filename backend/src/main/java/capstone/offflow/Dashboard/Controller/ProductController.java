@@ -47,7 +47,7 @@ public class ProductController {
     }
 
     //상품 조회 (Dashboard Id)
-    @GetMapping("/{dashboardId}")
+    @GetMapping("/dashboard/{dashboardId}")
     public ResponseEntity<?> getProductByDashboard(
             @PathVariable(name = "dashboardId") Long dashboardId,
             @AuthenticationPrincipal UserPrincipal userPrincipal) {
@@ -58,7 +58,7 @@ public class ProductController {
 
 
     //상품 조회 (Section Id)
-    @GetMapping("/{sectionId}")
+    @GetMapping("/section/{sectionId}")
     public ResponseEntity<?> getProductBySection(
             @PathVariable(name = "sectionId") Long sectionId,
             @AuthenticationPrincipal UserPrincipal userPrincipal) {
