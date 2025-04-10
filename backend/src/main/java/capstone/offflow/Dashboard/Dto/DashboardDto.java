@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class DashboardDto {
 
+    @NonNull
     private Long id;
     private String dashboardName;
 

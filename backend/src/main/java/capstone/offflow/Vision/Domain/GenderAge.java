@@ -15,7 +15,7 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class genderAge {
+public class GenderAge {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
