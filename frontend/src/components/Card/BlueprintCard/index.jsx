@@ -7,11 +7,7 @@ import Button from "@/components/Button";
 import { useModal } from "@/contexts/ModalContext";
 import TextInput from "@/components/Input/TextInput";
 import ImageGrid from "@/components/ImageGrid";
-
-const generateRandomColor = () => {
-  const hue = Math.floor(Math.random() * 360);
-  return `hsla(${hue}, 70%, 70%, 0.4)`; // pastel tone with transparency
-};
+import { generateRandomColor } from "@/utils/sectionUtils";
 
 const BlueprintCard = ({ sections, setSections, upload }) => {
   const [selected, setSelected] = useState(new Set());

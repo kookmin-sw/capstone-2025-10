@@ -5,11 +5,20 @@ export const fetchSession = async () => {
 };
 
 export const login = async (userId, password) => {
-  return await fetchJson("/api/login", {
+  const response = await fetchJson("/api/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ userId, password }),
   });
+
+  const setCookie = response.headers.get("Set-Cookie");
+  if (setCookie) {
+    const resHeaders = new Headers({
+      "Content-Type": "application/json",
+    });
+
+    resHeaders.set("Set-Cookie", setCookie);
+  }
 };
 
 export const logout = async () => {

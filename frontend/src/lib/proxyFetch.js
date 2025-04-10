@@ -1,31 +1,30 @@
 export async function proxyFetch({
   req,
-  res,
   backendUrl,
-  method = "POST",
+  method = "GET",
   headers = {},
 }) {
-  const body = await req.json();
+  let body;
+  if (method !== "GET" && method !== "HEAD") {
+    body = await req.json();
+  }
+
   const backendRes = await fetch(backendUrl, {
     method,
     headers: {
-      ...headers,
       "Content-Type": "application/json",
+      ...headers,
     },
-    body: JSON.stringify(body),
-    credentials: "include", // 세션 인증 필요 시
+    body: body ? JSON.stringify(body) : undefined,
+    credentials: "include",
   });
 
-  const responseBody = await backendRes.text(); // 나중에 JSON으로 파싱할 수도 있음
+  const responseBody = await backendRes.text();
 
-  const resHeaders = new Headers({
-    "Content-Type": "application/json",
-  });
-
-  // Set-Cookie 헤더가 있는 경우 수동으로 설정
+  const resHeaders = new Headers({ "Content-Type": "application/json" });
   const setCookie = backendRes.headers.get("Set-Cookie");
   if (setCookie) {
-    resHeaders.set("set-cookie", setCookie);
+    resHeaders.set("Set-Cookie", setCookie);
   }
 
   return new Response(responseBody, {

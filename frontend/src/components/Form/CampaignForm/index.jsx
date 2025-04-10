@@ -7,48 +7,13 @@ import ProductCard from "@/components/Card/ProductCard";
 import SectionCard from "@/components/Card/SectionCard";
 import { useState } from "react";
 import useImageUpload from "@/hooks/useImageUpload";
+import { getSectionFromCampaign } from "@/utils/sectionUtils";
 
-const CampaignForm = () => {
-  const [sections, setSections] = useState([]);
-  const [products, setProducts] = useState([
-    {
-      id: 1,
-      name: "여름 샌들",
-      price: 39000,
-      dashboardId: 3,
-      sectionId: null,
-      description: "통풍 잘 되는 여름 샌들입니다.",
-      imageUrl: "test.png",
-    },
-    {
-      id: 3,
-      name: "여름 샌들",
-      price: 39000,
-      dashboardId: 3,
-      sectionId: null,
-      description: "통풍 잘 되는 여름 샌들입니다.",
-      imageUrl: "test.png",
-    },
-    {
-      id: 4,
-      name: "여름 샌들",
-      price: 39000,
-      dashboardId: 3,
-      sectionId: null,
-      description: "통풍 잘 되는 여름 샌들입니다.",
-      imageUrl: "test.png",
-    },
-    {
-      id: 2,
-      name: "여름 샌들",
-      price: 39000,
-      dashboardId: 3,
-      sectionId: 4,
-      description: "통풍 잘 되는 여름 샌들입니다.",
-      imageUrl: "test.png",
-    },
-  ]);
+const CampaignForm = ({ campaign }) => {
+  const [sections, setSections] = useState(getSectionFromCampaign(campaign));
+  const [products, setProducts] = useState([]);
   const upload = useImageUpload();
+  console.log(sections);
 
   return (
     <form className={styles.form}>

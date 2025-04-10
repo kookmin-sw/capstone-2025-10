@@ -1,14 +1,19 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./index.module.scss";
 import Button from "@/components/Button";
 import { useModal } from "@/contexts/ModalContext";
 import ImageGrid from "@/components/ImageGrid";
+import { getProductBySectionId } from "@/lib/api/product";
 
 const SectionCard = ({ sections, setSections, image }) => {
   const { openModal, closeModal } = useModal();
   const [focusIndex, setFocusIndex] = useState(null);
+
+  useEffect(() => {
+    if (focusIndex !== null) getProductBySectionId(sections[focusIndex]?.id);
+  }, [focusIndex]);
 
   const handleAddSection = (e) => {
     e.preventDefault();
@@ -48,11 +53,7 @@ const SectionCard = ({ sections, setSections, image }) => {
         onClick={(e) => e.stopPropagation()}
       >
         <div className={styles["button-wrapper"]}>
-          {focusIndex === null ? (
-            <Button onClick={handleAddSection}>Add Product</Button>
-          ) : (
-            <Button onClick={handleUpdate}>Save</Button>
-          )}
+          <Button onClick={handleAddSection}>Add Product</Button>
         </div>
         <div className={styles["list-wrapper"]}>
           {sections.map((section, idx) => {

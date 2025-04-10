@@ -26,7 +26,7 @@ export default function LabeledPasswordInput({
           onChange={onChange}
           placeholder={placeholder}
           required={required}
-          pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,16}$"
+          //pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,16}$"
         />
         <button
           type="button"
