@@ -1,4 +1,7 @@
 package capstone.offflow.Vision.Repository;
 
-public interface VisionRepository {
+import capstone.offflow.Vision.Domain.Vision;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface VisionRepository extends JpaRepository<Vision, Long> {
 }
