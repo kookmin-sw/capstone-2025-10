@@ -16,8 +16,7 @@ export async function fetchWithSession(url, options = {}) {
 
   if (!response.ok) {
     const message = `[fetchWithSession] ${response.status} ${response.statusText}`;
-    console.error(message);
-    throw new Error(message);
+    return {};
   }
 
   return await response.json();

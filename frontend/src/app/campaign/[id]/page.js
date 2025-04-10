@@ -3,9 +3,10 @@ import CampaignForm from "@/components/Form/CampaignForm";
 import { fetchWithSession } from "@/lib/fetchWithSession";
 
 async function getCampaign(id) {
-  return await fetchWithSession(
+  const response = await fetchWithSession(
     `http://localhost:8080/api/dashboard/test1/${id}`,
   );
+  return response;
 }
 
 export default async function Campaign({ params }) {
@@ -16,7 +17,7 @@ export default async function Campaign({ params }) {
   return (
     <div className={styles.page}>
       <main className={styles.main}>
-        <CampaignForm campaign={campaign} />
+        <CampaignForm campaign={campaign} dashboardId={id} />
       </main>
       <footer className={styles.footer}></footer>
     </div>

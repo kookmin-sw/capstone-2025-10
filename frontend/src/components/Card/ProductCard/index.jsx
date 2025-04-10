@@ -7,6 +7,12 @@ import Button from "@/components/Button";
 import React, { useEffect, useState } from "react";
 import Textarea from "@/components/Input/Textarea";
 import useImageUpload from "@/hooks/useImageUpload";
+import {
+  createProduct,
+  deleteProduct,
+  getProductByDashboardId,
+  updateProduct,
+} from "@/lib/api/product";
 
 const shallowEqual = (a, b) => Object.keys(a).every((key) => a[key] === b[key]);
 
@@ -20,9 +26,11 @@ const initProduct = {
   imageUrl: null,
 };
 
-const ProductCard = ({ mode = "edit", onClose, products = {}, onSubmit }) => {
+const ProductCard = ({ mode = "edit", dashboardId }) => {
+  const [products, setProducts] = useState([]);
   const [focusProduct, setFocusProduct] = useState(initProduct);
   const [originalProduct, setOriginalProduct] = useState(initProduct);
+  const [shouldRefresh, setShouldRefresh] = useState(false);
   const isReadOnly = mode === "read";
   const upload = useImageUpload();
 
@@ -32,6 +40,38 @@ const ProductCard = ({ mode = "edit", onClose, products = {}, onSubmit }) => {
   const onCancelClick = () => {
     setFocusProduct(initProduct);
   };
+
+  const onDeleteClick = async (id) => {
+    const response = await deleteProduct(id);
+    console.log(response);
+    setShouldRefresh(true);
+  };
+
+  const onSubmitClick = async () => {
+    if (focusProduct.id) {
+      await updateProduct(focusProduct.id, focusProduct);
+    } else {
+      await createProduct(dashboardId, focusProduct);
+    }
+    setShouldRefresh(true);
+  };
+
+  useEffect(() => {
+    setShouldRefresh(true);
+  }, []);
+
+  useEffect(() => {
+    console.log("refresh");
+    if (!shouldRefresh) return;
+
+    const getProduct = async () => {
+      const response = await getProductByDashboardId(dashboardId);
+      console.log(response);
+      setProducts(response);
+      setShouldRefresh(false);
+    };
+    getProduct();
+  }, [shouldRefresh]);
 
   useEffect(() => {
     if (focusProduct?.imageUrl && typeof focusProduct.imageUrl !== "object") {
@@ -44,7 +84,7 @@ const ProductCard = ({ mode = "edit", onClose, products = {}, onSubmit }) => {
     } else {
       upload.setFile(null);
     }
-  }, [focusProduct]);
+  }, [focusProduct?.imageUrl]);
 
   return (
     <div className={styles.card}>
@@ -118,7 +158,15 @@ const ProductCard = ({ mode = "edit", onClose, products = {}, onSubmit }) => {
                 취소
               </Button>
             )}
-            <Button disabled={!isChanged}>저장</Button>
+            <Button
+              disabled={!isChanged}
+              onClick={(e) => {
+                e.preventDefault();
+                onSubmitClick();
+              }}
+            >
+              저장
+            </Button>
           </div>
         )}
       </div>
@@ -140,6 +188,7 @@ const ProductCard = ({ mode = "edit", onClose, products = {}, onSubmit }) => {
               <button
                 onClick={(e) => {
                   e.preventDefault();
+                  onDeleteClick(product.id);
                 }}
               >
                 삭제

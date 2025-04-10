@@ -7,20 +7,25 @@ export default function useSession() {
 
   useEffect(() => {
     const fetchSession = async () => {
-      //try {
-      //  const res = await fetch(`localhost:8080/api/users/${id}`);
-      //  if (!res.ok) {
-      //    throw new Error("세션 없음");
-      //  }
-      //
-      //  const data = await res.json();
-      //  setUser(data.user); // { id, name, email, ... }
-      //} catch (err) {
-      //  setUser(null);
-      //  setError(err);
-      //} finally {
-      //  setLoading(false);
-      //}
+      try {
+        const res = await fetch(`http://localhost:8080/api/auth/check`, {
+          credentials: "include",
+        });
+
+        if (!res.ok) {
+          throw new Error("세션 없음");
+        }
+
+        const data = await res.json();
+        console.log(data);
+        setUser(data); // { id, name, email, ... }
+      } catch (err) {
+        console.log(err);
+        setUser(null);
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchSession();

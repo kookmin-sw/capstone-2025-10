@@ -1,7 +1,7 @@
 import { fetchJson } from "@/lib/fetcher";
 
 export const fetchSession = async () => {
-  return await fetchJson("/api/session");
+  return await fetchJson("/api/auth/check");
 };
 
 export const login = async (userId, password) => {
@@ -11,14 +11,15 @@ export const login = async (userId, password) => {
     body: JSON.stringify({ userId, password }),
   });
 
-  const setCookie = response.headers.get("Set-Cookie");
-  if (setCookie) {
-    const resHeaders = new Headers({
-      "Content-Type": "application/json",
-    });
-
-    resHeaders.set("Set-Cookie", setCookie);
-  }
+  //const setCookie = response.headers.get("Set-Cookie");
+  //if (setCookie) {
+  //  const resHeaders = new Headers({
+  //    "Content-Type": "application/json",
+  //  });
+  //
+  //  resHeaders.set("Set-Cookie", setCookie);
+  //}
+  return response;
 };
 
 export const logout = async () => {

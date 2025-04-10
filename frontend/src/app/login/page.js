@@ -22,10 +22,10 @@ export default function LoginPage() {
     setError("");
 
     try {
-      const res = await login(userId, password);
+      await login(userId, password);
       router.push("/");
     } catch (err) {
-      console.log(error);
+      console.log(err);
       setError(err.message);
     }
   };

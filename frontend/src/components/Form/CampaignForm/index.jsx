@@ -8,33 +8,44 @@ import SectionCard from "@/components/Card/SectionCard";
 import { useState } from "react";
 import useImageUpload from "@/hooks/useImageUpload";
 import { getSectionFromCampaign } from "@/utils/sectionUtils";
+import RequireLogin from "@/components/Login/RequireLogin";
+import { useRouter } from "next/navigation";
 
-const CampaignForm = ({ campaign }) => {
+const CampaignForm = ({ campaign, dashboardId }) => {
+  const router = useRouter();
   const [sections, setSections] = useState(getSectionFromCampaign(campaign));
-  const [products, setProducts] = useState([]);
   const upload = useImageUpload();
-  console.log(sections);
+  console.log(campaign);
+
+  if (Object.keys(campaign).length === 0) {
+    //router.push("/login");
+    return <RequireLogin></RequireLogin>;
+  }
 
   return (
-    <form className={styles.form}>
-      <CardSlider
-        cards={[
-          <BlueprintCard
-            key="1"
-            sections={sections}
-            setSections={setSections}
-            upload={upload}
-          />,
-          <ProductCard products={products} setProducts={setProducts} key="2" />,
-          <SectionCard
-            key="2"
-            sections={sections}
-            setSections={setSections}
-            image={upload.file}
-          />,
-        ]}
-      />
-    </form>
+    <RequireLogin>
+      <form className={styles.form}>
+        <CardSlider
+          cards={[
+            <BlueprintCard
+              key="1"
+              sections={sections}
+              setSections={setSections}
+              upload={upload}
+              dashboardId={dashboardId}
+            />,
+            <ProductCard key="2" dashboardId={dashboardId} />,
+            <SectionCard
+              key="2"
+              sections={sections}
+              setSections={setSections}
+              image={upload.file}
+              dashboardId={dashboardId}
+            />,
+          ]}
+        />
+      </form>
+    </RequireLogin>
   );
 };
 

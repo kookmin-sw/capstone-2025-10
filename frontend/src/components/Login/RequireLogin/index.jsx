@@ -3,11 +3,11 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 const RequireLogin = ({ children }) => {
-  const { isLoggedIn, loading } = useSession();
+  const { isLoggedIn, loading, error } = useSession();
   const router = useRouter();
 
   useEffect(() => {
-    if (!loading && !isLoggedIn) {
+    if (error) {
       router.push("/login");
     }
   }, [loading, isLoggedIn, router]);
