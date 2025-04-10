@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/offflow
+      SPRING_DATASOURCE_USERNAME: offflow
+      SPRING_DATASOURCE_PASSWORD: secret
+
+  db:
+    image: postgres:15
+    container_name: postgres-db
+    restart: always
+    environment:
+      POSTGRES_DB: offflow
+      POSTGRES_USER: offflow
+      POSTGRES_PASSWORD: secret
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/Users/gimlinhoe/WebstormProjects/capstone-2025-10
+
+volumes:
+  pgdata:
