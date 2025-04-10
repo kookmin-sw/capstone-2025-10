@@ -1,11 +1,18 @@
 package capstone.offflow.Vision.Domain;
 
 
-import jakarta.persistence.Entity;
+import capstone.offflow.Dashboard.Domain.Dashboard;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.Date;
+
+/**
+ * 군중 밀집도 Data Entity
+ */
 
 @Entity
 @Getter
@@ -13,4 +20,17 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Heatmap {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private Date detectedTime; //보낸 시간
+
+    private String gridList; //좌표 리스트 -> String으로 받을 예정
+
+
+    @ManyToOne(optional = false) //항상 대시보드에 소속 (1개 대시보드 : 여러 대시보드 통계)
+    @JoinColumn(name = "dashboard_id")
+    private Dashboard dashboard;
 }
