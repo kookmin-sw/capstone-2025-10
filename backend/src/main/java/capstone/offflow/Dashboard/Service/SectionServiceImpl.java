@@ -63,27 +63,43 @@ public class SectionServiceImpl implements SectionService{
 
     //섹션 수정
     @Override
-    public void updateSection(Long id, SectionDto dto, User user) {
-
+    public Section updateSection(Long id, SectionDto dto, User user) {
         // 대시보드는 조회할 필요 없음 -> findById method 로 이미 유저, 대시보드 권한 검증
-        // 1. 섹션 조회 (해당 유저의 섹션인지 확인)
+        // 1. 섹션 조회
         Section section = sectionRepository.findByIdAndDashboard_User(id, user)
                 .orElseThrow(() -> new EntityNotFoundException("해당 섹션을 찾을 수 없습니다."));
 
-        // 2. 중복 좌표 체크
-        if (gridConfig.hasDuplicate(dto.getPositionList())) {
-            throw new IllegalArgumentException("중복된 좌표가 포함되어 있습니다.");
+        // 2. 이름 수정 (이름 수정 요청올때)
+        if (dto.getName() != null && !dto.getName().isEmpty()) {
+            section.setName(dto.getName());
         }
 
-        // 3. 유효한 좌표 범위 체크
-        if (!gridConfig.areAllPositionsValid(dto.getPositionList())) {
-            throw new IllegalArgumentException("좌표 범위를 벗어난 값이 포함되어 있습니다.");
+        // 3. 포지션 리스트 수정 (포지션 수정 요청올때)
+        if (dto.getPositionList() != null && !dto.getPositionList().isEmpty()) {
+
+            // 1. 대시보드 내 다른 섹션들 조회
+            Dashboard dashboard = section.getDashboard();
+            List<Section> sections = sectionRepository.findByDashboard(dashboard);
+
+            // 2. 포지션 충돌 체크 (본인 제외하고)
+            if (gridConfig.hasConflictWithExistingSections(dto.getPositionList(), sections)) {
+                throw new IllegalArgumentException("이미 사용 중인 좌표가 포함되어 있습니다.");
+            }
+
+            // 3. 중복 체크
+            if (gridConfig.hasDuplicate(dto.getPositionList())) {
+                throw new IllegalArgumentException("요청된 포지션 리스트에 중복된 좌표가 포함되어 있습니다.");
+            }
+
+            // 4. 범위 체크
+            if (!gridConfig.areAllPositionsValid(dto.getPositionList())) {
+                throw new IllegalArgumentException("좌표 범위를 벗어난 값이 포함되어 있습니다.");
+            }
+
+            section.setPositionList(dto.getPositionList());
         }
 
-        // 4. 필드만 setter로 수정
-        section.setName(dto.getName());
-        section.setPositionList(dto.getPositionList());
-
+        return sectionRepository.save(section);
     }
 
     //섹션 조회
