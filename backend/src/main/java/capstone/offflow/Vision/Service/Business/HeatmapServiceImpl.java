@@ -34,7 +34,7 @@ public class HeatmapServiceImpl implements HeatmapService {
         }
 
         // 2. Redis에 없으면 (Cache Miss) DB에서 찾는다
-        List<HeatmapDto> dbResult = heatmapRepository.findAllByDashboard_User(dashboardId, user).stream()
+        List<HeatmapDto> dbResult = heatmapRepository.findAllByDashboard_IdAndDashboard_User(dashboardId, user).stream()
                 .map(HeatmapDto::convertToDto)
                 .toList();
 

@@ -33,7 +33,7 @@ public class TrackingServiceImpl implements TrackingService{
         }
 
         // 2. Redis에 없으면 DB 조회
-        List<TrackingDto> dbResult = trackingRepository.findAllByDashboard_User(dashboardId, user).stream()
+        List<TrackingDto> dbResult = trackingRepository.findAllByDashboard_IdAndDashboard_User(dashboardId, user).stream()
                 .map(TrackingDto::convertToDto)
                 .toList();
 

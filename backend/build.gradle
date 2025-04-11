@@ -41,6 +41,11 @@ dependencies {
 	implementation 'org.springframework.kafka:spring-kafka'
 	//redis 추가
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	//Jackson
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+    implementation 'com.fasterxml.jackson.core:jackson-core'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations'
 }
 
 tasks.named('test') {

@@ -12,7 +12,7 @@ import java.util.Date;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class GenderAgeDto {
 
-    @NonNull
+//     @NonNull
     private Long id;
 
     @NonNull
@@ -30,6 +30,7 @@ public class GenderAgeDto {
     public static GenderAgeDto convertToDto(GenderAge genderAge){
         return GenderAgeDto.builder()
                 .id(genderAge.getId())
+                .dashboardId(genderAge.getDashboard().getId())
                 .detectedTime(genderAge.getDetectedTime())
                 .visitorLabel(genderAge.getVisitorLabel())
                 .gender(genderAge.getGender())
@@ -45,9 +46,10 @@ public class GenderAgeDto {
 
         genderAge.setDetectedTime(genderAgeDto.getDetectedTime());
         genderAge.setVisitorLabel(genderAgeDto.getVisitorLabel());
-        genderAge.setGender(genderAge.getGender());
-        genderAge.setAge(genderAge.getAge());
+        genderAge.setGender(genderAgeDto.getGender()); // ✅ 수정
+        genderAge.setAge(genderAgeDto.getAge());       // ✅ 수정
         genderAge.setDashboard(dashboard);
+
         return genderAge;
     }
 

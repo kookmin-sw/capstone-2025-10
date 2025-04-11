@@ -8,4 +8,6 @@ import java.util.List;
 public interface GenderAgeService {
 
     List<GenderAgeDto> getGenderAgeById(Long dashboardId, User user);
+    // GenderAgeService.java
+    void save(GenderAgeDto dto, Long dashboardId);
 }

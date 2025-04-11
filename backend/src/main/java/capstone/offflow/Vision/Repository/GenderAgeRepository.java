@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface GenderAgeRepository extends JpaRepository<GenderAge, Long> {
 
-    List<GenderAge> findAllByDashboard_User(Long dashboardId, User user);
+    List<GenderAge> findAllByDashboard_IdAndDashboard_User(Long dashboardId, User user);
 
 }
