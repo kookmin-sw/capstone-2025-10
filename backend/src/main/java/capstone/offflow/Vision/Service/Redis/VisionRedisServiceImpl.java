@@ -16,6 +16,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Type에 맞는 Repository에 데이터 저장
+ * Type : GenderAge, Heatmap, Tracking
+ */
+
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -29,11 +35,12 @@ public class VisionRedisServiceImpl implements VisionRedisService{
 
     //Redis에 데이터 넣는 Method
     public void cacheData(String key, Object data){
-        redisTemplate.opsForList().leftPush(key, data);
+        redisTemplate.opsForList().leftPush(key, data); //List로 저장
     }
 
     //Redis -> DB로 flush하는 Method
-
+    //5분마다 스케줄러가 호출
+    //Type에 맞는 Repository에 저장
     @Override
     public void flushCacheToDatabase() {
         flushType("heatmap", Heatmap.class, heatmapRepository);
@@ -62,7 +69,7 @@ public class VisionRedisServiceImpl implements VisionRedisService{
                     log.error("❌ Failed to save batch for redisKey {}: {}", redisKey, e.getMessage());
                 }
             }
-            redisTemplate.delete(redisKey);
+            redisTemplate.delete(redisKey); //저장 완료 후 Redis 데이터 삭제
         }
     }
 
