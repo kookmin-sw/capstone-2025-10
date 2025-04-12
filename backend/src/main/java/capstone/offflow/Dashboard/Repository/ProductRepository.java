@@ -34,7 +34,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
 
     // 섹션 매핑안된 모든 상품 가져오기
-    @Query("SELECT p FROM Product p LEFT JOIN FETCH p.section s WHERE p.dashboard.user = :user AND (s IS NULL OR s.id != :sectionId)")
+    @Query("SELECT p FROM Product p LEFT JOIN FETCH p.section s WHERE p.dashboard.user = :user AND s IS NULL")
     List<Product> findProductsByUserNotInSection(@Param("sectionId") Long sectionId, @Param("user") User user);
 
 }
