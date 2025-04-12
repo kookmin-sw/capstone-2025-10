@@ -125,7 +125,11 @@ public class SectionServiceImpl implements SectionService{
         Product product = productRepository.findByIdAndDashboard_User(productId, user)
                 .orElseThrow(() -> new EntityNotFoundException("해당 Id의 섹션을 찾을 수 없습니다."));
 
+        //1. 섹션에서 상품 제거
         section.getProductList().remove(product);
+
+        //2. 상품에서도 섹션 참조 끊기
+        product.setSection(null);
 
         return section;
     }

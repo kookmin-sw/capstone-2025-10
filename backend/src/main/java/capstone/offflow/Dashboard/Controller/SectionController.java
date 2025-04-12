@@ -64,7 +64,7 @@ public class SectionController {
     }
 
     //섹션에 매핑된 상품 삭제
-    @DeleteMapping("/sections/{sectionId}/products/{productId}")
+    @DeleteMapping("/{sectionId}/products/{productId}")
     public ResponseEntity<?> unmapProductFromSection(
             @PathVariable (name = "sectionId") Long sectionId,
             @PathVariable (name = "productId") Long productId,

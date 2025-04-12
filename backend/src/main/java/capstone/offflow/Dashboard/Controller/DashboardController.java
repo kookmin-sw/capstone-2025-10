@@ -67,6 +67,8 @@ public class DashboardController {
     @GetMapping("/all")
     public ResponseEntity<?> getAllDashboard(
             @AuthenticationPrincipal UserPrincipal userPrincipal){
+
+
         List<DashboardDto> dto = dashboardService.getAllDashboard(userPrincipal.getUser());
 
         return ResponseEntity.ok(dto);

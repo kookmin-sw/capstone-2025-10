@@ -98,8 +98,8 @@ public class ProductController {
             @RequestBody ProductDto dto,
             @AuthenticationPrincipal UserPrincipal userPrincipal){
 
-        productService.updateProduct(id, dto, userPrincipal.getUser());
-        return ResponseEntity.ok("Product updated successfully");
+        Product product = productService.updateProduct(id, dto, userPrincipal.getUser());
+        return ResponseEntity.ok(ProductDto.convertToDto(product));
     }
 
 
