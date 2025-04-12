@@ -15,6 +15,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -57,10 +60,15 @@ public class VisionDataServiceImpl implements VisionDataService{
                     // ✅ Redis에 저장
                     visionRedisService.cacheData("genderAge", genderAge);
 
-                    // ✅ DB에도 즉시 저장 (선택)
+                    // ✅ DB 저장을 위한 DTO 변환 (Date → LocalDateTime)
+                    LocalDateTime localDetectedTime = genderAge.getDetectedTime()
+                            .toInstant()
+                            .atZone(ZoneId.systemDefault())
+                            .toLocalDateTime();
+
                     GenderAgeDto dto = GenderAgeDto.builder()
                             .dashboardId(dashboardId)
-                            .detectedTime(genderAge.getDetectedTime())
+                            .detectedTime(localDetectedTime)
                             .visitorLabel(genderAge.getVisitorLabel())
                             .gender(genderAge.getGender())
                             .age(genderAge.getAge())
