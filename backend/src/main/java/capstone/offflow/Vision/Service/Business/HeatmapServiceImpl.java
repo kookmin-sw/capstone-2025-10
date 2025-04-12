@@ -1,8 +1,13 @@
 package capstone.offflow.Vision.Service.Business;
 
 
+import capstone.offflow.Dashboard.Domain.Dashboard;
+import capstone.offflow.Dashboard.Repository.DashboardRepository;
 import capstone.offflow.User.Domain.User;
 
+import capstone.offflow.Vision.Domain.GenderAge;
+import capstone.offflow.Vision.Domain.Heatmap;
+import capstone.offflow.Vision.Dto.GenderAgeDto;
 import capstone.offflow.Vision.Dto.HeatmapDto;
 import capstone.offflow.Vision.Repository.HeatmapRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +24,7 @@ import java.util.List;
 public class HeatmapServiceImpl implements HeatmapService {
 
     private final HeatmapRepository heatmapRepository;
+    private final DashboardRepository dashboardRepository;
     private final RedisTemplate<String, Object> redisTemplate;
 
     private static final String HEATMAP_KEY_PREFIX = "heatmap:";
@@ -46,6 +52,12 @@ public class HeatmapServiceImpl implements HeatmapService {
 
     @Override
     public void save(HeatmapDto dto, Long dashboardId) {
+        Dashboard dashboard = dashboardRepository.findById(dashboardId)
+                .orElseThrow(() -> new IllegalArgumentException("Dashboard not found"));
+
+        Heatmap entity = HeatmapDto.convertToEntity(dto, dashboard);
+        heatmapRepository.save(entity);
 
     }
+
 }

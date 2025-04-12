@@ -1,4 +1,4 @@
-package capstone.offflow.Common.config;
+package capstone.offflow.Common;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

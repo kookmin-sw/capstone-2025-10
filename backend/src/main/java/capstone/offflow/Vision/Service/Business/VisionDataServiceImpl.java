@@ -8,6 +8,9 @@ import capstone.offflow.Vision.Domain.Tracking;
 import capstone.offflow.Vision.Dto.GenderAgeDto;
 import capstone.offflow.Vision.Dto.HeatmapDto;
 import capstone.offflow.Vision.Dto.TrackingDto;
+import capstone.offflow.Vision.Repository.GenderAgeRepository;
+import capstone.offflow.Vision.Repository.HeatmapRepository;
+import capstone.offflow.Vision.Repository.TrackingRepository;
 import capstone.offflow.Vision.Service.Kafka.KafkaMessageWrapper;
 import capstone.offflow.Vision.Service.Redis.VisionRedisService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +28,9 @@ public class VisionDataServiceImpl implements VisionDataService {
 
     private final VisionRedisService visionRedisService;
     private final DashboardRepository dashboardRepository;
+    private final GenderAgeService genderAgeService;
+    private final HeatmapService heatmapService;
+    private final TrackingService trackingService;
 
     @Override
     public void processIncomingData(KafkaMessageWrapper wrapper) {
@@ -69,6 +75,7 @@ public class VisionDataServiceImpl implements VisionDataService {
 
         Heatmap heatmap = HeatmapDto.convertToEntity(dto, dashboard);
         visionRedisService.cacheData("heatmap", heatmap);
+        heatmapService.save(dto, dashboard.getId());
     }
 
     private void handleTracking(KafkaMessageWrapper wrapper, Dashboard dashboard) {
@@ -86,6 +93,7 @@ public class VisionDataServiceImpl implements VisionDataService {
 
         Tracking tracking = TrackingDto.convertToEntity(dto, dashboard);
         visionRedisService.cacheData("tracking", tracking);
+        trackingService.save(dto, dashboard.getId());
     }
 
     private void handleGenderAge(KafkaMessageWrapper wrapper, Dashboard dashboard) {
@@ -104,6 +112,7 @@ public class VisionDataServiceImpl implements VisionDataService {
 
         GenderAge genderAge = GenderAgeDto.convertToEntity(dto, dashboard);
         visionRedisService.cacheData("genderAge", genderAge);
+        genderAgeService.save(dto, dashboard.getId());
     }
 
 
