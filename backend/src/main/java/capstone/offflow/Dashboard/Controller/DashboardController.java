@@ -5,6 +5,7 @@ import capstone.offflow.Dashboard.Domain.Dashboard;
 import capstone.offflow.Dashboard.Dto.DashboardDto;
 import capstone.offflow.Dashboard.Dto.ProductDto;
 import capstone.offflow.Dashboard.Service.DashboardService;
+import capstone.offflow.User.Domain.User;
 import capstone.offflow.User.Service.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 
@@ -17,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController //Controller + ResponseBody 합친 컨트롤러 => API 개발시 사용
@@ -60,6 +62,17 @@ public class DashboardController {
         }
 
     }
+
+    //dashboard 전체 조회
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllDashboard(
+            @AuthenticationPrincipal UserPrincipal userPrincipal){
+        List<DashboardDto> dto = dashboardService.getAllDashboard(userPrincipal.getUser());
+
+        return ResponseEntity.ok(dto);
+
+    }
+
 
 
     //dashboard 삭제
