@@ -1,7 +1,6 @@
 package capstone.offflow.Dashboard.Dto;
 
 import capstone.offflow.Dashboard.Domain.Dashboard;
-import capstone.offflow.Dashboard.Domain.Product;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -37,9 +36,13 @@ public class DashboardDto {
                 .startDate(dashboard.getStartDate())
                 .endDate(dashboard.getEndDate())
                 .metadata(MetadataDto.convertToDto(dashboard.getMetadata()))
-                .sections(dashboard.getSections().stream()
-                        .map(SectionDto::convertToDto)
-                        .collect(Collectors.toList()))
+                .sections(
+                        dashboard.getSections() != null
+                                ? dashboard.getSections().stream()
+                                .map(SectionDto::convertToDto)
+                                .collect(Collectors.toList())
+                                : new ArrayList<>() // sections가 null이면 빈 리스트
+                )
                 .build();
     }
 

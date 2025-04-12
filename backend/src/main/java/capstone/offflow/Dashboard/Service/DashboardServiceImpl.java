@@ -31,6 +31,7 @@ public class DashboardServiceImpl implements DashboardService{
         Dashboard dashboard = new Dashboard();
         dashboard.setDashboardName(dashboardDto.getDashboardName());
         dashboard.setStartDate(dashboardDto.getStartDate());
+        dashboard.setImageUrl(dashboardDto.getImageUrl());
         dashboard.setUser(user);
 
         if (dashboardDto.getMetadata() != null) {

@@ -62,7 +62,7 @@ public class DashboardServiceTest {
         DashboardDto dto  = DashboardDto.builder()
                 .dashboardName("testname")
                 .startDate(new Date())
-                .metadataDto(metadataDto) //메타데이터 추가
+                .metadata(metadataDto) //메타데이터 추가
                 .build();
 
         when(dashboardRepository.save(any(Dashboard.class)))
@@ -102,8 +102,8 @@ public class DashboardServiceTest {
         // then
         assertThat(result).isNotNull();
         assertThat(result.getDashboardName()).isEqualTo("testname");
-        assertThat(result.getMetadataDto()).isNotNull();
-        assertThat(result.getMetadataDto().getPopupName()).isEqualTo("testPopup");
+        assertThat(result.getMetadata()).isNotNull();
+        assertThat(result.getMetadata().getPopupName()).isEqualTo("testPopup");
 
         log.info("조회된 DTO: {}", result);
     }
