@@ -42,4 +42,9 @@ public class TrackingServiceImpl implements TrackingService{
 
         return dbResult;
     }
+
+    @Override
+    public void save(TrackingDto dto, Long dashboardId) {
+
+    }
 }

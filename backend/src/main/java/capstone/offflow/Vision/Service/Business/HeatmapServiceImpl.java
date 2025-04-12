@@ -43,4 +43,9 @@ public class HeatmapServiceImpl implements HeatmapService {
 
         return dbResult;
     }
+
+    @Override
+    public void save(HeatmapDto dto, Long dashboardId) {
+
+    }
 }

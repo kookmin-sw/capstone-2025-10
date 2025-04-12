@@ -12,7 +12,6 @@ import java.util.Date;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class HeatmapDto {
 
-    @NonNull
     private Long id;
 
     @NonNull

@@ -3,6 +3,7 @@ package capstone.offflow.Vision.Service.Kafka;
 import capstone.offflow.Vision.Service.Business.VisionDataService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
  */
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class VisionKafkaConsumer {
 
@@ -30,7 +32,8 @@ public class VisionKafkaConsumer {
             //VisionDataService를 통해 Redis에 저장 처리
             visionDataService.processIncomingData(wrapper);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("❌ Error processing Vision data: {}", e.getMessage(), e);
         }
     }
 }
+
