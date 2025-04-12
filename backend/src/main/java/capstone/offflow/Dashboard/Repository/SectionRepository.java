@@ -18,6 +18,7 @@ public interface SectionRepository extends JpaRepository<Section, Long> {
     @Query("SELECT s FROM Section s JOIN FETCH s.dashboard d WHERE s.id = :id AND d.user = :user")
     Optional<Section> findByIdAndDashboard_User(@Param("id") Long id, @Param("user") User user);
 
+
     List<Section> findByDashboard(Dashboard dashboard);
 
 }

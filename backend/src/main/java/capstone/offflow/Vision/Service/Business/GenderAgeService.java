@@ -8,6 +8,7 @@ import java.util.List;
 public interface GenderAgeService {
 
     List<GenderAgeDto> getGenderAgeById(Long dashboardId, User user);
-    // GenderAgeService.java
+
+    // Redis -> DB로 저장
     void save(GenderAgeDto dto, Long dashboardId);
 }

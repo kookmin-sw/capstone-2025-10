@@ -27,7 +27,7 @@ public class ProductController {
 
     //상품 생성
     //별도 예외처리 필요없음 -> 예외 핸들러가 예외발생시 중간 개입후 처리
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<?> createProduct(
             @RequestBody @Validated ProductDto productDto,
             @AuthenticationPrincipal UserPrincipal userPrincipal
@@ -47,7 +47,7 @@ public class ProductController {
         return ResponseEntity.ok(dto);
     }
 
-    //상품 조회 (Dashboard Id)
+    //상품 조회 (Dashboard Id) - 전체
     @GetMapping("/dashboard/{dashboardId}")
     public ResponseEntity<?> getProductByDashboard(
             @PathVariable(name = "dashboardId") Long dashboardId,
@@ -58,13 +58,22 @@ public class ProductController {
     }
 
 
-    //상품 조회 (Section Id)
+    //상품 조회 (Section Id) -> 선택된
     @GetMapping("/section/{sectionId}")
     public ResponseEntity<?> getProductBySection(
             @PathVariable(name = "sectionId") Long sectionId,
             @AuthenticationPrincipal UserPrincipal userPrincipal) {
 
         List<ProductDto> dto = productService.getProductBySection(sectionId, userPrincipal.getUser());
+        return ResponseEntity.ok(dto);
+    }
+
+    //section에 선택 안된 상품 조회
+    @GetMapping("/section/not/{sectionId}")
+    public ResponseEntity<?> getProductByNotSection(
+            @PathVariable(name = "sectionId") Long sectionId,
+            @AuthenticationPrincipal UserPrincipal userPrincipal){
+        List<ProductDto> dto = productService.getProductByNotSection(sectionId, userPrincipal.getUser());
         return ResponseEntity.ok(dto);
     }
 
@@ -89,8 +98,8 @@ public class ProductController {
             @RequestBody ProductDto dto,
             @AuthenticationPrincipal UserPrincipal userPrincipal){
 
-        productService.updateProduct(id, dto, userPrincipal.getUser());
-        return ResponseEntity.ok("Product updated successfully");
+        Product product = productService.updateProduct(id, dto, userPrincipal.getUser());
+        return ResponseEntity.ok(ProductDto.convertToDto(product));
     }
 
 

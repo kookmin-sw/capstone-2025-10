@@ -29,6 +29,8 @@ public class Dashboard {
     @Version
     private Long version;
 
+    private String imageUrl;
+
     private Date startDate;
     private Date endDate;
 

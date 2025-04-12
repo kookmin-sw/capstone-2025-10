@@ -17,7 +17,6 @@ import java.util.Date;
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
 public class GenderAgeDto {
 
-//     @NonNull
     private Long id;
 
     @NonNull
