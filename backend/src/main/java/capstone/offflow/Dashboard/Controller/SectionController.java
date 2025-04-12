@@ -26,7 +26,7 @@ public class SectionController {
     private final DashboardRepository dashboardRepository;
 
     //섹션생성
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<?> createSection(
             @RequestBody SectionDto sectionDto,
             @AuthenticationPrincipal UserPrincipal userPrincipal){

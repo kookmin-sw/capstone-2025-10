@@ -28,7 +28,7 @@ public class DashboardController {
 
 
     //dashboard 생성
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<?> createDashboard(
             @RequestBody @Validated DashboardDto dashboardDto,
             @AuthenticationPrincipal UserPrincipal userPrincipal){
