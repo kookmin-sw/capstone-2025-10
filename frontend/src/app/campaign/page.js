@@ -1,18 +1,15 @@
 import styles from "./page.module.scss";
 import CampaignForm from "@/components/Form/CampaignForm";
+import { fetchWithSession } from "@/lib/fetchWithSession";
 
 async function getCampaign(id) {
-  const response = await fetch(`localhost:8080/api/dashboard/test1/${id}`, {
-    cache: "no-store",
-    credentials: "include",
-  });
-
-  if (!response.ok) {
-    throw new Error("데이터를 불러오는데 실패했습니다.");
-  }
-
-  const data = await response.json();
-  return data;
+  return await fetchWithSession(
+    `http://localhost:8080/api/dashboard/test1/${id}`,
+    {
+      cache: "no-store",
+      credentials: "include",
+    },
+  );
 }
 
 export default async function Campaign({ params }) {
