@@ -35,7 +35,11 @@ public class DashboardDto {
                 .imageUrl(dashboard.getImageUrl())
                 .startDate(dashboard.getStartDate())
                 .endDate(dashboard.getEndDate())
-                .metadata(MetadataDto.convertToDto(dashboard.getMetadata()))
+                .metadata(
+                        dashboard.getMetadata() != null
+                                ? MetadataDto.convertToDto(dashboard.getMetadata())
+                                : null
+                )
                 .sections(
                         dashboard.getSections() != null
                                 ? dashboard.getSections().stream()
