@@ -16,6 +16,8 @@ public interface SectionService {
     //섹션 조회
     SectionDto getSectionById(Long id,  User user);
 
+    //섹션에 매핑된 상품삭제
+    Section unmapProductFromSection(Long sectionId, Long productId, User user);
 
     //섹션 삭제
     void deleteSection(Long id, User user);

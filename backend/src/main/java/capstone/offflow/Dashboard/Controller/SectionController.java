@@ -7,6 +7,7 @@ import capstone.offflow.Dashboard.Dto.ProductDto;
 import capstone.offflow.Dashboard.Dto.SectionDto;
 import capstone.offflow.Dashboard.Repository.DashboardRepository;
 import capstone.offflow.Dashboard.Service.SectionService;
+import capstone.offflow.User.Domain.User;
 import capstone.offflow.User.Service.UserPrincipal;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -60,6 +61,17 @@ public class SectionController {
 
         Section updatedSection = sectionService.updateSection(id, dto, userPrincipal.getUser());
         return ResponseEntity.ok(updatedSection);
+    }
+
+    //섹션에 매핑된 상품 삭제
+    @DeleteMapping("/sections/{sectionId}/products/{productId}")
+    public ResponseEntity<?> unmapProductFromSection(
+            @PathVariable (name = "sectionId") Long sectionId,
+            @PathVariable (name = "productId") Long productId,
+            @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        Section deletedSection = sectionService.unmapProductFromSection(
+                sectionId,productId,userPrincipal.getUser());
+        return ResponseEntity.ok(deletedSection);
     }
 
 
