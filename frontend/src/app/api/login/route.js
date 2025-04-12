@@ -7,8 +7,8 @@ export async function POST(req, res) {
 
   return await proxyFetch({
     req,
-    res,
     backendUrl: "http://localhost:8080/api/users/login",
     method: "POST",
+    withCredentials: false,
   });
 }

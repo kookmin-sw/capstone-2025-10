@@ -7,69 +7,45 @@ import ProductCard from "@/components/Card/ProductCard";
 import SectionCard from "@/components/Card/SectionCard";
 import { useState } from "react";
 import useImageUpload from "@/hooks/useImageUpload";
+import { getSectionFromCampaign } from "@/utils/sectionUtils";
+import RequireLogin from "@/components/Login/RequireLogin";
+import { useRouter } from "next/navigation";
 
-const CampaignForm = () => {
-  const [sections, setSections] = useState([]);
-  const [products, setProducts] = useState([
-    {
-      id: 1,
-      name: "여름 샌들",
-      price: 39000,
-      dashboardId: 3,
-      sectionId: null,
-      description: "통풍 잘 되는 여름 샌들입니다.",
-      imageUrl: "test.png",
-    },
-    {
-      id: 3,
-      name: "여름 샌들",
-      price: 39000,
-      dashboardId: 3,
-      sectionId: null,
-      description: "통풍 잘 되는 여름 샌들입니다.",
-      imageUrl: "test.png",
-    },
-    {
-      id: 4,
-      name: "여름 샌들",
-      price: 39000,
-      dashboardId: 3,
-      sectionId: null,
-      description: "통풍 잘 되는 여름 샌들입니다.",
-      imageUrl: "test.png",
-    },
-    {
-      id: 2,
-      name: "여름 샌들",
-      price: 39000,
-      dashboardId: 3,
-      sectionId: 4,
-      description: "통풍 잘 되는 여름 샌들입니다.",
-      imageUrl: "test.png",
-    },
-  ]);
+const CampaignForm = ({ campaign, dashboardId }) => {
+  const router = useRouter();
+  const [sections, setSections] = useState(getSectionFromCampaign(campaign));
   const upload = useImageUpload();
+  console.log(campaign);
+
+  if (Object.keys(campaign).length === 0) {
+    //router.push("/login");
+    return <RequireLogin></RequireLogin>;
+  }
 
   return (
-    <form className={styles.form}>
-      <CardSlider
-        cards={[
-          <BlueprintCard
-            key="1"
-            sections={sections}
-            setSections={setSections}
-            upload={upload}
-          />,
-          <ProductCard products={products} setProducts={setProducts} key="2" />,
-          <SectionCard
-            key="2"
-            sections={sections}
-            setSections={setSections}
-            image={upload.file}
-          />,
-        ]}
-      />
-    </form>
+    <RequireLogin>
+      <form className={styles.form}>
+        <CardSlider
+          cards={[
+            <BlueprintCard
+              key="1"
+              sections={sections}
+              setSections={setSections}
+              upload={upload}
+              dashboardId={dashboardId}
+            />,
+            <ProductCard key="2" dashboardId={dashboardId} />,
+            <SectionCard
+              key="2"
+              sections={sections}
+              setSections={setSections}
+              image={upload.file}
+              dashboardId={dashboardId}
+            />,
+          ]}
+        />
+      </form>
+    </RequireLogin>
   );
 };
 

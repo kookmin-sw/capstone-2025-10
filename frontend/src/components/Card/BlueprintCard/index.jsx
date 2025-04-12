@@ -7,23 +7,29 @@ import Button from "@/components/Button";
 import { useModal } from "@/contexts/ModalContext";
 import TextInput from "@/components/Input/TextInput";
 import ImageGrid from "@/components/ImageGrid";
+import { generateRandomColor } from "@/utils/sectionUtils";
+import { createSection, deleteSection, updateSection } from "@/lib/api/section";
 
-const generateRandomColor = () => {
-  const hue = Math.floor(Math.random() * 360);
-  return `hsla(${hue}, 70%, 70%, 0.4)`; // pastel tone with transparency
-};
-
-const BlueprintCard = ({ sections, setSections, upload }) => {
+const BlueprintCard = ({ sections, setSections, upload, dashboardId }) => {
   const [selected, setSelected] = useState(new Set());
   const isDragging = useRef(false);
   const [isDraggable, setIsDraggable] = useState(true);
   const { openModal, closeModal } = useModal();
   const [focusIndex, setFocusIndex] = useState(null);
 
-  const handleSectionNameSave = (name) => {
-    handleSave(name);
-    closeModal();
-    focusClear();
+  const handleSectionNameSave = async (name) => {
+    try {
+      await createSection({
+        name: name,
+        positionList: Array.from(selected),
+        dashboardId,
+      });
+      handleSave(name);
+      closeModal();
+      focusClear();
+    } catch (e) {
+      closeModal();
+    }
   };
 
   const addSelected = (index) => {
@@ -75,19 +81,29 @@ const BlueprintCard = ({ sections, setSections, upload }) => {
     setSelected(new Set());
   };
 
-  const handleUpdate = (e) => {
+  const handleUpdate = async (e) => {
     e.preventDefault();
-    setSections((prev) =>
-      prev.map((s, i) =>
-        i === focusIndex ? { ...s, cells: Array.from(selected) } : s,
-      ),
-    );
-    focusClear();
+    try {
+      await updateSection(sections[focusIndex].id, {
+        positionList: Array.from(selected),
+        name: sections[focusIndex].name,
+      });
+
+      setSections((prev) =>
+        prev.map((s, i) =>
+          i === focusIndex ? { ...s, cells: Array.from(selected) } : s,
+        ),
+      );
+      focusClear();
+    } catch (e) {}
   };
 
-  const handleDeleteSection = (index) => {
-    setSections((prev) => prev.filter((_, i) => i !== index));
-    setSelected(new Set());
+  const handleDeleteSection = async (index) => {
+    try {
+      await deleteSection(sections[index].id);
+      setSections((prev) => prev.filter((_, i) => i !== index));
+      setSelected(new Set());
+    } catch (e) {}
   };
 
   const handleRenameSection = (index, newName) => {

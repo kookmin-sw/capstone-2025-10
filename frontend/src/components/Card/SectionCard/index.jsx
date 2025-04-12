@@ -1,18 +1,48 @@
 "use client";
 
-import React, { useState } from "react";
+import dynamic from "next/dynamic";
+import React, { useEffect, useState } from "react";
 import styles from "./index.module.scss";
 import Button from "@/components/Button";
 import { useModal } from "@/contexts/ModalContext";
-import ImageGrid from "@/components/ImageGrid";
+import {
+  getProductByDashboardId,
+  getProductBySectionId,
+  matchProductWithSection,
+} from "@/lib/api/product";
 
-const SectionCard = ({ sections, setSections, image }) => {
+const ImageGrid = dynamic(() => import("@/components/ImageGrid"), {
+  ssr: false,
+});
+
+const SectionCard = ({ sections, setSections, image, dashboardId }) => {
   const { openModal, closeModal } = useModal();
   const [focusIndex, setFocusIndex] = useState(null);
+  const [products, setProducts] = useState([]);
 
-  const handleAddSection = (e) => {
+  useEffect(() => {}, []);
+
+  useEffect(() => {
+    if (focusIndex !== null) {
+      getProducts();
+    }
+  }, [focusIndex]);
+
+  const getProducts = async () => {
+    const response = await getProductBySectionId(sections[focusIndex]?.id);
+    setProducts(response);
+  };
+
+  const handleAddSection = async (e) => {
     e.preventDefault();
-    openModal(<ProductList />);
+    const response = await getDashboardProducts();
+    openModal(
+      <ProductList
+        dashboardId={dashboardId}
+        products={response}
+        onSave={(focusIndex) => onMatchClick(focusIndex)}
+      />,
+    );
   };
 
   const handleSave = (name) => {};
@@ -28,6 +58,16 @@ const SectionCard = ({ sections, setSections, image }) => {
         setFocusIndex(sectionIndex);
       }
     });
+  };
+
+  const getDashboardProducts = async () => {
+    return await getProductByDashboardId(dashboardId);
+  };
+
+  const onMatchClick = async (productId) => {
+    await matchProductWithSection(productId, sections[focusIndex].id);
+    await getProducts();
+    closeModal();
   };
 
   return (
@@ -48,14 +88,10 @@ const SectionCard = ({ sections, setSections, image }) => {
         onClick={(e) => e.stopPropagation()}
       >
         <div className={styles["button-wrapper"]}>
-          {focusIndex === null ? (
-            <Button onClick={handleAddSection}>Add Product</Button>
-          ) : (
-            <Button onClick={handleUpdate}>Save</Button>
-          )}
+          <Button onClick={handleAddSection}>Add Product</Button>
         </div>
         <div className={styles["list-wrapper"]}>
-          {sections.map((section, idx) => {
+          {products.map((product, idx) => {
             return (
               <div
                 key={idx}
@@ -63,7 +99,7 @@ const SectionCard = ({ sections, setSections, image }) => {
                   border: idx === "1px solid #000",
                 }}
               >
-                {section.name}
+                {product.name}
                 <button
                   onClick={(e) => {
                     e.preventDefault();
@@ -81,7 +117,7 @@ const SectionCard = ({ sections, setSections, image }) => {
   );
 };
 
-const ProductList = () => {
+const ProductList = ({ products, onSave }) => {
   const [selectedIndex, setSelectedIndex] = useState(new Set());
   const toggleSelect = (index) => {
     setSelectedIndex((prev) => {
@@ -94,45 +130,6 @@ const ProductList = () => {
       return newSet;
     });
   };
-
-  const [products, setProducts] = useState([
-    {
-      id: 1,
-      name: "여름 샌들",
-      price: 39000,
-      dashboardId: 3,
-      sectionId: null,
-      description: "통풍 잘 되는 여름 샌들입니다.",
-      imageUrl: "test.png",
-    },
-    {
-      id: 3,
-      name: "여름 샌들",
-      price: 39000,
-      dashboardId: 3,
-      sectionId: null,
-      description: "통풍 잘 되는 여름 샌들입니다.",
-      imageUrl: "test.png",
-    },
-    {
-      id: 4,
-      name: "여름 샌들",
-      price: 39000,
-      dashboardId: 3,
-      sectionId: null,
-      description: "통풍 잘 되는 여름 샌들입니다.",
-      imageUrl: "test.png",
-    },
-    {
-      id: 2,
-      name: "여름 샌들",
-      price: 39000,
-      dashboardId: 3,
-      sectionId: 4,
-      description: "통풍 잘 되는 여름 샌들입니다.",
-      imageUrl: "test.png",
-    },
-  ]);
 
   return (
     <div>
@@ -148,7 +145,13 @@ const ProductList = () => {
         ))}
       </div>
 
-      <Button>Save</Button>
+      <div style={{ marginLeft: "auto" }}>
+        <Button
+          onClick={() => onSave(products[Array.from(selectedIndex)[0]].id)}
+        >
+          Save
+        </Button>
+      </div>
     </div>
   );
 };

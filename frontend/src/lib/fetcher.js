@@ -7,7 +7,7 @@ export async function fetchJson(url, options = {}) {
 
   let data;
   try {
-    data = await res.text();
+    data = res.text();
   } catch (e) {
     // JSON 파싱 실패 시 기본 메시지
     throw new Error("서버 응답을 해석할 수 없습니다");

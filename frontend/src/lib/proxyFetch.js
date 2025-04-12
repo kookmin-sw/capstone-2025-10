@@ -1,31 +1,53 @@
+function parseCookies(cookieString) {
+  return Object.fromEntries(
+    cookieString
+      ?.split(";")
+      .map((cookie) => cookie.trim().split("="))
+      .filter(([k, v]) => k && v),
+  );
+}
+
 export async function proxyFetch({
   req,
-  res,
   backendUrl,
-  method = "POST",
+  method = "GET",
   headers = {},
+  withCredentials = true,
+  hasBody = true,
 }) {
-  const body = await req.json();
+  let body;
+  if (hasBody && method !== "GET" && method !== "HEAD") {
+    body = await req.json();
+  }
+
+  const newHeaders = new Headers(headers);
+  newHeaders.set("Content-Type", `application/json`);
+  newHeaders.set("Cache-Control", `no-cache`);
+
+  if (withCredentials) {
+    const cookieHeader = req.headers.get("cookie");
+    const cookies = parseCookies(cookieHeader);
+    const jsessionId = cookies["JSESSIONID"];
+
+    if (jsessionId) {
+      newHeaders.set("Cookie", `JSESSIONID=${jsessionId}`);
+    }
+  }
+  console.log(newHeaders);
+
   const backendRes = await fetch(backendUrl, {
     method,
-    headers: {
-      ...headers,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-    credentials: "include", // 세션 인증 필요 시
+    headers: newHeaders,
+    body: body ? JSON.stringify(body) : undefined,
+    credentials: "include",
   });
 
-  const responseBody = await backendRes.text(); // 나중에 JSON으로 파싱할 수도 있음
+  const responseBody = await backendRes.text();
 
-  const resHeaders = new Headers({
-    "Content-Type": "application/json",
-  });
-
-  // Set-Cookie 헤더가 있는 경우 수동으로 설정
+  const resHeaders = new Headers({ "Content-Type": "application/json" });
   const setCookie = backendRes.headers.get("Set-Cookie");
   if (setCookie) {
-    resHeaders.set("set-cookie", setCookie);
+    resHeaders.set("Set-Cookie", setCookie);
   }
 
   return new Response(responseBody, {
