@@ -43,17 +43,4 @@ public class DashboardDto {
                 .build();
     }
 
-
-    //DTO -> Entity (생성/수정용)
-    public static Dashboard convertToEntity(DashboardDto dashboardDto){
-        Dashboard dashboard = new Dashboard();
-        dashboard.setDashboardName(dashboardDto.getDashboardName());
-        dashboard.setImageUrl(dashboardDto.getImageUrl());
-        dashboard.setStartDate(dashboardDto.getStartDate());
-        dashboard.setEndDate(dashboardDto.getEndDate());
-        dashboard.setMetadata(MetadataDto.convertToEntity(dashboardDto.getMetadata())); // ✅ 변환 필요
-        dashboard.setSections(new ArrayList<>());
-        return dashboard;
-    }
-
 }
