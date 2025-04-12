@@ -300,7 +300,7 @@ def attempt_load_weights(weights, device=None, inplace=True, fuse=False):
 
     model = Ensemble()
     for w in weights if isinstance(weights, list) else [weights]:
-        ckpt = torch.load(attempt_download(w), map_location='cpu')  # load
+        ckpt = torch.load(attempt_download(w), map_location='cpu', weights_only=False)  # load
         args = {**DEFAULT_CONFIG_DICT, **ckpt['train_args']}  # combine model and default args, preferring model args
         ckpt = (ckpt.get('ema') or ckpt['model']).to(device).float()  # FP32 model
 
