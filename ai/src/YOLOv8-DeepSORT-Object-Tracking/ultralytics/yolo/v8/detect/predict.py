@@ -1,5 +1,9 @@
 # Ultralytics YOLO 🚀, GPL-3.0 license
 
+from kafka import KafkaProducer
+import json
+import time
+
 import hydra
 import torch
 import argparse
@@ -98,12 +102,12 @@ def draw_border(img, pt1, pt2, color, thickness, r, d):
 
     cv2.rectangle(img, (x1 + r, y1), (x2 - r, y2), color, -1, cv2.LINE_AA)
     cv2.rectangle(img, (x1, y1 + r), (x2, y2 - r - d), color, -1, cv2.LINE_AA)
-    
+
     cv2.circle(img, (x1 +r, y1+r), 2, color, 12)
     cv2.circle(img, (x2 -r, y1+r), 2, color, 12)
     cv2.circle(img, (x1 +r, y2-r), 2, color, 12)
     cv2.circle(img, (x2 -r, y2-r), 2, color, 12)
-    
+
     return img
 
 def UI_box(x, img, color=None, label=None, line_thickness=None):
@@ -145,7 +149,7 @@ def draw_boxes(img, bbox, names,object_id, identities=None, offset=(0, 0)):
         id = int(identities[i]) if identities is not None else 0
 
         # create new buffer for new object
-        if id not in data_deque:  
+        if id not in data_deque:
           data_deque[id] = deque(maxlen= 64)
         color = compute_color_for_labels(object_id[i])
         obj_name = names[object_id[i]]
@@ -218,7 +222,7 @@ class DetectionPredictor(BasePredictor):
         det = det[det[:, 5] == 0] # 사람 클래스인 0번만 남도록 필터링 !!!
         if len(det) == 0:
             return log_string
-        
+
         for c in det[:, 5].unique():
             n = (det[:, 5] == c).sum()  # detections per class
             log_string += f"{n} {self.model.names[int(c)]}{'s' * (n > 1)}, "
@@ -236,14 +240,44 @@ class DetectionPredictor(BasePredictor):
             oids.append(int(cls))
         xywhs = torch.Tensor(xywh_bboxs)
         confss = torch.Tensor(confs)
-          
+
         outputs = deepsort.update(xywhs, confss, oids, im0)
         if len(outputs) > 0:
             bbox_xyxy = outputs[:, :4]
             identities = outputs[:, -2]
             object_id = outputs[:, -1]
-            
+
             draw_boxes(im0, bbox_xyxy, self.model.names, object_id,identities)
+            producer = KafkaProducer(
+                bootstrap_servers='192.168.219.160:9092',
+                value_serializer=lambda v: json.dumps(v).encode('utf-8'),
+                linger_ms=10,             # 최대 10ms까지 모았다가 전송
+                compression_type='gzip'   # 메시지 압축 적용 (CPU 비용 vs 전송량 절약)
+            )
+
+            batch_messages = []
+            print(bbox_xyxy, identities, object_id)
+
+            for i, box in enumerate(bbox_xyxy):
+                x1, y1, x2, y2 = [int(i) for i in box]
+
+                tracking_message = {
+                    "type": "tracking",
+                    "payload": {
+                        "dashboardId": 1,
+                        "detectedTime": int(time.time() * 1000),
+                        "visitorLabel": int(object_id[i]),
+                        "gridList": f"[[{int((x1 + x2) / 2)}, {int((y1 + y2) / 2)}]]"
+                    }
+                }
+                print(tracking_message)
+                batch_messages.append(tracking_message)
+
+            for msg in batch_messages:
+                producer.send("vision-data-topic", msg)
+
+            # 명시적으로 flush할 수도 있음
+            producer.flush()
 
         return log_string
 
