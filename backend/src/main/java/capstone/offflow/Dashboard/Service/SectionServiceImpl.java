@@ -3,9 +3,11 @@ package capstone.offflow.Dashboard.Service;
 
 import capstone.offflow.Common.GridConfig;
 import capstone.offflow.Dashboard.Domain.Dashboard;
+import capstone.offflow.Dashboard.Domain.Product;
 import capstone.offflow.Dashboard.Domain.Section;
 import capstone.offflow.Dashboard.Dto.SectionDto;
 import capstone.offflow.Dashboard.Repository.DashboardRepository;
+import capstone.offflow.Dashboard.Repository.ProductRepository;
 import capstone.offflow.Dashboard.Repository.SectionRepository;
 import capstone.offflow.User.Domain.User;
 import jakarta.persistence.EntityNotFoundException;
@@ -24,6 +26,7 @@ public class SectionServiceImpl implements SectionService{
 
     private final SectionRepository sectionRepository;
     private final DashboardRepository dashboardRepository;
+    private final ProductRepository productRepository;
     private final GridConfig gridConfig;
 
 
@@ -111,6 +114,24 @@ public class SectionServiceImpl implements SectionService{
                 .orElseThrow(() -> new EntityNotFoundException("해당 Id의 섹션을 찾을 수 없습니다."));
 
         return SectionDto.convertToDto(section); //controller로 DTO를 보내야함
+    }
+
+    //섹션에 매핑된 상품삭제
+    @Override
+    public Section unmapProductFromSection(Long sectionId, Long productId, User user) {
+        Section section = sectionRepository.findByIdAndDashboard_User(sectionId, user)
+                .orElseThrow(() -> new EntityNotFoundException("해당 Id의 섹션을 찾을 수 없습니다."));
+
+        Product product = productRepository.findByIdAndDashboard_User(productId, user)
+                .orElseThrow(() -> new EntityNotFoundException("해당 Id의 섹션을 찾을 수 없습니다."));
+
+        //1. 섹션에서 상품 제거
+        section.getProductList().remove(product);
+
+        //2. 상품에서도 섹션 참조 끊기
+        product.setSection(null);
+
+        return section;
     }
 
     //섹션 삭제

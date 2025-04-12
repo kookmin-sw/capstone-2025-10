@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface HeatmapRepository extends JpaRepository<Heatmap,Long> {
 
-    List<Heatmap> findAllByDashboard_User(Long dashboardId, User user);
+    List<Heatmap> findAllByDashboard_IdAndDashboard_User(Long dashboardId, User user);
 }

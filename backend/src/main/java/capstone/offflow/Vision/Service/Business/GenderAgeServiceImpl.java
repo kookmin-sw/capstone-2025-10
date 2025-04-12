@@ -1,8 +1,10 @@
 package capstone.offflow.Vision.Service.Business;
-
+import capstone.offflow.Dashboard.Domain.Dashboard;
+import capstone.offflow.Vision.Domain.GenderAge;
 import capstone.offflow.User.Domain.User;
 import capstone.offflow.Vision.Dto.GenderAgeDto;
 import capstone.offflow.Vision.Repository.GenderAgeRepository;
+import capstone.offflow.Dashboard.Repository.DashboardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,8 @@ public class GenderAgeServiceImpl implements GenderAgeService{
 
     private final RedisTemplate<String, Object> redisTemplate;
 
+    private final DashboardRepository dashboardRepository;
+
     private static final String GENDER_AGE_KEY_PREFIX = "genderAge:";
 
     @Override
@@ -33,7 +37,7 @@ public class GenderAgeServiceImpl implements GenderAgeService{
         }
 
         // 2. Redis에 없으면 DB 조회
-        List<GenderAgeDto> dbResult = genderAgeRepository.findAllByDashboard_User(dashboardId, user).stream()
+        List<GenderAgeDto> dbResult = genderAgeRepository.findAllByDashboard_IdAndDashboard_User(dashboardId, user).stream()
                 .map(GenderAgeDto::convertToDto)
                 .toList();
 
@@ -41,5 +45,14 @@ public class GenderAgeServiceImpl implements GenderAgeService{
         redisTemplate.opsForValue().set(redisKey, dbResult, Duration.ofMinutes(10));
 
         return dbResult;
+    }
+
+    @Override
+    public void save(GenderAgeDto dto, Long dashboardId) {
+        Dashboard dashboard = dashboardRepository.findById(dashboardId)
+            .orElseThrow(() -> new IllegalArgumentException("Dashboard not found"));
+
+        GenderAge entity = GenderAgeDto.convertToEntity(dto, dashboard);
+        genderAgeRepository.save(entity);
     }
 }

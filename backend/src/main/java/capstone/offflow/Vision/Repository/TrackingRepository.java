@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface TrackingRepository extends JpaRepository<Tracking, Long> {
 
-    List<Tracking> findAllByDashboard_User(Long dashboardId, User user);
+    List<Tracking> findAllByDashboard_IdAndDashboard_User(Long dashboardId, User user);
 }

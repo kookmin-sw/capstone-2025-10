@@ -38,7 +38,7 @@ public class VisionRedisServiceImpl implements VisionRedisService{
         redisTemplate.opsForList().leftPush(key, data); //List로 저장
     }
 
-    //Redis -> DB로 flush하는 Method
+    //Redis -> DB로 flush하는 Method -> Vision
     //5분마다 스케줄러가 호출
     //Type에 맞는 Repository에 저장
     @Override

@@ -55,6 +55,7 @@ public class ProductServiceImpl implements ProductService{
 
     //Dashboard Id 기반 조회
     @Override
+    @Transactional(readOnly = true)
     public List<ProductDto> getProductByDashboard(Long id, User user) {
         List<Product> products = productRepository.findAllByDashboard_User(id, user);
 
@@ -65,6 +66,7 @@ public class ProductServiceImpl implements ProductService{
 
     //Section Id 기반 조회
     @Override
+    @Transactional(readOnly = true)
     public List<ProductDto> getProductBySection(Long id, User user) {
         List<Product> products = productRepository.findAllBySection_User(id, user);
 
@@ -72,6 +74,20 @@ public class ProductServiceImpl implements ProductService{
                 .map(ProductDto::convertToDto)
                 .collect(Collectors.toList());
     }
+
+
+    //매핑 안된 Section Id 기반 조회
+    @Override
+    @Transactional(readOnly = true)
+    public List<ProductDto> getProductByNotSection(Long sectionId, User user) {
+        List<Product> products = productRepository.findProductsByUserNotInSection(sectionId, user);
+
+        return products.stream()
+                .map(ProductDto::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+
 
     //상품에 섹션Id값 부여
     @Override

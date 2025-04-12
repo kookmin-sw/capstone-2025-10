@@ -15,6 +15,9 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @Transactional //트랜잭션
 @Slf4j
@@ -28,6 +31,7 @@ public class DashboardServiceImpl implements DashboardService{
         Dashboard dashboard = new Dashboard();
         dashboard.setDashboardName(dashboardDto.getDashboardName());
         dashboard.setStartDate(dashboardDto.getStartDate());
+        dashboard.setImageUrl(dashboardDto.getImageUrl());
         dashboard.setUser(user);
 
         if (dashboardDto.getMetadata() != null) {
@@ -48,6 +52,18 @@ public class DashboardServiceImpl implements DashboardService{
 
         //fetch join을 통해 섹션까지 함꼐 조회한 경우
         return DashboardDto.convertToDto(dashboard);
+    }
+
+    //dashboard 전체 조회
+    @Override
+    @Transactional(readOnly = true)
+    public List<DashboardDto> getAllDashboard(User user) {
+        List<Dashboard> dashboards = dashboardRepository.findAllByUser(user);
+
+        return dashboards.stream()
+                .map(DashboardDto::convertToDto)
+                .collect(Collectors.toList());
+
     }
 
     @Override
