@@ -54,16 +54,26 @@
     gap: 32px;
     height: 160px;
 
-    img {
-      width: 48px;
-      height: 48px;
-      object-fit: contain;
-    }
-
     label > div {
       padding: 0;
       width: 160px;
       gap: 12px;
+
+      img {
+        width: 48px;
+        height: 48px;
+        object-fit: contain;
+      }
+    }
+
+    .upload-wrapper {
+      width: 160px;
+      height: 160px;
+
+      & > div {
+        width: 160px;
+        height: 160px;
+      }
     }
   }
 
@@ -87,6 +97,10 @@
     font-size: 16px;
     width: 120px;
     padding: 12px 0;
+  }
+
+  & > button:last-child {
+    margin-left: auto;
   }
 }
 

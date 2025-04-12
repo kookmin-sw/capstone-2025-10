@@ -18,10 +18,7 @@ const ImageGrid = ({
     >
       {Array.from({ length: 100 }).map((_, index) => {
         const isSelected = selected?.has(index);
-        const section = sections.find(
-          (s, sectionIndex) =>
-            s.cells.includes(index) && sectionIndex !== focusIndex,
-        );
+        const section = sections.find((s) => s.cells.includes(index));
         const backgroundColor = isSelected
           ? "rgba(0, 76, 214, 0.4)"
           : section?.color || "transparent";

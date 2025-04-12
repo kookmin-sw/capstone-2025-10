@@ -3,20 +3,31 @@
 import React, { useState } from "react";
 import styles from "./login.module.scss";
 import LoginFormFields from "@/components/Login/LoginFormFields";
+import { useRouter } from "next/navigation";
+import { login } from "@/lib/api/auth";
 
 export default function LoginPage() {
+  const router = useRouter();
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [error, setError] = useState("");
 
   const toggleShowPassword = () => setShowPassword(!showPassword);
   const toggleRememberMe = () => setRememberMe(!rememberMe);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("로그인 시도:", { userId, password, rememberMe });
-    // 로그인 API 호출 후 rememberMe 값에 따라 localStorage 또는 sessionStorage에 토큰 저장 등 처리
+    setError("");
+
+    try {
+      const res = await login(userId, password);
+      router.push("/");
+    } catch (err) {
+      console.log(error);
+      setError(err.message);
+    }
   };
 
   return (
@@ -38,12 +49,17 @@ export default function LoginPage() {
           />
 
           {/* 로그인 버튼 */}
-          <button 
-            type="submit" 
-            className={styles.loginButton} 
-            style={{ textAlign: 'center', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+          <button
+            type="submit"
+            className={styles.loginButton}
+            style={{
+              textAlign: "center",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
           >
-            <span style={{ width: '100%', textAlign: 'center' }}>로그인</span>
+            <span style={{ width: "100%", textAlign: "center" }}>로그인</span>
           </button>
         </form>
       </div>
