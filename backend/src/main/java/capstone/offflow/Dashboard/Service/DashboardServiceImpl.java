@@ -55,6 +55,7 @@ public class DashboardServiceImpl implements DashboardService{
 
     //dashboard 전체 조회
     @Override
+    @Transactional(readOnly = true)
     public List<DashboardDto> getAllDashboard(User user) {
         List<Dashboard> dashboards = dashboardRepository.findAllByUser(user);
 

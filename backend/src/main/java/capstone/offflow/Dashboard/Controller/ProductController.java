@@ -47,7 +47,7 @@ public class ProductController {
         return ResponseEntity.ok(dto);
     }
 
-    //상품 조회 (Dashboard Id)
+    //상품 조회 (Dashboard Id) - 전체
     @GetMapping("/dashboard/{dashboardId}")
     public ResponseEntity<?> getProductByDashboard(
             @PathVariable(name = "dashboardId") Long dashboardId,
@@ -58,13 +58,22 @@ public class ProductController {
     }
 
 
-    //상품 조회 (Section Id)
+    //상품 조회 (Section Id) -> 선택된
     @GetMapping("/section/{sectionId}")
     public ResponseEntity<?> getProductBySection(
             @PathVariable(name = "sectionId") Long sectionId,
             @AuthenticationPrincipal UserPrincipal userPrincipal) {
 
         List<ProductDto> dto = productService.getProductBySection(sectionId, userPrincipal.getUser());
+        return ResponseEntity.ok(dto);
+    }
+
+    //section에 선택 안된 상품 조회
+    @GetMapping("/section/not/{sectionId}")
+    public ResponseEntity<?> getProductByNotSection(
+            @PathVariable(name = "sectionId") Long sectionId,
+            @AuthenticationPrincipal UserPrincipal userPrincipal){
+        List<ProductDto> dto = productService.getProductByNotSection(sectionId, userPrincipal.getUser());
         return ResponseEntity.ok(dto);
     }
 

@@ -28,9 +28,13 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findAllByDashboard_User(@Param("dashboardId") Long dashboardId, @Param("user") User user);
 
 
-
     // 섹션 기준 모든 상품 가져오기
     @Query("SELECT p FROM Product p JOIN FETCH p.section s WHERE s.id = :sectionId AND s.dashboard.user = :user")
     List<Product> findAllBySection_User(@Param("sectionId") Long sectionId, @Param("user") User user);
+
+
+    // 섹션 매핑안된 모든 상품 가져오기
+    @Query("SELECT p FROM Product p LEFT JOIN FETCH p.section s WHERE p.dashboard.user = :user AND (s IS NULL OR s.id != :sectionId)")
+    List<Product> findProductsByUserNotInSection(@Param("sectionId") Long sectionId, @Param("user") User user);
 
 }

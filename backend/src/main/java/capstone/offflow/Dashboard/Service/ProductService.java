@@ -23,6 +23,9 @@ public interface ProductService {
     //상품 조회 (Section Id 기준)
     List<ProductDto> getProductBySection(Long id, User user);
 
+    //상품 조회 (매핑 안된 Section Id 기준)
+    List<ProductDto> getProductByNotSection(Long sectionId, User user);
+
     //상품 - 섹션 연결
     Product assignSectionToProduct(Long productId, Long sectionId, User user);
 
