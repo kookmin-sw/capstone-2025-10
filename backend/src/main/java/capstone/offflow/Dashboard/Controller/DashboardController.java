@@ -1,7 +1,9 @@
 package capstone.offflow.Dashboard.Controller;
 
 
+import capstone.offflow.Dashboard.Domain.Dashboard;
 import capstone.offflow.Dashboard.Dto.DashboardDto;
+import capstone.offflow.Dashboard.Dto.ProductDto;
 import capstone.offflow.Dashboard.Service.DashboardService;
 import capstone.offflow.User.Service.UserPrincipal;
 import lombok.RequiredArgsConstructor;
@@ -33,8 +35,9 @@ public class DashboardController {
             @RequestBody @Validated DashboardDto dashboardDto,
             @AuthenticationPrincipal UserPrincipal userPrincipal){
 
-        dashboardService.createDashboard(dashboardDto, userPrincipal.getUser());
-        return new ResponseEntity<>("Dashboard created Successfully", HttpStatus.CREATED);
+        Dashboard dashboard = dashboardService.createDashboard(dashboardDto, userPrincipal.getUser());
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(DashboardDto.convertToDto(dashboard));
     }
 
 
