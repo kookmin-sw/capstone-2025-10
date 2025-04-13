@@ -1,3 +1,5 @@
+from kafka import KafkaProducer
+import json
 import cv2
 import time
 import torch
@@ -5,7 +7,7 @@ import numpy as np
 from ultralytics import YOLO
 from PIL import Image, ImageDraw, ImageFont
 from torchvision import transforms
-from visitor_detect import MultiTaskEfficientNet  
+from visitor_detect import MultiTaskEfficientNet
 
 # Device 설정
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -22,11 +24,11 @@ face_transform = transforms.Compose([
 group_names = {0: "0~10", 1: "10~20", 2: "20~30", 3: "30~40", 4: "40~50", 5: "50+"}
 
 # YOLOv8 얼굴 감지 모델 로드 (얼굴 전용 모델)
-face_detector = YOLO("./ai/model/yolov8n-face.pt")
+face_detector = YOLO("./yolov8n-face.pt")
 
 # MultiTaskEfficientNet 모델 로드 (체크포인트 사용)
 model = MultiTaskEfficientNet(num_gender_classes=2, num_age_groups=6)
-checkpoint_path = "./ai/model/model_checkpoint.pt"
+checkpoint_path = "./model_checkpoint.pt"
 model.load_state_dict(torch.load(checkpoint_path, map_location=device))
 model.to(device)
 model.eval()
@@ -46,9 +48,26 @@ def is_same_visitor(center, tracked_center, threshold=TRACKING_THRESHOLD):
     dy = center[1] - tracked_center[1]
     return np.sqrt(dx**2 + dy**2) < threshold
 
+def request_kafka(message):
+    producer = KafkaProducer(
+        bootstrap_servers='192.168.219.180:9092',
+        value_serializer=lambda v: json.dumps(v).encode('utf-8'),
+    )
+
+    producer.send("vision-data-topic", message)
+
 def send_to_server(visitor_data):
     # 실제 서버 API 호출 코드 (예: requests.post 등)
     print("Sending data to server:", visitor_data)
+    request_kafka({
+        "type": "genderAge",
+        "payload": {
+            "dashboardId": 1,
+            "visitorLabel": visitor_data["visitor_id"],
+            "gender": visitor_data["gender"],
+            "age": visitor_data["age_group"],
+        }
+    })
 
 # 추적 업데이트 및 검출 실행 함수 (추가: 10프레임마다 YOLO 검출 실행)
 def process_frame(frame, face_detector, model, transform, device, tracked_visitors, run_detection=True):
@@ -57,7 +76,7 @@ def process_frame(frame, face_detector, model, transform, device, tracked_visito
     pil_img = Image.fromarray(img_rgb)
     draw = ImageDraw.Draw(pil_img)
     current_time = time.time()
-    
+
     detected_faces = []
     if run_detection:
         # YOLO 얼굴 감지 실행
@@ -81,7 +100,7 @@ def process_frame(frame, face_detector, model, transform, device, tracked_visito
                     "box": (new_x1, new_y1, new_x2, new_y2),
                     "center": get_face_center((new_x1, new_y1, new_x2, new_y2))
                 })
-    
+
     # 트래킹: 새로운 객체에 대해서만 모델 추론 실행
     for face in detected_faces:
         center = face["center"]
@@ -119,7 +138,7 @@ def process_frame(frame, face_detector, model, transform, device, tracked_visito
             tracked_visitors[matched_id]["center"] = smoothed_center
             tracked_visitors[matched_id]["last_seen"] = current_time
             tracked_visitors[matched_id]["box"] = face["box"]
-    
+
     if run_detection:
         for visitor_id in list(tracked_visitors.keys()):
             if tracked_visitors[visitor_id]["last_seen"] < current_time:
@@ -133,7 +152,7 @@ def process_frame(frame, face_detector, model, transform, device, tracked_visito
         box = info["box"]
         draw.rectangle(box, outline="red", width=2)
         draw.text((box[0], box[1] - 20), label_text, fill="red")
-    
+
     # 방문자 처리: 30초 이상 머문 방문자는 서버 전송, 60초 이상 보이지 않으면 삭제
     for visitor_id in list(tracked_visitors.keys()):
         duration = current_time - tracked_visitors[visitor_id]["start_time"]
@@ -148,11 +167,11 @@ def process_frame(frame, face_detector, model, transform, device, tracked_visito
             tracked_visitors[visitor_id]["data_sent"] = True
         if current_time - tracked_visitors[visitor_id]["last_seen"] > EXPIRE_TIME:
             del tracked_visitors[visitor_id]
-    
+
     return np.array(pil_img)
 
 # 메인 루프: 실시간 영상 처리 및 시각화
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture("rtsp://offflow:offflow1234@192.168.219.188/stream1")
 frame_count = 0
 DETECTION_INTERVAL = 10  # 예: 10프레임마다 YOLO 검출 실행
 
@@ -161,14 +180,14 @@ while True:
     if not ret:
         break
     frame_count += 1
-    
+
     # YOLO 검출은 매 DETECTION_INTERVAL 프레임마다 수행
     if frame_count % DETECTION_INTERVAL == 0:
         processed_frame = process_frame(frame, face_detector, model, face_transform, device, tracked_visitors, run_detection=True)
     else:
         # 이전 검출 결과(트래킹)만 업데이트: run_detection=False이면 새 검출은 수행하지 않고, 기존 방문자 정보만 업데이트 (예: 타임스탬프 갱신)
         processed_frame = process_frame(frame, face_detector, model, face_transform, device, tracked_visitors, run_detection=False)
-    
+
     processed_frame_bgr = cv2.cvtColor(processed_frame, cv2.COLOR_RGB2BGR)
     cv2.imshow("Real-Time Visitor Tracking", processed_frame_bgr)
     if cv2.waitKey(1) & 0xFF == ord('q'):
