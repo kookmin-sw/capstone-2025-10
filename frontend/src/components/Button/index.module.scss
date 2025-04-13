@@ -1,0 +1,45 @@
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 22px;
+  border-radius: 50px;
+  cursor: pointer;
+
+  font-family: Noto Sans KR;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--gray-2);
+
+  &:hover {
+    //background-color: ;
+  }
+
+  &:active {
+    //background-color: ;
+  }
+
+  &:disabled {
+    background: var(--gray-2);
+    border: 1px solid var(--gray-2);
+  }
+}
+
+.outline {
+  border: 1px solid var(--gray-2);
+  background-color: transparent;
+  color: var(--gray-2);
+}
+
+.default {
+  background: var(--primary-blue);
+  border: 1px solid var(--primary-blue);
+  color: var(--white);
+}
+
+.cancel {
+  background: var(--primary-red);
+  border: 1px solid var(--primary-red);
+  color: var(--white);
+}
