@@ -18,7 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Slf4j
 @Service
@@ -35,7 +36,6 @@ public class VisionDataServiceImpl implements VisionDataService {
     @Override
     public void processIncomingData(KafkaMessageWrapper wrapper) {
         String type = wrapper.getType();
-
         try {
             Long dashboardId = Long.parseLong(wrapper.getPayload().get("dashboardId").toString());
             Dashboard dashboard = dashboardRepository.findById(dashboardId)
@@ -97,21 +97,36 @@ public class VisionDataServiceImpl implements VisionDataService {
     }
 
     private void handleGenderAge(KafkaMessageWrapper wrapper, Dashboard dashboard) {
-        Date detectedTime = new Date(); // 현재 시간 기준
+        Date detectedTime = new Date(); // 현재 시간
         String visitorLabel = wrapper.getPayload().get("visitorLabel").toString();
         String gender = wrapper.getPayload().get("gender").toString();
         String age = wrapper.getPayload().get("age").toString();
 
+        // 1. Entity 생성
+        GenderAge genderAge = new GenderAge();
+        genderAge.setDashboard(dashboard);
+        genderAge.setAge(age);
+        genderAge.setGender(gender);
+        genderAge.setVisitorLabel(visitorLabel);
+        genderAge.setDetectedTime(detectedTime);
+
+        // 2. Redis 저장 (Entity 기준)
+        visionRedisService.cacheData("genderAge", genderAge);
+
+        // 3. DB 저장용 DTO 생성 (Date → LocalDateTime 변환)
+        LocalDateTime localDetectedTime = detectedTime.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+
         GenderAgeDto dto = GenderAgeDto.builder()
                 .dashboardId(dashboard.getId())
-                .detectedTime(detectedTime)
+                .detectedTime(localDetectedTime)
                 .visitorLabel(visitorLabel)
                 .gender(gender)
                 .age(age)
                 .build();
 
-        GenderAge genderAge = GenderAgeDto.convertToEntity(dto, dashboard);
-        visionRedisService.cacheData("genderAge", genderAge);
+        // 4. DB 저장
         genderAgeService.save(dto, dashboard.getId());
     }
 

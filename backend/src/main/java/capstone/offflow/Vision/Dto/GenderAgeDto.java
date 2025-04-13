@@ -3,6 +3,10 @@ package capstone.offflow.Vision.Dto;
 import capstone.offflow.Dashboard.Domain.Dashboard;
 import capstone.offflow.Vision.Domain.GenderAge;
 import lombok.*;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
 
@@ -10,6 +14,7 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
 public class GenderAgeDto {
 
     private Long id;
@@ -17,7 +22,8 @@ public class GenderAgeDto {
     @NonNull
     private Long dashboardId;
 
-    private Date detectedTime; //보낸 시간
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime detectedTime; //보낸 시간
 
     private String visitorLabel; //방문객 구분 라벨
 
@@ -30,7 +36,11 @@ public class GenderAgeDto {
         return GenderAgeDto.builder()
                 .id(genderAge.getId())
                 .dashboardId(genderAge.getDashboard().getId())
-                .detectedTime(genderAge.getDetectedTime())
+                .detectedTime(
+                    genderAge.getDetectedTime().toInstant()
+                             .atZone(ZoneId.systemDefault())
+                             .toLocalDateTime()
+                )
                 .visitorLabel(genderAge.getVisitorLabel())
                 .gender(genderAge.getGender())
                 .age(genderAge.getAge())
@@ -43,10 +53,10 @@ public class GenderAgeDto {
     public static GenderAge convertToEntity(GenderAgeDto genderAgeDto, Dashboard dashboard){
         GenderAge genderAge = new GenderAge();
 
-        genderAge.setDetectedTime(genderAgeDto.getDetectedTime());
+        genderAge.setDetectedTime(java.sql.Timestamp.valueOf(genderAgeDto.getDetectedTime())); // ✅ LocalDateTime → Timestamp
         genderAge.setVisitorLabel(genderAgeDto.getVisitorLabel());
-        genderAge.setGender(genderAgeDto.getGender()); // ✅ 수정
-        genderAge.setAge(genderAgeDto.getAge());       // ✅ 수정
+        genderAge.setGender(genderAgeDto.getGender());
+        genderAge.setAge(genderAgeDto.getAge());
         genderAge.setDashboard(dashboard);
 
         return genderAge;
