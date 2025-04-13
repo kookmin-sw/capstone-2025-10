@@ -10,15 +10,6 @@ export const login = async (userId, password) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ userId, password }),
   });
-
-  //const setCookie = response.headers.get("Set-Cookie");
-  //if (setCookie) {
-  //  const resHeaders = new Headers({
-  //    "Content-Type": "application/json",
-  //  });
-  //
-  //  resHeaders.set("Set-Cookie", setCookie);
-  //}
   return response;
 };
 

@@ -1,69 +1,116 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import styles from "./index.module.scss";
-import MyCanvas, { drawSectionArrows } from "@/components/Canvas";
 import ImageGrid from "@/components/ImageGrid";
 import CardContainer from "@/components/CardContainer";
+import RequireLogin from "@/components/Login/RequireLogin";
+import ArrowCanvas from "@/components/Canvas/ArrowCanvas";
 
-const generateRandomColor = () => {
-  const hue = Math.floor(Math.random() * 360);
-  return `hsla(${hue}, 70%, 70%, 0.4)`; // pastel tone with transparency
-};
+const gridCols = 10;
+const cellSize = 480 / 10;
 
-const TrafficMapSection = () => {
+function generateArrowsFromTracking(
+  trackingData,
+  sections,
+  imageWidth,
+  imageHeight,
+  gridCols,
+  gridRows,
+  originalImageWidth,
+  originalImageHeight,
+) {
+  const scaleX = imageWidth / originalImageWidth;
+  const scaleY = imageHeight / originalImageHeight;
+
+  const normalized = trackingData.map((track) => ({
+    x: track.x * scaleX,
+    y: track.y * scaleY,
+  }));
+
+  const cellSizeX = imageWidth / gridCols;
+  const cellSizeY = imageHeight / gridRows;
+
+  const visited = [];
+
+  for (const { x, y } of normalized) {
+    const col = Math.floor(x / cellSizeX);
+    const row = Math.floor(y / cellSizeY);
+    const cellIndex = row * gridCols + col;
+
+    const section = sections.find((s) => s.cells.includes(cellIndex));
+    const last = visited[visited.length - 1];
+
+    if (section && (!last || last.id !== section.id)) {
+      const cellsXY = section.cells.map((idx) => [
+        idx % gridCols,
+        Math.floor(idx / gridCols),
+      ]);
+      visited.push({ id: section.id, cells: cellsXY });
+    } else if (!section) {
+      // 구역 없는 경우도 연결해주기 위해 직접 XY 추가
+      visited.push({
+        id: `untracked-${x},${y}`,
+        cells: [[Math.floor(x / cellSizeX), Math.floor(y / cellSizeY)]],
+      });
+    }
+  }
+
+  const arrows = [];
+  for (let i = 0; i < visited.length - 1; i++) {
+    arrows.push({
+      from: visited[i].cells,
+      to: visited[i + 1].cells,
+      userId: trackingData[0]?.visitorLabel || `user-${i}`,
+    });
+  }
+
+  return arrows;
+}
+
+const TrafficMapSection = ({ sections, trafficPoints, image }) => {
   const canvasRef = useRef(null);
-  const [sections, setSection] = useState([
-    {
-      name: "test1",
-      cells: Array.from([1, 2, 3, 4]),
-      color: generateRandomColor(),
-    },
-    {
-      name: "test2",
-      cells: Array.from([31, 32, 33, 34]),
-      color: generateRandomColor(),
-    },
-    {
-      name: "test3",
-      cells: Array.from([97, 98, 99, 100]),
-      color: generateRandomColor(),
-    },
-  ]);
-  const [image, setImage] = useState("test.png");
 
-  useEffect(() => {
-    const ctx = canvasRef.current.getContext("2d");
-    const gridCols = 10;
-    const cellSize = 480 / 10;
-    const arrows = [
-      { from: 0, to: 1 }, // section index A → B
-      { from: 1, to: 2 }, // section index B → C
-    ];
-
-    drawSectionArrows(ctx, sections, arrows, gridCols, cellSize);
-  }, []);
+  //if (Object.keys(sections).length === 0) {
+  //  //router.push("/login");
+  //  return <RequireLogin></RequireLogin>;
+  //}
 
   return (
-    <section className={styles.section}>
-      <CardContainer showDivider={false} margin="40px">
-        <div className={styles["image-grid-wrapper"]}>
-          {image && (
-            //<img src={URL.createObjectURL(image)} alt="Uploaded Preview" />
-            <img src={image} alt="Uploaded Preview" />
-          )}
-          <ImageGrid sections={sections} />
-          <div className={styles.canvas}>
-            <MyCanvas canvasRef={canvasRef} />
+    <RequireLogin>
+      <section className={styles.section}>
+        <CardContainer showDivider={false} margin="40px">
+          <div className={styles["image-grid-wrapper"]}>
+            {image && <img src={image} alt="Uploaded Preview" />}
+            <ImageGrid sections={sections} />
+            <div className={styles.canvas}>
+              <ArrowCanvas
+                canvasRef={canvasRef}
+                sections={sections}
+                arrows={generateArrowsFromTracking(
+                  trafficPoints,
+                  sections,
+                  480,
+                  480,
+                  10,
+                  10,
+                  1920, // 👈 원본 이미지 width
+                  1080, // 👈 원본 이미지 height
+                )}
+                gridCols={gridCols}
+                cellSize={cellSize}
+              />
+            </div>
           </div>
-        </div>
-      </CardContainer>
-      <CardContainer showDivider={false} margin="40px">
-        {/* User List */}
-      </CardContainer>
+        </CardContainer>
 
-      <div className={styles["filter-wrapper"]}></div>
-    </section>
+        {/*<CardContainer showDivider={false} margin="40px">*/}
+        {/*  /!* User List *!/*/}
+        {/*</CardContainer>*/}
+
+        {/*<div className={styles["filter-wrapper"]}></div>*/}
+      </section>
+    </RequireLogin>
   );
 };
 

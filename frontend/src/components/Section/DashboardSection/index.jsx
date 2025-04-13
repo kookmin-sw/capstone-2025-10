@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from "react";
+"use client";
+
+import React, { useState } from "react";
 import { Bar, Doughnut, Line } from "react-chartjs-2";
 import {
   ArcElement,
@@ -14,6 +16,7 @@ import {
 } from "chart.js";
 
 import styles from "./index.module.scss";
+import RequireLogin from "@/components/Login/RequireLogin";
 
 ChartJS.register(
   CategoryScale,
@@ -51,26 +54,37 @@ const getChartDataFromVisitors = (visitors) => {
   const timeGender = timeSlots.map(() => ({ male: 0, female: 0 }));
 
   visitors.forEach((v) => {
-    const date = new Date(v.detectedTime);
-    const hour = date.getHours();
+    const dateUTC = new Date(v.detectedTime);
+    const dateKST = new Date(dateUTC.getTime() + 9 * 60 * 60 * 1000); // ✅ UTC → KST 변환
+    const hour = dateKST.getHours();
 
-    if (v.gender === "male" || v.gender === "female") {
-      genderCount[v.gender]++;
+    // 성별 카운트
+    const gender = v.gender?.toLowerCase();
+    if (gender === "male" || gender === "female") {
+      genderCount[gender]++;
     }
 
-    const age = parseInt(v.age);
-    if (age <= 9) ageGroups["9세 이하"]++;
-    else if (age <= 19) ageGroups["10대"]++;
-    else if (age <= 29) ageGroups["20대"]++;
-    else if (age <= 39) ageGroups["30대"]++;
-    else if (age <= 49) ageGroups["40대"]++;
-    else if (age <= 59) ageGroups["50대"]++;
-    else ageGroups["60대 이상"]++;
+    // 연령 카운트
+    let age = parseInt(v.age);
+    if (isNaN(age)) {
+      const match = v.age.match(/\d+/);
+      age = match ? parseInt(match[0]) : -1;
+    }
+    if (age >= 0) {
+      if (age <= 9) ageGroups["9세 이하"]++;
+      else if (age <= 19) ageGroups["10대"]++;
+      else if (age <= 29) ageGroups["20대"]++;
+      else if (age <= 39) ageGroups["30대"]++;
+      else if (age <= 49) ageGroups["40대"]++;
+      else if (age <= 59) ageGroups["50대"]++;
+      else ageGroups["60대 이상"]++;
+    }
 
+    // 시간대별 성별 카운트
     timeSlots.forEach((slot, index) => {
       if (hour >= slot.start && hour < slot.end) {
-        if (v.gender === "male") timeGender[index].male++;
-        if (v.gender === "female") timeGender[index].female++;
+        if (gender === "male") timeGender[index].male++;
+        if (gender === "female") timeGender[index].female++;
       }
     });
   });
@@ -78,23 +92,8 @@ const getChartDataFromVisitors = (visitors) => {
   return { genderCount, ageGroups, timeGender };
 };
 
-const DashboardSection = () => {
-  const [visitors, setVisitors] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch("/api/dashboard/gender-age"); // 실제 API 경로로 변경
-        const data = await res.json();
-        setVisitors(data);
-      } catch (err) {
-        console.error("Failed to fetch visitors:", err);
-      }
-    };
-
-    fetchData();
-  }, []);
-
+const DashboardSection = ({ visitors }) => {
+  const [test, setTest] = useState(visitors);
   const { genderCount, ageGroups, timeGender } =
     getChartDataFromVisitors(visitors);
 
@@ -184,10 +183,15 @@ const DashboardSection = () => {
     maintainAspectRatio: false,
   };
 
+  if (Object.keys(visitors).length === 0) {
+    //router.push("/login");
+    return <RequireLogin></RequireLogin>;
+  }
+
   return (
-    <section className={styles["visitor-stats-section"]}>
-      <div className={styles["chart-full"]}>
-        <h3>
+    <RequireLogin>
+      <section className={styles["visitor-stats-section"]}>
+        <div className={styles["chart-full"]}>
           <h3>
             <b>{maxMaleTime.label}</b>에는 <b>남성</b>이{" "}
             <b>{maxMaleTime.maleRatio.toFixed(1)}%</b>로,{" "}
@@ -195,40 +199,40 @@ const DashboardSection = () => {
             <b>{maxFemaleTime.femaleRatio.toFixed(1)}%</b>로 가장 많이
             방문했습니다.
           </h3>
-        </h3>
-        <div style={{ height: "300px" }}>
-          <Line data={lineData} options={chartOptions} />
-        </div>
-      </div>
-      <div className={styles["chart-half-wrapper"]}>
-        <div className={styles["chart-half"]}>
-          <h3>
-            <b>{dominantGender}</b>이{" "}
-            <b>
-              {(
-                (Math.max(genderCount.male, genderCount.female) /
-                  totalGenderCount) *
-                100
-              ).toFixed(1)}
-              %
-            </b>
-            로 더 많이 방문했습니다.
-          </h3>
-          <div style={{ height: "280px" }}>
-            <Doughnut data={doughnutData} options={chartOptions} />
+          <div style={{ height: "300px" }}>
+            <Line data={lineData} options={chartOptions} />
           </div>
         </div>
-        <div className={styles["chart-half"]}>
-          <h3>
-            <b>{mostVisitedAgeGroupLabel}</b>가{" "}
-            <b>{mostVisitedAgeGroupRatio}%</b>로 가장 많이 방문했습니다.
-          </h3>
-          <div style={{ height: "280px" }}>
-            <Bar data={barData} options={chartOptions} />
+        <div className={styles["chart-half-wrapper"]}>
+          <div className={styles["chart-half"]}>
+            <h3>
+              <b>{dominantGender}</b>이{" "}
+              <b>
+                {(
+                  (Math.max(genderCount.male, genderCount.female) /
+                    totalGenderCount) *
+                  100
+                ).toFixed(1)}
+                %
+              </b>
+              로 더 많이 방문했습니다.
+            </h3>
+            <div style={{ height: "280px" }}>
+              <Doughnut data={doughnutData} options={chartOptions} />
+            </div>
+          </div>
+          <div className={styles["chart-half"]}>
+            <h3>
+              <b>{mostVisitedAgeGroupLabel}</b>가{" "}
+              <b>{mostVisitedAgeGroupRatio}%</b>로 가장 많이 방문했습니다.
+            </h3>
+            <div style={{ height: "280px" }}>
+              <Bar data={barData} options={chartOptions} />
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </RequireLogin>
   );
 };
 
