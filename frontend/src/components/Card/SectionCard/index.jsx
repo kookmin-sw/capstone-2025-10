@@ -1,105 +1,179 @@
 "use client";
 
-import React, {useState} from "react";
+import dynamic from "next/dynamic";
+import React, { useEffect, useState } from "react";
 import styles from "./index.module.scss";
 import Button from "@/components/Button";
-import {useModal} from "@/contexts/ModalContext";
-import TextInput from "@/components/Input/TextInput";
+import { useModal } from "@/contexts/ModalContext";
+import {
+  getProductByDashboardId,
+  getProductBySectionId,
+  matchProductWithSection,
+} from "@/lib/api/product";
 
-const SectionCard = ({sections, setSections, image}) => {
-    const {openModal, closeModal} = useModal();
-    const [focusIndex, setFocusIndex] = useState(null);
+const ImageGrid = dynamic(() => import("@/components/ImageGrid"), {
+  ssr: false,
+});
 
-    const handleAddSection = (e) => {
-    };
+const SectionCard = ({ sections, setSections, image, dashboardId }) => {
+  const { openModal, closeModal } = useModal();
+  const [focusIndex, setFocusIndex] = useState(null);
+  const [products, setProducts] = useState([]);
 
-    const handleSave = (name) => {
+  useEffect(() => {}, []);
+
+  useEffect(() => {
+    if (focusIndex !== null) {
+      getProducts();
     }
+  }, [focusIndex]);
 
-    const handleUpdate = (e) => {
-    }
+  const getProducts = async () => {
+    const response = await getProductBySectionId(sections[focusIndex]?.id);
+    setProducts(response);
+  };
 
-    const handleDeleteSection = (index) => {
-    };
-
-    return (
-        <div className={styles["upload-card"]}>
-            <div className={styles["image-grid-wrapper"]}>
-                {image && <img src={URL.createObjectURL(image)} alt="Uploaded Preview"/>}
-                <ImageGrid
-                    sections={sections}
-                />
-            </div>
-            <div className={styles["right-wrapper"]} onClick={(e) => e.stopPropagation()}>
-                <div className={styles["button-wrapper"]}>
-                    {
-                        focusIndex === null ? <Button onClick={handleAddSection}>Add Section</Button> :
-                            <Button onClick={handleUpdate}>Save</Button>
-                    }
-                </div>
-                <div className={styles["list-wrapper"]}>
-                    {sections.map((section, idx) => {
-                        return (
-                            <div
-                                key={idx}
-                                style={{
-                                    backgroundColor: section.color,
-                                    border: idx === focusIndex ? "1px solid #000" : ""
-                                }}
-                            >
-                                <input
-                                    value={section.name}
-                                    onChange={(e) => {
-                                        e.preventDefault()
-                                    }}
-                                    disabled={idx !== focusIndex}
-                                />
-                                <button
-                                    onClick={(e) => {
-                                        e.preventDefault()
-                                        handleDeleteSection(idx)
-                                    }}
-                                >
-                                    삭제
-                                </button>
-                            </div>
-                        )
-                    })}
-                </div>
-            </div>
-        </div>
+  const handleAddSection = async (e) => {
+    e.preventDefault();
+    const response = await getDashboardProducts();
+    openModal(
+      <ProductList
+        dashboardId={dashboardId}
+        products={response}
+        onSave={(focusIndex) => onMatchClick(focusIndex)}
+      />,
     );
-};
+  };
 
-const ImageGrid = ({sections}) => {
-    return (
-        <div className={styles.grid}>
-            {Array.from({length: 100}).map((_, index) => {
-                const section = sections.find((s) => s.cells.includes(index));
-                const backgroundColor = section?.color || "transparent";
+  const handleSave = (name) => {};
 
-                return <div
-                    key={index}
-                    className={styles["grid-cell"]}
-                    style={{backgroundColor}}
-                />
-            })}
+  const handleUpdate = (e) => {};
+
+  const handleDeleteSection = (index) => {};
+
+  const onSectionClick = (index) => {
+    sections.map((section, sectionIndex) => {
+      console.log(section);
+      if (section.cells.includes(index)) {
+        setFocusIndex(sectionIndex);
+      }
+    });
+  };
+
+  const getDashboardProducts = async () => {
+    return await getProductByDashboardId(dashboardId);
+  };
+
+  const onMatchClick = async (productId) => {
+    await matchProductWithSection(productId, sections[focusIndex].id);
+    await getProducts();
+    closeModal();
+  };
+
+  return (
+    <div className={styles["upload-card"]}>
+      <div className={styles["image-grid-wrapper"]}>
+        {image && (
+          <img src={URL.createObjectURL(image)} alt="Uploaded Preview" />
+        )}
+        <ImageGrid
+          sections={sections}
+          handleMouseClick={onSectionClick}
+          focusIndex={focusIndex}
+          selected={new Set(sections[focusIndex]?.cells)}
+        />
+      </div>
+      <div
+        className={styles["right-wrapper"]}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className={styles["button-wrapper"]}>
+          <Button onClick={handleAddSection}>Add Product</Button>
         </div>
-    );
-};
-
-const SectionNameCard = ({onSave}) => {
-    const [name, setName] = useState();
-
-    return <div className={styles["section-name-card"]}>
-        <TextInput onChange={(e) => setName(e.target.value)} label="섹션 이름" placeholder="섹션 이름을 입력하세요"/>
-        <Button
-            onClick={(e) => {
-                e.preventDefault()
-                onSave(name)
-            }}
-        >SAVE</Button>
+        <div className={styles["list-wrapper"]}>
+          {products.map((product, idx) => {
+            return (
+              <div
+                key={idx}
+                style={{
+                  border: idx === "1px solid #000",
+                }}
+              >
+                {product.name}
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleDeleteSection(idx);
+                  }}
+                >
+                  삭제
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      </div>
     </div>
-}
+  );
+};
+
+const ProductList = ({ products, onSave }) => {
+  const [selectedIndex, setSelectedIndex] = useState(new Set());
+  const toggleSelect = (index) => {
+    setSelectedIndex((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(index)) {
+        newSet.delete(index); // 선택 해제
+      } else {
+        newSet.add(index); // 선택 추가
+      }
+      return newSet;
+    });
+  };
+
+  return (
+    <div>
+      <div className={styles.list}>
+        {products.map((product, idx) => (
+          <ProductCard
+            key={idx}
+            index={idx}
+            product={product}
+            isSelected={selectedIndex.has(idx)}
+            onClick={() => toggleSelect(idx)}
+          />
+        ))}
+      </div>
+
+      <div style={{ marginLeft: "auto" }}>
+        <Button
+          onClick={() => onSave(products[Array.from(selectedIndex)[0]].id)}
+        >
+          Save
+        </Button>
+      </div>
+    </div>
+  );
+};
+
+const ProductCard = ({ index, product, isSelected, onClick }) => {
+  return (
+    <div
+      className={`${styles.card} ${isSelected ? styles.selected : ""}`}
+      onClick={onClick}
+    >
+      <span className={styles.index}>{index + 1}.</span>
+      <div className={styles.content}>
+        <div className={styles.titleLine}>
+          <span className={styles.name}>{product.name}</span>
+          <span className={styles.price}>
+            {product.price.toLocaleString()}원
+          </span>
+        </div>
+        <p className={styles.description}>{product.description}</p>
+      </div>
+    </div>
+  );
+};
 
 export default SectionCard;

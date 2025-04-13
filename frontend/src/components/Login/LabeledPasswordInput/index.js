@@ -15,7 +15,9 @@ export default function LabeledPasswordInput({
 }) {
   return (
     <>
-      <label htmlFor={id} className={styles.label}>{label}</label>
+      <label htmlFor={id} className={styles.label}>
+        {label}
+      </label>
       <div className={styles.passwordContainer}>
         <input
           type={showPassword ? "text" : "password"}
@@ -24,7 +26,7 @@ export default function LabeledPasswordInput({
           onChange={onChange}
           placeholder={placeholder}
           required={required}
-          pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,16}$"
+          //pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,16}$"
         />
         <button
           type="button"
@@ -32,7 +34,9 @@ export default function LabeledPasswordInput({
           onClick={togglePassword}
         >
           <Image
-            src={showPassword ? "/IP-password_open.svg" : "/IP-password_close.svg"}
+            src={
+              showPassword ? "/IP-password_open.svg" : "/IP-password_close.svg"
+            }
             alt={showPassword ? "숨기기" : "보기"}
             width={20}
             height={20}
