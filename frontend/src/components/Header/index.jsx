@@ -17,7 +17,7 @@ export default function Header() {
 
   const headerItems = [
     {
-      title: "대시보드",
+      title: "통계",
       path: "/dashboard",
     },
     {
