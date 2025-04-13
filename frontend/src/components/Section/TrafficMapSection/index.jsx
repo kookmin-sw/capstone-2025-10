@@ -13,12 +13,12 @@ const cellSize = 480 / 10;
 function generateArrowsFromTracking(
   trackingData,
   sections,
-  imageWidth, // 예: 480
-  imageHeight, // 예: 480
+  imageWidth,
+  imageHeight,
   gridCols,
   gridRows,
-  originalImageWidth, // 예: 1080
-  originalImageHeight, // 예: 720
+  originalImageWidth,
+  originalImageHeight,
 ) {
   const scaleX = imageWidth / originalImageWidth;
   const scaleY = imageHeight / originalImageHeight;
@@ -31,33 +31,37 @@ function generateArrowsFromTracking(
   const cellSizeX = imageWidth / gridCols;
   const cellSizeY = imageHeight / gridRows;
 
-  const visitedSectionIndices = [];
+  const visited = [];
 
   for (const { x, y } of normalized) {
     const col = Math.floor(x / cellSizeX);
     const row = Math.floor(y / cellSizeY);
     const cellIndex = row * gridCols + col;
 
-    console.log(
-      `x=${x}, y=${y}, col=${col}, row=${row}, cellIndex=${cellIndex}`,
-    );
+    const section = sections.find((s) => s.cells.includes(cellIndex));
+    const last = visited[visited.length - 1];
 
-    const sectionIdx = sections.findIndex((s) => s.cells.includes(cellIndex));
-    console.log("sectionIdx", sectionIdx);
-
-    if (
-      sectionIdx !== -1 &&
-      sectionIdx !== visitedSectionIndices[visitedSectionIndices.length - 1]
-    ) {
-      visitedSectionIndices.push(sectionIdx);
+    if (section && (!last || last.id !== section.id)) {
+      const cellsXY = section.cells.map((idx) => [
+        idx % gridCols,
+        Math.floor(idx / gridCols),
+      ]);
+      visited.push({ id: section.id, cells: cellsXY });
+    } else if (!section) {
+      // 구역 없는 경우도 연결해주기 위해 직접 XY 추가
+      visited.push({
+        id: `untracked-${x},${y}`,
+        cells: [[Math.floor(x / cellSizeX), Math.floor(y / cellSizeY)]],
+      });
     }
   }
 
   const arrows = [];
-  for (let i = 0; i < visitedSectionIndices.length - 1; i++) {
+  for (let i = 0; i < visited.length - 1; i++) {
     arrows.push({
-      from: visitedSectionIndices[i],
-      to: visitedSectionIndices[i + 1],
+      from: visited[i].cells,
+      to: visited[i + 1].cells,
+      userId: trackingData[0]?.visitorLabel || `user-${i}`,
     });
   }
 
@@ -84,17 +88,14 @@ const TrafficMapSection = ({ sections, trafficPoints, image }) => {
                 canvasRef={canvasRef}
                 sections={sections}
                 arrows={generateArrowsFromTracking(
-                  [
-                    { x: 408, y: 120 }, // test1
-                    { x: 456, y: 264 }, // test2
-                  ],
+                  trafficPoints,
                   sections,
                   480,
                   480,
                   10,
                   10,
-                  480, // 👈 원본 이미지 width
-                  480, // 👈 원본 이미지 height
+                  1920, // 👈 원본 이미지 width
+                  1080, // 👈 원본 이미지 height
                 )}
                 gridCols={gridCols}
                 cellSize={cellSize}
@@ -103,11 +104,11 @@ const TrafficMapSection = ({ sections, trafficPoints, image }) => {
           </div>
         </CardContainer>
 
-        <CardContainer showDivider={false} margin="40px">
-          {/* User List */}
-        </CardContainer>
+        {/*<CardContainer showDivider={false} margin="40px">*/}
+        {/*  /!* User List *!/*/}
+        {/*</CardContainer>*/}
 
-        <div className={styles["filter-wrapper"]}></div>
+        {/*<div className={styles["filter-wrapper"]}></div>*/}
       </section>
     </RequireLogin>
   );

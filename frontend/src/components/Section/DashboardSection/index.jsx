@@ -54,26 +54,37 @@ const getChartDataFromVisitors = (visitors) => {
   const timeGender = timeSlots.map(() => ({ male: 0, female: 0 }));
 
   visitors.forEach((v) => {
-    const date = new Date(v.detectedTime);
-    const hour = date.getHours();
+    const dateUTC = new Date(v.detectedTime);
+    const dateKST = new Date(dateUTC.getTime() + 9 * 60 * 60 * 1000); // ✅ UTC → KST 변환
+    const hour = dateKST.getHours();
 
-    if (v.gender === "male" || v.gender === "female") {
-      genderCount[v.gender]++;
+    // 성별 카운트
+    const gender = v.gender?.toLowerCase();
+    if (gender === "male" || gender === "female") {
+      genderCount[gender]++;
     }
 
-    const age = parseInt(v.age);
-    if (age <= 9) ageGroups["9세 이하"]++;
-    else if (age <= 19) ageGroups["10대"]++;
-    else if (age <= 29) ageGroups["20대"]++;
-    else if (age <= 39) ageGroups["30대"]++;
-    else if (age <= 49) ageGroups["40대"]++;
-    else if (age <= 59) ageGroups["50대"]++;
-    else ageGroups["60대 이상"]++;
+    // 연령 카운트
+    let age = parseInt(v.age);
+    if (isNaN(age)) {
+      const match = v.age.match(/\d+/);
+      age = match ? parseInt(match[0]) : -1;
+    }
+    if (age >= 0) {
+      if (age <= 9) ageGroups["9세 이하"]++;
+      else if (age <= 19) ageGroups["10대"]++;
+      else if (age <= 29) ageGroups["20대"]++;
+      else if (age <= 39) ageGroups["30대"]++;
+      else if (age <= 49) ageGroups["40대"]++;
+      else if (age <= 59) ageGroups["50대"]++;
+      else ageGroups["60대 이상"]++;
+    }
 
+    // 시간대별 성별 카운트
     timeSlots.forEach((slot, index) => {
       if (hour >= slot.start && hour < slot.end) {
-        if (v.gender === "male") timeGender[index].male++;
-        if (v.gender === "female") timeGender[index].female++;
+        if (gender === "male") timeGender[index].male++;
+        if (gender === "female") timeGender[index].female++;
       }
     });
   });

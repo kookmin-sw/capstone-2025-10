@@ -11,7 +11,7 @@ export default function ArrowCanvas({
   cellSize,
 }) {
   const draw = (ctx) => {
-    drawSectionArrows(ctx, sections, arrows, gridCols, cellSize);
+    drawSectionArrows(ctx, arrows, gridCols, cellSize);
   };
 
   return (

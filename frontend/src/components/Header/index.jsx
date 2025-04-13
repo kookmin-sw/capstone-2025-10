@@ -21,7 +21,7 @@ export default function Header() {
       path: "/dashboard",
     },
     {
-      title: "캠페인 추가",
+      title: "대시보드",
       path: "/campaign",
     },
     {

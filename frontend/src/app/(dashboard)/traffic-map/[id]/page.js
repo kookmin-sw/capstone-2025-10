@@ -23,15 +23,12 @@ async function getTrafficPointData(id) {
     return raw.map((item) => {
       const [gridX, gridY] = JSON.parse(item.gridList)[0].map(Number);
 
-      const x = Math.round((gridX / gridWidth) * imageWidth);
-      const y = Math.round((gridY / gridHeight) * imageHeight);
-
       return {
         id: item.id,
         dashboardId: item.dashboardId,
         createdAt: item.detectedTime,
-        x,
-        y,
+        x: gridX,
+        y: gridY,
         userLabel: item.visitorLabel,
       };
     });
