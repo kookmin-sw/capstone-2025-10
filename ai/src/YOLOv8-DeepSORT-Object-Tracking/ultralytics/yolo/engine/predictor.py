@@ -182,12 +182,15 @@ class BasePredictor:
             with self.dt[2]:
                 preds = self.postprocess(preds, im, im0s)
 
+            frame_count = 0  # 루프 시작 위에 추가
             for i in range(len(im)):
                 if self.webcam:
                     path, im0s = path[i], im0s[i]
                 p = Path(path)
-                s += self.write_results(i, preds, (p, im, im0s))
+                if frame_count % 150 == 0:
+                    s += self.write_results(i, preds, (p, im, im0s))
 
+                frame_count += 1
                 if self.args.show:
                     self.show(p)
 

@@ -249,7 +249,7 @@ class DetectionPredictor(BasePredictor):
 
             draw_boxes(im0, bbox_xyxy, self.model.names, object_id,identities)
             producer = KafkaProducer(
-                bootstrap_servers='192.168.219.160:9092',
+                bootstrap_servers='192.168.219.180:9092',
                 value_serializer=lambda v: json.dumps(v).encode('utf-8'),
                 linger_ms=10,             # 최대 10ms까지 모았다가 전송
                 compression_type='gzip'   # 메시지 압축 적용 (CPU 비용 vs 전송량 절약)
