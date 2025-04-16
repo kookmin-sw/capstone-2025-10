@@ -6,13 +6,13 @@
  * @returns {boolean} - 전송 버튼 활성화 여부
  */
 export const isButtonActive = (messageContent, recipientList, messageCount) => {
-  if (!messageContent || recipientList.length === 0) return false;
+  if (!messageContent || recipientList.length === 0) {return false;}
   
   // 메시지 잔여 건수를 숫자로 변환 (콤마 제거 후 숫자로 변환)
   const availableCount = parseFloat(messageCount.replace(/,/g, ''));
   
   // 발송 대상 인원수가 메시지 잔여 건수보다 많으면 비활성화
-  if (recipientList.length > availableCount) return false;
+  if (recipientList.length > availableCount) {return false;}
   
   return true;
 };

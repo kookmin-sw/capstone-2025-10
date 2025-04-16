@@ -37,7 +37,7 @@ const NoticeCustomList = ({
     setCheckedGroups({});
   };
 
-  if (!isOpen) return null;
+  if (!isOpen) {return null;}
   
   return (
     <div className={styles.popupOverlay}>

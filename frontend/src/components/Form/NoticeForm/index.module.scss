@@ -1,0 +1,166 @@
+.formContainer {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.10);
+  padding: 32px;
+  width: 100%;
+}
+
+.formTitle {
+  color: #000;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  
+  label {
+    color: #333;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+  }
+}
+
+.formControl {
+  height: 48px;
+  padding: 0 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: 'Noto Sans KR', sans-serif;
+  
+  &:focus {
+    border-color: #004bd6;
+    outline: none;
+  }
+}
+
+.formTextarea {
+  padding: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  resize: vertical;
+  font-family: 'Noto Sans KR', sans-serif;
+  min-height: 200px;
+  
+  &:focus {
+    border-color: #004bd6;
+    outline: none;
+  }
+}
+
+.recipientsList {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  min-height: 120px;
+  max-height: 240px;
+  overflow-y: auto;
+  background-color: #fafafa;
+  
+  ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+}
+
+.noRecipients {
+  color: #888;
+  font-style: italic;
+  text-align: center;
+  margin: 24px 0;
+}
+
+.recipientItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f0f0f0;
+  padding: 10px 16px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+.removeButton {
+  background-color: #ff4d4f;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 12px;
+  
+  &:hover {
+    background-color: #ff7875;
+  }
+}
+
+.addRecipientContainer {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.addButton {
+  background-color: #004bd6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0 16px;
+  height: 48px;
+  cursor: pointer;
+  font-weight: 500;
+  font-family: 'Noto Sans KR', sans-serif;
+  
+  &:hover {
+    background-color: #0039a6;
+  }
+}
+
+.formActions {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.submitButton {
+  background-color: #004bd6;
+  color: white;
+  border: none;
+  border-radius: 24px;
+  padding: 0 48px;
+  height: 56px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  
+  &:hover {
+    background-color: #0039a6;
+  }
+  
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+} 

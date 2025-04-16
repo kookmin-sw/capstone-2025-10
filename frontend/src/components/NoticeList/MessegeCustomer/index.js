@@ -11,7 +11,7 @@ const MessegeCustomer = ({
 }) => {
   // 전화번호 추가 핸들러
   const handleAddPhoneNumber = () => {
-    if (!phoneNumber) return;
+    if (!phoneNumber) {return;}
     
     // 간단한 전화번호 유효성 검사 (숫자와 하이픈만 허용)
     const phoneRegex = /^[0-9-]+$/;
