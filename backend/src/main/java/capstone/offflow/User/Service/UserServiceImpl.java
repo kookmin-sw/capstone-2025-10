@@ -22,6 +22,7 @@ import org.springframework.web.server.ResponseStatusException;
 public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
+
     private final PasswordEncoder passwordEncoder;
 
 

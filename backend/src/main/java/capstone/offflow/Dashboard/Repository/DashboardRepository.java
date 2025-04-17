@@ -4,6 +4,8 @@ import capstone.offflow.Dashboard.Domain.Dashboard;
 import capstone.offflow.User.Domain.User;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,8 +20,10 @@ import java.util.Optional;
 public interface DashboardRepository extends JpaRepository<Dashboard, Long> {
 
     //대시보드 조회 (사용자기반)
-    @EntityGraph(attributePaths = {"sections", "sections.products"}) //대시보드 + 섹션 + 상품 join을 통해 한번의 쿼리로 가져옴
-    Optional<Dashboard> findByIdAndUser(Long id, User user);
+    //섹션 → 상품은 나중에 Lazy 로 가져온다. (2개 동시에 fetch join시 error발생)
+    //JPQL활용
+    @Query("SELECT d FROM Dashboard d LEFT JOIN FETCH d.sections WHERE d.id = :id AND d.user = :user")
+    Optional<Dashboard> findByIdAndUser(@Param("id") Long id, @Param("user") User user);
 
     //여러건 조회
     List<Dashboard> findAllByUser(User user);

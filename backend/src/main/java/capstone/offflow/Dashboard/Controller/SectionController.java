@@ -1,9 +1,15 @@
 package capstone.offflow.Dashboard.Controller;
 
 
+import capstone.offflow.Dashboard.Domain.Dashboard;
+import capstone.offflow.Dashboard.Domain.Section;
+import capstone.offflow.Dashboard.Dto.ProductDto;
 import capstone.offflow.Dashboard.Dto.SectionDto;
+import capstone.offflow.Dashboard.Repository.DashboardRepository;
 import capstone.offflow.Dashboard.Service.SectionService;
+import capstone.offflow.User.Domain.User;
 import capstone.offflow.User.Service.UserPrincipal;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -18,15 +24,21 @@ import org.springframework.web.bind.annotation.*;
 public class SectionController {
 
     private final SectionService sectionService;
+    private final DashboardRepository dashboardRepository;
 
     //섹션생성
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<?> createSection(
             @RequestBody SectionDto sectionDto,
             @AuthenticationPrincipal UserPrincipal userPrincipal){
 
-        sectionService.createSection(sectionDto, userPrincipal.getUser());
-        return ResponseEntity.status(HttpStatus.CREATED).body("Section create Successfully");
+        if (sectionDto.getPositionList().isEmpty()) {
+            throw new IllegalArgumentException("positionList는 비어 있을 수 없습니다.");
+        }
+
+        Section section = sectionService.createSection(sectionDto, userPrincipal.getUser());
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(SectionDto.convertToDto(section));
     }
 
 
@@ -47,8 +59,19 @@ public class SectionController {
             @RequestBody SectionDto dto,
             @AuthenticationPrincipal UserPrincipal userPrincipal){
 
-        sectionService.updateSection(id, dto, userPrincipal.getUser());
-        return ResponseEntity.ok("Section updated successfully");
+        Section updatedSection = sectionService.updateSection(id, dto, userPrincipal.getUser());
+        return ResponseEntity.ok(updatedSection);
+    }
+
+    //섹션에 매핑된 상품 삭제
+    @DeleteMapping("/{sectionId}/products/{productId}")
+    public ResponseEntity<?> unmapProductFromSection(
+            @PathVariable (name = "sectionId") Long sectionId,
+            @PathVariable (name = "productId") Long productId,
+            @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        Section deletedSection = sectionService.unmapProductFromSection(
+                sectionId,productId,userPrincipal.getUser());
+        return ResponseEntity.ok(deletedSection);
     }
 
 

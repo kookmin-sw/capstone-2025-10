@@ -29,7 +29,6 @@ data_deque = {}
 
 deepsort = None
 
-
 producer = KafkaProducer(
     bootstrap_servers='192.168.219.115:9092',
     value_serializer=lambda v: json.dumps(v).encode('utf-8'),

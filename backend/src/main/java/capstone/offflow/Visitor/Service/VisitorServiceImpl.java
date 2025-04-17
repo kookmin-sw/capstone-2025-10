@@ -59,8 +59,8 @@ public class VisitorServiceImpl implements VisitorService {
     //유저에 따른 방문객 전체 조회
     @Override
     @Transactional(readOnly = true)
-    public List<VisitorDto> getVisitorByUserId(String userId) {
-        List<Visitor> visitors = visitorRepository.findAllByUserId(userId);
+    public List<VisitorDto> getVisitorByUserId(Long id) {
+        List<Visitor> visitors = visitorRepository.findAllByUserId(id);
 
         //방문객(Visitor) 엔티티 리스트를 → DTO 리스트로 변환해서 반환
         return visitors.stream() //stream 호출시 하나하나씩 처리 가능

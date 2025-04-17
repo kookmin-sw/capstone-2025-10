@@ -62,6 +62,8 @@ public class UserController {
             response.put("userId", user.getUserId());
             response.put("companyName", user.getCompanyName());
             response.put("managerName", user.getManagerName());
+            response.put("messageCount", String.valueOf(user.getMessageCount())); //int -> String으로 변환
+            response.put("surveyCount", String.valueOf(user.getSurveyCount()));
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -69,10 +71,8 @@ public class UserController {
 
     }
 
-
-
     //회원삭제
-    @DeleteMapping("/delete")
+    @DeleteMapping("/{userId}")
     public ResponseEntity<?> deleteUser(
             @PathVariable(name = "userId") String userId){
         if (!userRepository.existsByUserId(userId)){
