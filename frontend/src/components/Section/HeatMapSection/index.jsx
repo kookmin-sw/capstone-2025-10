@@ -2,10 +2,10 @@
 
 import React, { useRef } from "react";
 import styles from "./index.module.scss";
-import ImageGrid from "@/components/ImageGrid";
 import CardContainer from "@/components/CardContainer";
 import RequireLogin from "@/components/Login/RequireLogin";
 import HeatmapCanvas from "@/components/Canvas/HeatmapCanvas";
+import Image from "next/image";
 
 const gridCols = 10;
 const gridRows = 10;
@@ -23,8 +23,13 @@ const HeatmapSection = ({ heatmapData, sections, image }) => {
       <section className={styles.section}>
         <CardContainer showDivider={false} margin="40px">
           <div className={styles["image-grid-wrapper"]}>
-            {image && <img src={image} alt="Uploaded Preview" />}
-            <ImageGrid sections={sections} />
+            <Image
+              src="/output_result.jpg"
+              alt={"img"}
+              width={1280}
+              height={720}
+            />
+            {/*<ImageGrid sections={sections} />*/}
             <div className={styles.canvas}>
               <HeatmapCanvas
                 canvasRef={canvasRef}
@@ -32,6 +37,8 @@ const HeatmapSection = ({ heatmapData, sections, image }) => {
                 gridRows={gridRows}
                 cellSize={cellSize}
                 heatmapData={heatmapData}
+                originalWidth={1920}
+                originalHeight={1080}
               />
             </div>
           </div>

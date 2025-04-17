@@ -55,17 +55,23 @@ export function drawSectionArrows(ctx, arrows, gridCols, cellSize) {
     return `rgba(${r}, ${g}, ${b}, 0.4)`; // 🎯 투명도 0.4 적용
   };
 
-  arrows.forEach(({ from, to, userId }) => {
-    if (!Array.isArray(from) || !Array.isArray(to)) {
-      return;
-    }
+  arrows.forEach(({ from, to, userId, isDimmed = false }) => {
+    //if (!Array.isArray(from) || !Array.isArray(to)) {
+    //  return;
+    //}
 
-    const fromCenter = getSectionCenter(from);
-    const toCenter = getSectionCenter(to);
+    //const fromCenter = getSectionCenter(from);
+    //const toCenter = getSectionCenter(to);
     const color = getColorById(userId || "default");
-
-    drawArrow(ctx, fromCenter.x, fromCenter.y, toCenter.x, toCenter.y, {
-      color,
-    });
+    const style = isDimmed
+      ? "rgba(0, 0, 0, 0.1)" // 흐리게
+      : color || "rgba(0, 255, 0, 0.6)"; // 선명하게
+    if (isDimmed) {
+      drawArrow(ctx, from.x, from.y, to.x, to.y, {
+        color,
+        width: isDimmed ? 1 : 2,
+        curveOffset: 15,
+      });
+    }
   });
 }

@@ -13,7 +13,7 @@ function drawHeatmap(
 ) {
   const heatmapInstance = h337.create({
     container: ctx.canvas.parentElement,
-    radius: 30,
+    radius: 45,
     maxOpacity: 0.6,
     minOpacity: 0.1,
     blur: 0.85,
@@ -22,6 +22,11 @@ function drawHeatmap(
   // 정규화된 위치 적용
   const normalizedData = Object.entries(heatmapData).map(([key, value]) => {
     const [x, y] = key.split(",").map(Number);
+    console.log(
+      "x y",
+      (x / originalWidth) * canvasWidth,
+      (y / originalHeight) * canvasHeight,
+    );
 
     return {
       x: (x / originalWidth) * canvasWidth,
@@ -48,7 +53,12 @@ export default function HeatmapCanvas({
   originalHeight = 480,
 }) {
   const draw = (ctx) => {
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.clearRect(0, 0, 1280, 720);
+    console.log(
+      "ctx.canvas.width, ctx.canvas.height",
+      ctx.canvas.width,
+      ctx.canvas.height,
+    );
     drawHeatmap(
       ctx,
       heatmapData,

@@ -17,12 +17,12 @@ export default function Header() {
 
   const headerItems = [
     {
-      title: "대시보드",
-      path: "/dashboard",
+      title: "통계",
+      path: "/dashboard/1",
     },
     {
       title: "대시보드",
-      path: "/campaign",
+      path: "/campaign/1",
     },
     {
       title: "제품관리",

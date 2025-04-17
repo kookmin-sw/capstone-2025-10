@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./index.module.scss";
-import ImageGrid from "@/components/ImageGrid";
 import CardContainer from "@/components/CardContainer";
 import RequireLogin from "@/components/Login/RequireLogin";
 import ArrowCanvas from "@/components/Canvas/ArrowCanvas";
+import DashboardTable from "@/components/Table/DashboardTable";
+import Image from "next/image";
 
 const gridCols = 10;
 const cellSize = 480 / 10;
@@ -57,11 +58,14 @@ function generateArrowsFromTracking(
   }
 
   const arrows = [];
-  for (let i = 0; i < visited.length - 1; i++) {
+  for (let i = 0; i < trackingData.length - 1; i++) {
     arrows.push({
-      from: visited[i].cells,
-      to: visited[i + 1].cells,
-      userId: trackingData[0]?.visitorLabel || `user-${i}`,
+      from: { x: trackingData[i].x * scaleX, y: trackingData[i].y * scaleY },
+      to: {
+        x: trackingData[i + 1].x * scaleX,
+        y: trackingData[i + 1].y * scaleY,
+      },
+      userId: trackingData[i]?.userLabel || `user-${i}`,
     });
   }
 
@@ -70,7 +74,32 @@ function generateArrowsFromTracking(
 
 const TrafficMapSection = ({ sections, trafficPoints, image }) => {
   const canvasRef = useRef(null);
+  const [selectedSectionId, setSelectedSectionId] = useState(null);
 
+  const allArrows = generateArrowsFromTracking(
+    trafficPoints,
+    sections,
+    1280,
+    720,
+    10,
+    10,
+    1280,
+    720, // 👈 원본 이미지 height
+  );
+
+  const [arrows, setArrows] = useState(allArrows);
+
+  useEffect(() => {
+    setArrows(
+      allArrows.map((arrow) => {
+        if (!selectedSectionId) return { ...arrow, isDimmed: true };
+        return {
+          ...arrow,
+          isDimmed: arrow.userId === selectedSectionId,
+        };
+      }),
+    );
+  }, [selectedSectionId]);
   //if (Object.keys(sections).length === 0) {
   //  //router.push("/login");
   //  return <RequireLogin></RequireLogin>;
@@ -81,29 +110,29 @@ const TrafficMapSection = ({ sections, trafficPoints, image }) => {
       <section className={styles.section}>
         <CardContainer showDivider={false} margin="40px">
           <div className={styles["image-grid-wrapper"]}>
-            {image && <img src={image} alt="Uploaded Preview" />}
-            <ImageGrid sections={sections} />
+            <Image
+              src="/output_result.jpg"
+              alt={"img"}
+              width={1280}
+              height={720}
+            />
+            {/*{image && <img src={"output_result.jpg"} alt="Uploaded Preview" />}*/}
             <div className={styles.canvas}>
               <ArrowCanvas
                 canvasRef={canvasRef}
                 sections={sections}
-                arrows={generateArrowsFromTracking(
-                  trafficPoints,
-                  sections,
-                  480,
-                  480,
-                  10,
-                  10,
-                  1920, // 👈 원본 이미지 width
-                  1080, // 👈 원본 이미지 height
-                )}
+                arrows={arrows}
                 gridCols={gridCols}
                 cellSize={cellSize}
               />
             </div>
           </div>
-        </CardContainer>
 
+          <DashboardTable
+            trafficPoints={trafficPoints}
+            onSectionSelect={setSelectedSectionId}
+          />
+        </CardContainer>
         {/*<CardContainer showDivider={false} margin="40px">*/}
         {/*  /!* User List *!/*/}
         {/*</CardContainer>*/}
