@@ -6,7 +6,7 @@ import torch
 import torch.nn as nn
 
 model_paths = {
-    'vgg16_bn': '/Users/seongjeongkyu/capstone-2025-10/ai/crowd_counting/output/vgg16_bn-6c64b313.pth',
+    'vgg16_bn': '/Users/gimlinhoe/WebstormProjects/capstone-2025-10/ai/crowd_counting/vgg16_bn-6c64b313.pth',
 }
 
 class VGG(nn.Module):
