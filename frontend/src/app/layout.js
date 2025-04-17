@@ -1,14 +1,13 @@
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import "./styles/globals.scss";
+import Header from "@/components/Header";
+import {ModalProvider} from "@/contexts/ModalContext";
+import { Noto_Sans_KR } from 'next/font/google'
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const notoSansKr = Noto_Sans_KR({
+  // preload: true, 기본값
+  subsets: ["latin"], // 또는 preload: false
+  weight: ["400", "500", "600", "700", "900"], // 가변 폰트가 아닌 경우, 사용할 fontWeight 배열
+  variable: "--font-primary",
 });
 
 export const metadata = {
@@ -18,9 +17,12 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
+    <html lang="ko" className={notoSansKr.variable}>
+      <body>
+        <ModalProvider>
+          <Header/>
+          {children}
+        </ModalProvider>
       </body>
     </html>
   );

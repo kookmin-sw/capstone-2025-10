@@ -1,0 +1,202 @@
+.messageTargetCardWrapper {
+  width: 100%;
+  margin: 0; /* 마진 초기화 */
+  padding: 0;
+}
+
+.customCard {
+  width: 100%;
+  background: #FFF;
+  border-radius: 40px;
+  box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.10);
+  padding: 0;
+  margin: 0;
+  height: 100%; /* 부모 요소 높이에 맞추기 */
+  display: flex;
+  flex-direction: column;
+}
+
+.customCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 32px 0;
+}
+
+.customCardTitle {
+  color: #000;
+  font-family: "Noto Sans KR";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 18px;
+  letter-spacing: -0.36px;
+  margin: 0 0 12px 0;
+}
+
+.dividerContainer {
+  padding: 0 32px;
+}
+
+.customDivider {
+  height: 1px;
+  background-color: #d9d9d9;
+  margin: 12px 0;
+  width: 100%;
+}
+
+.targetSection {
+  padding: 0 32px 24px; /* 좌우 32px, 하단 24px 패딩 */
+  
+  .inputGroup {
+    display: flex;
+    margin-bottom: 16px;
+    position: relative;
+    width: 100%;
+    
+    .phoneInputContainer {
+      display: flex;
+      flex: 1;
+      margin-right: 8px;
+      
+      .phoneInput {
+        flex: 1;
+        padding: 10px 12px;
+        border: 1px solid #E8E8E8;
+        border-radius: 4px 0 0 4px;
+        font-size: 14px;
+        background-color: #FAFAFA;
+        color: #000;
+        font-family: "Noto Sans KR", sans-serif;
+        font-weight: 400;
+        
+        &:focus {
+          outline: none;
+          border-color: #0056fd;
+        }
+      }
+      
+      .addButton {
+        padding: 10px 12px;
+        background-color: #0056fd;
+        color: white;
+        border: none;
+        border-radius: 0 4px 4px 0;
+        font-size: 18px;
+        cursor: pointer;
+        font-weight: 400;
+        transition: all 0.2s;
+        
+        &:hover {
+          background-color: #0048d4;
+        }
+      }
+    }
+    
+    .groupButton {
+      padding: 10px 16px;
+      background-color: #FAFAFA;
+      color: #333;
+      border: 1px solid #E8E8E8;
+      border-radius: 4px;
+      font-size: 18px;
+      cursor: pointer;
+      font-weight: 400;
+      transition: all 0.2s;
+      white-space: nowrap;
+      
+      &:hover {
+        background-color: #f0f0f0;
+        border-color: #ddd;
+      }
+    }
+  }
+  
+  .recipientListContainer {
+    width: 100%;
+    min-height: 120px;
+    max-height: 180px;
+    border: 1px solid #E8E8E8;
+    background-color: #FAFAFA;
+    border-radius: 4px;
+    padding: 12px;
+    margin-bottom: 16px;
+    overflow-y: auto; /* 내용이 많을 경우 스크롤 */
+    
+    /* A 스크롤바 스타일 */
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 4px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+      border-radius: 4px;
+    }
+    
+    &::-webkit-scrollbar-thumb:hover {
+      background: #a1a1a1;
+    }
+    
+    .recipientList {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      
+      .recipientItem {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 10px;
+        background-color: rgba(0, 86, 253, 0.1);
+        border-radius: 4px;
+        margin-bottom: 8px;
+        color: #333;
+        font-size: 14px;
+        font-family: "Noto Sans KR", sans-serif;
+        
+        .removeButton {
+          background-color: transparent;
+          color: #666;
+          border: none;
+          font-size: 16px;
+          font-weight: bold;
+          cursor: pointer;
+          padding: 0 4px;
+          margin-left: 8px;
+          
+          &:hover {
+            color: #ff3b30;
+          }
+        }
+      }
+    }
+    
+    .emptyList {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      min-height: 80px;
+      color: #999;
+      font-size: 14px;
+      font-family: "Noto Sans KR", sans-serif;
+      text-align: center;
+    }
+  }
+  
+  .totalRecipients {
+    font-size: 14px;
+    color: #333;
+    font-family: "Noto Sans KR", sans-serif;
+    text-align: right;
+    
+    strong {
+      font-weight: 700;
+    }
+  }
+}

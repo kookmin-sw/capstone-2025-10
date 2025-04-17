@@ -1,0 +1,49 @@
+.modal {
+  width: 360px;
+  background: var(--white);
+  border-radius: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--gray-3);
+
+  h2 {
+    font-family: Noto Sans KR;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 18px;
+  }
+}
+
+.content {
+  margin-top: 16px;
+
+  .image-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 16px;
+
+    img {
+      width: 126px;
+      height: 126px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+  }
+
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 28px;
+}

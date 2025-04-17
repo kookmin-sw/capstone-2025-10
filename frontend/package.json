@@ -9,13 +9,22 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@svgr/webpack": "^8.1.0",
+    "chart.js": "^4.4.8",
+    "heatmap.js": "^2.0.5",
+    "next": "15.2.1",
     "react": "^19.0.0",
+    "react-chartjs-2": "^5.3.0",
     "react-dom": "^19.0.0",
-    "next": "15.2.1"
+    "sass": "^1.85.1"
   },
   "devDependencies": {
-    "eslint": "^9",
+    "@eslint/eslintrc": "^3.3.0",
+    "@eslint/js": "^9.22.0",
+    "eslint": "^9.22.0",
     "eslint-config-next": "15.2.1",
-    "@eslint/eslintrc": "^3"
+    "eslint-config-prettier": "^10.1.1",
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.2"
   }
 }

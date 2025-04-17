@@ -1,0 +1,114 @@
+.container {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f8f8f8;
+}
+
+.content {
+  display: flex;
+  min-height: calc(100vh - 70px); /* Header 높이 고려 */
+}
+
+.mainContent {
+  flex: 1;
+  padding: 40px 0 0 58px; /* 상단 40px, 왼쪽 58px 패딩 */
+}
+
+.pageTitle {
+  font-size: 28px;
+  font-weight: 700;
+  color: #000;
+  margin-bottom: 40px; /* 알림 전송 텍스트와 첫 번째 카드 사이 간격 40px */
+}
+
+.cardSection {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 상단 카드 컨테이너 (잔여 건수와 미리보기를 가로로 배치) */
+.topCardsContainer {
+  display: flex;
+  gap: 32px;
+  width: 100%;
+  align-items: flex-start; /* 상단 정렬로 변경 */
+  margin-bottom: 32px;
+  position: relative; /* 상대 위치 설정 */
+  z-index: 1; /* z-index 설정 */
+}
+
+/* 새로운 레이아웃 구조 */
+.layoutContainer {
+  display: flex;
+  gap: 32px;
+  width: 100%;
+}
+
+.leftContainer {
+  flex: 7; /* 70% 차지하도록 변경 */
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* 카드 간 간격을 16px에서 12px로 더 축소 */
+}
+
+.rightContainer {
+  flex: 3; /* 30% 차지하도록 변경 */
+  display: flex;
+  height: 100%;
+  position: sticky;
+  top: 0;
+}
+
+/* 카드 컨테이너 공통 스타일 */
+.messageCountCard, .messageSendCard {
+  width: 100%;
+  background: #FFF;
+  border-radius: 40px;
+  box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.10);
+  
+  :global(.contentHeader) {
+    padding: 24px 32px 0; /* 패딩 상단 24px, 좌우 32px */
+    
+    :global(.pageTitle) {
+      color: #000;
+      font-family: "Noto Sans KR";
+      font-size: 18px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 18px; /* 100% */
+      letter-spacing: -0.36px;
+    }
+  }
+  
+  :global(.divider) {
+    background-color: #d9d9d9;
+    margin: 12px 0;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ripple {
+  5%, 100% { opacity: 0; }
+  5% { opacity: 1; }
+}
