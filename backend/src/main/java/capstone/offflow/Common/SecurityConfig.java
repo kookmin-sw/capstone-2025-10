@@ -1,6 +1,6 @@
 package capstone.offflow.Common;
 
-import capstone.offflow.User.Service.UserServiceImpl;
+import capstone.offflow.User.Service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,29 +20,29 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final UserServiceImpl userService;
+    //SecurityConfig에서는 UserDetailsService 인터페이스만 봄
+    //UserServiceImpl은 SecurityConfig를 몰라야함 -> 순환참조 현상 제거
+    private final UserService userService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) //SPA방식 react (front)와 api 통신위해 -> 토큰 받을방법 X
-                .cors(cors -> {}) // 필요에 따라 CORS 설정 추가
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> {})
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/users/login", "/api/users/join").permitAll()
-                        .anyRequest().authenticated()) // 나머지 요청은 인증 필요
-                .logout((logout) -> logout
+                        .requestMatchers("/api/users/login", "/api/users/register").permitAll() // 회원가입/로그인은 로그인 없이 가능
+                        .requestMatchers("/api/users/**").authenticated() // /api/users/ 하위는 로그인만 하면 접근 가능
+                        .anyRequest().authenticated())
+                .logout(logout -> logout
                         .logoutSuccessUrl("/login")
-                        .invalidateHttpSession(true)) //로그아웃 이후 전체 세션 삭제
+                        .invalidateHttpSession(true))
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //세션생성 및 사용여부에 대한 정책
-                .formLogin((formLogin) -> formLogin
-                        .loginPage("/login") //Login URL
-                        .defaultSuccessUrl("/")  //성공시에 이동하는 페이지 루트 URL
-                );
-
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED));
 
         return http.build();
     }
+
+
 
     /**
      * 내부에서 비밀번호 검증
@@ -60,12 +60,6 @@ public class SecurityConfig {
     }
 
 
-
-    //PW encoding
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
 }
 
 

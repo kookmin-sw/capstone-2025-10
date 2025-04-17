@@ -48,11 +48,11 @@ public class VisitorController {
 
 
     //방문객 조회 (전체)
-    @GetMapping("/{userId}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> getAllVisitor(
-            @PathVariable(name= "userId") String userId){
+            @PathVariable(name= "id") Long id){
 
-        List<VisitorDto> dto = visitorService.getVisitorByUserId(userId);
+        List<VisitorDto> dto = visitorService.getVisitorByUserId(id);
         return ResponseEntity.ok(dto);
     }
 

@@ -1,8 +1,11 @@
 package capstone.offflow.Dashboard.Controller;
 
 
+import capstone.offflow.Dashboard.Domain.Dashboard;
 import capstone.offflow.Dashboard.Dto.DashboardDto;
+import capstone.offflow.Dashboard.Dto.ProductDto;
 import capstone.offflow.Dashboard.Service.DashboardService;
+import capstone.offflow.User.Domain.User;
 import capstone.offflow.User.Service.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 
@@ -15,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController //Controller + ResponseBody 합친 컨트롤러 => API 개발시 사용
@@ -28,13 +32,14 @@ public class DashboardController {
 
 
     //dashboard 생성
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<?> createDashboard(
             @RequestBody @Validated DashboardDto dashboardDto,
             @AuthenticationPrincipal UserPrincipal userPrincipal){
 
-        dashboardService.createDashboard(dashboardDto, userPrincipal.getUser());
-        return new ResponseEntity<>("Dashboard created Successfully", HttpStatus.CREATED);
+        Dashboard dashboard = dashboardService.createDashboard(dashboardDto, userPrincipal.getUser());
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(DashboardDto.convertToDto(dashboard));
     }
 
 
@@ -58,9 +63,23 @@ public class DashboardController {
 
     }
 
+    //dashboard 전체 조회
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllDashboard(
+            @AuthenticationPrincipal UserPrincipal userPrincipal){
+
+
+        List<DashboardDto> dto = dashboardService.getAllDashboard(userPrincipal.getUser());
+
+        return ResponseEntity.ok(dto);
+
+    }
+
+
 
     //dashboard 삭제
-    @DeleteMapping("/delete/{id}")
+    //UserPrincipal은 세션 쿠키 기반 인증 결과로 주입된 사용자 정보
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteDashboard(
             @PathVariable(name = "id") Long id,
             @AuthenticationPrincipal UserPrincipal userPrincipal){
@@ -69,6 +88,4 @@ public class DashboardController {
         return ResponseEntity.ok("dashboard delete Successfully");
 
     }
-
-
 }
