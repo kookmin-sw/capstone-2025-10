@@ -187,8 +187,8 @@ class BasePredictor:
                 if self.webcam:
                     path, im0s = path[i], im0s[i]
                 p = Path(path)
-                if frame_count % 150 == 0:
-                    s += self.write_results(i, preds, (p, im, im0s))
+#                 if frame_count % 150 == 0:
+                s += self.write_results(i, preds, (p, im, im0s))
 
                 frame_count += 1
                 if self.args.show:
@@ -238,7 +238,7 @@ class BasePredictor:
                     w = int(vid_cap.get(cv2.CAP_PROP_FRAME_WIDTH))
                     h = int(vid_cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
                 else:  # stream
-                    fps, w, h = 30, im0.shape[1], im0.shape[0]
+                    fps, w, h = 1, im0.shape[1], im0.shape[0]
                 save_path = str(Path(save_path).with_suffix('.mp4'))  # force *.mp4 suffix on results videos
                 self.vid_writer[idx] = cv2.VideoWriter(save_path, cv2.VideoWriter_fourcc(*'mp4v'), fps, (w, h))
             self.vid_writer[idx].write(im0)

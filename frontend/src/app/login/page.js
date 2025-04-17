@@ -23,7 +23,7 @@ export default function LoginPage() {
 
     try {
       await login(userId, password);
-      router.push("/");
+      router.push("/dashboard/1");
     } catch (err) {
       console.log(err);
       setError(err.message);

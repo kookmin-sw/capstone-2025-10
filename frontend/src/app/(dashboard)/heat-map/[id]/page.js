@@ -22,8 +22,8 @@ async function getCampaign(id) {
 
 function transformToHeatmapData(data) {
   const heatmapData = {};
-
-  const gridList = JSON.parse(data[data.length - 1].gridList); // 문자열을 파싱
+  console.log(data[0]);
+  const gridList = JSON.parse(data[0].gridList); // 문자열을 파싱
 
   gridList.forEach(([x, y]) => {
     const key = `${x},${y}`;
