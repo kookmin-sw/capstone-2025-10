@@ -23,7 +23,8 @@ public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
     private final DashboardRepository dashboardRepository;
 
-
+    //이벤트 생성 method
+    //이벤트 조건추가 logic 필요
     @Override
     public Event createEvent(EventDto event, User user) {
         return null;
