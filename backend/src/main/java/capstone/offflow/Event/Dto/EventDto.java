@@ -6,7 +6,6 @@ import capstone.offflow.Event.Domain.Event;
 import capstone.offflow.Event.Domain.EventCondition;
 import lombok.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Builder
