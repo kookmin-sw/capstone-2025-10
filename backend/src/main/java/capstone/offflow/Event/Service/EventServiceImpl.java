@@ -35,15 +35,23 @@ public class EventServiceImpl implements EventService {
         return null;
     }
 
+
     @Override
-    public List<EventDto> getByEventId(Long eventId, User user) {
-        return List.of();
+    public EventDto getByEventId(Long eventId, User user) {
+        return null;
     }
 
     @Override
-    public List<EventDto> getByDashboardId(Long dashboardId, User user) {
-        return List.of();
+    public List<EventDto> getAllByEventId(Long eventId, User user) {
+        return null;
     }
+
+    @Override
+    public List<EventDto> getAllByDashboardId(Long dashboardId, User user) {
+        return null;
+    }
+
+
 
     @Override
     public void deleteEvent(Long id, User user) {

@@ -16,12 +16,15 @@ public interface EventService {
     Event updateEvent(Long eventId, EventDto event, User user);
 
 
+    //이벤트 조회 (event id) - 1개
+    EventDto getByEventId(Long eventId, User user);
+
     //이벤트 조회 (event id)
-    List<EventDto> getByEventId(Long eventId, User user);
+    List<EventDto> getAllByEventId(Long eventId, User user);
 
 
     //이벤트 조회 (dashboard id)
-    List<EventDto> getByDashboardId(Long dashboardId, User user);
+    List<EventDto> getAllByDashboardId(Long dashboardId, User user);
 
     //이벤트 삭제
     void deleteEvent(Long id, User user);

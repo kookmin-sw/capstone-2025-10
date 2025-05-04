@@ -170,4 +170,5 @@ replay_pid*
 Thumbs.db
 
 # 로그 및 환경설정 파일 제외
-.env
+.env.idea/
+frontend/.idea/

@@ -11,10 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,18 +36,46 @@ public class EventController {
     }
 
 
-    //event 조회 (event Id)
+    //event 조회 (event id)
+    @GetMapping("/{eventId}")
+    public ResponseEntity<?> getEventByEventId(
+            @PathVariable(name = "eventId") Long eventId,
+            @AuthenticationPrincipal UserPrincipal userPrincipal){
+        List<EventDto> eventDto = eventService.getAllByEventId(eventId, userPrincipal.getUser());
+        return ResponseEntity.ok(eventDto);
+    }
 
 
     //event 조회 (dashboard Id)
+    @GetMapping("/{dashboardId}")
+    public ResponseEntity<?> getEventBydashboardId(
+            @PathVariable(name = "dashboardId") Long dashboardId,
+            @AuthenticationPrincipal UserPrincipal userPrincipal){
+        List<EventDto> eventDto = eventService.getAllByDashboardId(dashboardId, userPrincipal.getUser());
+        return ResponseEntity.ok(eventDto);
+    }
 
 
     //event 수정 (이름, 설명)
+    @PatchMapping("/{eventId}")
+    public ResponseEntity<?> updateEvent(
+            @PathVariable(name = "eventId") Long eventId,
+            @RequestBody EventDto dto,
+            @AuthenticationPrincipal UserPrincipal userPrincipal) {
 
-
+        Event event = eventService.updateEvent(eventId, dto, userPrincipal.getUser());
+        return ResponseEntity.ok(EventDto.convertToDto(event));
+    }
 
     //event 삭제
+    @DeleteMapping("/{eventId}")
+    public ResponseEntity<?> deleteEvent(
+            @PathVariable(name = "eventId") Long eventId,
+            @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        EventDto eventDto = eventService.getByEventId(eventId, userPrincipal.getUser());
 
-
+        eventService.deleteEvent(eventId, userPrincipal.getUser());
+        return ResponseEntity.ok(eventDto);
+    }
 
 }
