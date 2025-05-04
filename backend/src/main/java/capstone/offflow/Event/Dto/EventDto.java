@@ -6,7 +6,9 @@ import capstone.offflow.Event.Domain.Event;
 import capstone.offflow.Event.Domain.EventCondition;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Builder
 @Getter
@@ -19,7 +21,7 @@ public class EventDto {
     private String eventName;
     private String description;
 
-    private List<EventCondition> eventConditions;
+    private List<EventConditionDto> eventConditions;
 
     @NonNull
     private Long dashboardId;
@@ -27,11 +29,16 @@ public class EventDto {
 
     //Entity -> Dto (조회용)
     public static EventDto convertToDto(Event event) {
+
+        List<EventConditionDto> conditionDto = event.getEventConditions().stream()
+                .map(EventConditionDto::convertToDto)
+                .collect(Collectors.toList());
+
         return EventDto.builder()
                 .id(event.getId())
                 .eventName(event.getEventName())
                 .description(event.getDescription())
-                .eventConditions(event.getEventConditions())
+                .eventConditions(conditionDto)
                 .dashboardId(event.getDashboard().getId())
                 .build();
     }
@@ -42,7 +49,7 @@ public class EventDto {
         event.setId(eventDto.getId());
         event.setEventName(eventDto.getEventName());
         event.setDescription(eventDto.getDescription());
-        event.setEventConditions(eventDto.getEventConditions());
+        event.setEventConditions(new ArrayList<>()); // 빈 리스트로 초기화
         event.setDashboard(dashboard);
         return event;
     }
