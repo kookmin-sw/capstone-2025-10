@@ -2,6 +2,8 @@ package capstone.offflow.Event.Controller;
 
 
 import capstone.offflow.Event.Domain.Event;
+import capstone.offflow.Event.Domain.EventCondition;
+import capstone.offflow.Event.Dto.EventConditionDto;
 import capstone.offflow.Event.Dto.EventDto;
 import capstone.offflow.Event.Service.EventService;
 import capstone.offflow.User.Service.UserPrincipal;
@@ -33,6 +35,17 @@ public class EventController {
         Event event = eventService.createEvent(eventDto, userPrincipal.getUser());
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(EventDto.convertToDto(event)); //static이므로 클래스이름으로 호출 해야함 (인스턴스 호출X)
+    }
+
+    //event 조건 생성
+    @PostMapping("/{eventId}/conditions")
+    public ResponseEntity<?> createEventCondition(
+            @RequestBody @Validated EventConditionDto dto,
+            @AuthenticationPrincipal UserPrincipal userPrincipal){
+
+        EventCondition eventCondition = eventService.createEventCondition(dto, userPrincipal.getUser());
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(EventConditionDto.convertToDto(eventCondition));
     }
 
 
@@ -67,6 +80,20 @@ public class EventController {
         return ResponseEntity.ok(EventDto.convertToDto(event));
     }
 
+
+    //event 조건 수정
+    @PatchMapping("/{eventId}/conditions/{eventConditionId}")
+    public ResponseEntity<?> updateEventCondition(
+            @PathVariable(name = "eventId") Long eventId,
+            @RequestBody EventConditionDto conditionDto,
+            @AuthenticationPrincipal UserPrincipal userPrincipal){
+
+        EventCondition eventCondition = eventService.updateEventCondition(eventId, conditionDto, userPrincipal.getUser());
+        return ResponseEntity.ok(EventConditionDto.convertToDto(eventCondition));
+    }
+
+
+
     //event 삭제
     @DeleteMapping("/{eventId}")
     public ResponseEntity<?> deleteEvent(
@@ -78,4 +105,16 @@ public class EventController {
         return ResponseEntity.ok(eventDto);
     }
 
+    //eventCondition 삭제
+    //eventId를 통해 잘못된 event에 대한 condition삭제 방지 가능
+    @DeleteMapping("/{eventId}/condition/{eventConditionId}")
+    public ResponseEntity<?> deleteEventCondition(
+            @PathVariable(name = "eventId") Long eventId,
+            @PathVariable(name = "eventConditionId") Long eventConditionId,
+            @AuthenticationPrincipal UserPrincipal userPrincipal){
+
+        EventConditionDto conditionDto = eventService.getByEventConditionId(eventConditionId, userPrincipal.getUser());
+        eventService.deleteEventCondition(eventId, eventConditionId, userPrincipal.getUser());
+        return ResponseEntity.ok(conditionDto);
+    }
 }
