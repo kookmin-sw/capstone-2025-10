@@ -172,3 +172,8 @@ Thumbs.db
 # 로그 및 환경설정 파일 제외
 .env.idea/
 frontend/.idea/
+
+
+# Python (optional)
+*.py[cod]
+__pycache__/
