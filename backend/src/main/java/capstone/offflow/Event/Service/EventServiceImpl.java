@@ -98,7 +98,10 @@ public class EventServiceImpl implements EventService {
     @Override
     @Transactional(readOnly = true)
     public EventConditionDto getByEventConditionId(Long conditionId, User user) {
-        return null;
+        EventCondition condition = eventConditionRepository.findByIdAndEvent_Dashboard_User(conditionId, user)
+                .orElseThrow(() -> new EntityNotFoundException("이벤트조건을 찾을 수 없습니다."));
+
+        return EventConditionDto.convertToDto(condition);
     }
 
     @Override
@@ -115,8 +118,7 @@ public class EventServiceImpl implements EventService {
     @Override
     @Transactional(readOnly = true)
     public List<EventDto> getAllByDashboardId(Long dashboardId, User user) {
-        List<Event> events = eventRepository.findAllByDashboard_User(dashboardId, user);
-
+        List<Event> events = eventRepository.findAllByDashboard_IdAndDashboard_User(dashboardId, user);
 
         return events.stream()
                 .map(EventDto::convertToDto)

@@ -49,19 +49,9 @@ public class EventController {
     }
 
 
-    //event 조회 (event id)
-    @GetMapping("/{eventId}")
-    public ResponseEntity<?> getEventByEventId(
-            @PathVariable(name = "eventId") Long eventId,
-            @AuthenticationPrincipal UserPrincipal userPrincipal){
-        List<EventDto> eventDto = eventService.getAllByEventId(eventId, userPrincipal.getUser());
-        return ResponseEntity.ok(eventDto);
-    }
-
-
     //event 조회 (dashboard Id)
     @GetMapping("/{dashboardId}")
-    public ResponseEntity<?> getEventBydashboardId(
+    public ResponseEntity<?> getAllEventBydashboardId(
             @PathVariable(name = "dashboardId") Long dashboardId,
             @AuthenticationPrincipal UserPrincipal userPrincipal){
         List<EventDto> eventDto = eventService.getAllByDashboardId(dashboardId, userPrincipal.getUser());
