@@ -10,13 +10,15 @@ import capstone.offflow.Event.Repository.EventConditionRepository;
 import capstone.offflow.Event.Repository.EventRepository;
 import capstone.offflow.User.Domain.User;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -33,7 +35,6 @@ public class EventServiceImpl implements EventService {
     //이벤트 생성 method
     //이벤트 조건추가 logic 필요
     @Override
-    @Transactional
     public Event createEvent(EventDto eventDto, User user) {
 
         //1. 대시보드 소유 검증
@@ -70,7 +71,6 @@ public class EventServiceImpl implements EventService {
         }
 
         EventCondition eventCondition = EventConditionDto.convertToEntity(eventConditionDto, event);
-
         eventConditionRepository.save(eventCondition);
 
         return eventCondition;
@@ -96,36 +96,58 @@ public class EventServiceImpl implements EventService {
 
     //이벤트 조건 삭제 위한 조회 Method
     @Override
+    @Transactional(readOnly = true)
     public EventConditionDto getByEventConditionId(Long conditionId, User user) {
         return null;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public EventDto getByEventId(Long eventId, User user) {
-        return null;
+        Event event = eventRepository.findByIdAndDashboard_User(eventId,user)
+                .orElseThrow(() -> new EntityNotFoundException("이벤트를 찾을 수 없습니다."));
+
+        return EventDto.convertToDto(event);
     }
 
 
-    @Override
-    public List<EventDto> getAllByEventId(Long eventId, User user) {
-        return null;
-    }
 
     @Override
+    @Transactional(readOnly = true)
     public List<EventDto> getAllByDashboardId(Long dashboardId, User user) {
-        return null;
+        List<Event> events = eventRepository.findAllByDashboard_User(dashboardId, user);
+
+
+        return events.stream()
+                .map(EventDto::convertToDto)
+                .collect(Collectors.toList());
     }
 
 
     //이벤트 삭제
     @Override
     public void deleteEvent(Long id, User user) {
+        //1. Event 존재여부 확인
+        Event event = eventRepository.findByIdAndDashboard_User(id, user)
+                .orElseThrow(() -> new EntityNotFoundException("이벤트를 찾을 수 없습니다."));
 
+        //2. Event 삭제
+        eventRepository.delete(event);
+        log.info("이벤트 조건 삭제 완료 {}", event.getId());
     }
 
     //이벤트 조건 삭제
     @Override
     public void deleteEventCondition(Long eventId, Long eventConditionId, User user) {
+        //1. Event 존재여부 확인
+        Event event = eventRepository.findByIdAndDashboard_User(eventId, user)
+                .orElseThrow(() -> new EntityNotFoundException("이벤트를 찾을 수 없습니다."));
 
+        //2. Event 조건 존재여부 확인
+        EventCondition eventCondition = eventConditionRepository.findByIdAndEvent(eventConditionId, event)
+                .orElseThrow(() -> new EntityNotFoundException("이벤트 조건을 찾을 수 없습니다."));
+
+        eventConditionRepository.delete(eventCondition);
+        log.info("이벤트 조건 삭제 완료 {}", eventCondition.getId());
     }
 }

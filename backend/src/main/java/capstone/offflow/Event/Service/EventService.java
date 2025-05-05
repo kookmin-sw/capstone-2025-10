@@ -32,10 +32,6 @@ public interface EventService {
     EventDto getByEventId(Long eventId, User user);
 
 
-    //이벤트 조회 (event id)
-    List<EventDto> getAllByEventId(Long eventId, User user);
-
-
     //이벤트 조회 (dashboard id)
     List<EventDto> getAllByDashboardId(Long dashboardId, User user);
 
