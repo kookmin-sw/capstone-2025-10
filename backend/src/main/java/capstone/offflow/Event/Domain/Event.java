@@ -24,7 +24,7 @@ public class Event {
 
 
     //이벤트 -> 조건 연결
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true) //event삭제시 조건 전부 삭제
     private List<EventCondition> eventConditions;
 
 

@@ -49,7 +49,17 @@ public class EventServiceImpl implements EventService {
             throw new IllegalArgumentException("이벤트 조건은 1개 이상이어야 합니다.");
         }
 
+        //3. 이벤트 생성
         Event event = EventDto.convertToEntity(eventDto, dashboard);
+
+        // 4. 이벤트 조건 생성 및 연결
+        List<EventCondition> eventConditions = conditionDto.stream()
+                .map(dto -> EventConditionDto.convertToEntity(dto, event)) // 반드시 event를 주입
+                .collect(Collectors.toList());
+
+        event.setEventConditions(eventConditions);
+
+        //5. 이벤트 저장
         Event savedEvent = eventRepository.save(event);
 
         log.info("Event 생성 완료 - {}", savedEvent.getId());
@@ -78,15 +88,40 @@ public class EventServiceImpl implements EventService {
 
     //이벤트 수정
     @Override
-    public Event updateEvent(Long eventId, EventDto event, User user) {
-        return null;
+    public Event updateEvent(Long eventId, EventDto eventDto, User user) {
+
+        //1. 이벤트 조회
+        Event event = eventRepository.findByIdAndDashboard_User(eventId, user)
+                .orElseThrow(() -> new EntityNotFoundException("해당 이벤트를 찾을 수 없습니다."));
+
+        //2. 이벤트 조건 변환 (Dto로)
+        List<EventCondition> convertedConditions = eventDto.getEventConditions().stream()
+                .map(dto -> EventConditionDto.convertToEntity(dto, event))
+                .collect(Collectors.toList());
+
+
+        //2. 이벤트 수정
+        event.setEventName(eventDto.getEventName());
+        event.setEventConditions(convertedConditions);
+        event.setDescription(eventDto.getDescription());
+
+        return event;
     }
 
 
     //이벤트 조건 수정
     @Override
-    public EventCondition updateEventCondition(Long ConditionId, EventConditionDto dto, User user) {
-        return null;
+    public EventCondition updateEventCondition(Long conditionId, EventConditionDto dto, User user) {
+
+        //1. 이벤트 조건 조회
+        EventCondition condition = eventConditionRepository.findByIdAndEvent_Dashboard_User(conditionId, user)
+                .orElseThrow(() -> new EntityNotFoundException("해당 이벤트 조건을 찾을 수 없습니다."));
+
+        condition.setIndicatorName(dto.getIndicatorName());
+        condition.setOperator(dto.getOperator());
+        condition.setValue(dto.getValue());
+
+        return condition;
     }
 
 
