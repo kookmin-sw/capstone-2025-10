@@ -28,7 +28,7 @@ public class VisitorController {
 
     //방문객 등록
     //별도 예외처리 필요없음 -> 예외 핸들러가 예외발생시 중간 개입후 처리
-    @PostMapping("/create")
+    @PostMapping()
     public ResponseEntity<?> createVisitor(
             @RequestBody @Validated VisitorDto visitorDto){
         visitorService.createVisitor(visitorDto);
