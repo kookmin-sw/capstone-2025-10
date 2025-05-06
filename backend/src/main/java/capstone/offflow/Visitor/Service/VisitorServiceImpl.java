@@ -41,7 +41,19 @@ public class VisitorServiceImpl implements VisitorService {
         Optional<Visitor> existing = visitorRepository.findByUserAndVisitorNameAndPhoneNumber(user, visitorDto.getVisitorName(), visitorDto.getPhoneNumber());
 
         if (existing.isPresent()) {
-            throw new IllegalStateException("이미 등록된 방문자입니다.");
+            Visitor visitor = existing.get();
+
+            // 방문한 대시보드인지 체크
+            boolean alreadyVisited = visitor.getVisitHistories().stream()
+                    .anyMatch(h -> h.getDashboard().getId().equals(dashboard.getId()));
+
+            if (!alreadyVisited) {
+                // 방문횟수 증가만 수행 (히스토리 저장 X)
+                visitor.setVisitedCount(visitor.getVisitedCount() + 1);
+                visitorRepository.save(visitor);
+            }
+
+            return visitor;
         }
 
         // 4. 방문객 생성 및 저장
@@ -54,6 +66,7 @@ public class VisitorServiceImpl implements VisitorService {
                 .dashboard(dashboard)
                 .visitTime(java.time.LocalDateTime.now())
                 .build();
+
         visitHistoryRepository.save(visitHistory);
 
         return visitor;
