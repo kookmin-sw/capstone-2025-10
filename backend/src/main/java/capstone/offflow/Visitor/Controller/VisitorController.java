@@ -1,6 +1,7 @@
 package capstone.offflow.Visitor.Controller;
 
 
+import capstone.offflow.Visitor.Domain.Visitor;
 import capstone.offflow.Visitor.Dto.VisitorDto;
 import capstone.offflow.Visitor.Service.VisitorService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 방문객은 대시보드를 통해 어떤 유저의 소속인지 Check 가능
@@ -28,11 +30,17 @@ public class VisitorController {
 
     //방문객 등록
     //별도 예외처리 필요없음 -> 예외 핸들러가 예외발생시 중간 개입후 처리
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<?> createVisitor(
             @RequestBody @Validated VisitorDto visitorDto){
-        visitorService.createVisitor(visitorDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Visitor created Successfully");
+        try {
+            Visitor visitor = visitorService.createVisitor(visitorDto);
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(VisitorDto.convertToDto(visitor));
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Map.of("message", e.getMessage()));
+        }
     }
 
 

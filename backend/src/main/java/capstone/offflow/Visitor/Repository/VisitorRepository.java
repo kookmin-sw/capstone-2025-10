@@ -1,6 +1,7 @@
 package capstone.offflow.Visitor.Repository;
 
 
+import capstone.offflow.User.Domain.User;
 import capstone.offflow.Visitor.Domain.Visitor;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -26,4 +27,5 @@ public interface VisitorRepository extends JpaRepository<Visitor, Long> {
     List<Visitor> findAllByUserId(Long userId);
 
 
+    Optional<Visitor> findByUserAndVisitorNameAndPhoneNumber(User user, String visitorName, String phoneNumber);
 }
