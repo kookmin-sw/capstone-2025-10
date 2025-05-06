@@ -1,6 +1,7 @@
 package capstone.offflow.Visitor.Repository;
 
 
+import capstone.offflow.User.Domain.User;
 import capstone.offflow.Visitor.Domain.Visitor;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,8 +23,8 @@ public interface VisitorRepository extends JpaRepository<Visitor, Long> {
 
     //여러건 조회 (사용자 기반 방문객 찾기)
     //방문객 -> 방문이력 -> 대시보드를 통해 대시보드 이름도 가져오기
-    @EntityGraph(attributePaths = {"visitHistories", "visitHistories.dashboard"})
     List<Visitor> findAllByUserId(Long userId);
 
 
+    Optional<Visitor> findByUserAndVisitorNameAndPhoneNumber(User user, String visitorName, String phoneNumber);
 }

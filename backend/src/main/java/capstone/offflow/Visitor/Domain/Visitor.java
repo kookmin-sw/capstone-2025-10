@@ -32,6 +32,8 @@ public class Visitor {
     private Date registerDate;
     private Date reservationDate;
 
+    private int visitedCount = 1; //대시보드 방문횟수 (최초방문은 했으므로 1)
+
     //방문객과 유저사이의 관계
     //유저는 여러명의 방문객 보유 가능
     @ManyToOne(fetch = FetchType.LAZY) //ManyToOne defaulte => 즉시로딩이므로 지연로딩으로짆랭

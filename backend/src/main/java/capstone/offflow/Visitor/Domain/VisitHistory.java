@@ -26,5 +26,6 @@ public class VisitHistory {
     @JoinColumn(name = "dashboard_id")
     private Dashboard dashboard;
 
+    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime visitTime;
 }

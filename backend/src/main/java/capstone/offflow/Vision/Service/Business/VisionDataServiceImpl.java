@@ -8,9 +8,6 @@ import capstone.offflow.Vision.Domain.Tracking;
 import capstone.offflow.Vision.Dto.GenderAgeDto;
 import capstone.offflow.Vision.Dto.HeatmapDto;
 import capstone.offflow.Vision.Dto.TrackingDto;
-import capstone.offflow.Vision.Repository.GenderAgeRepository;
-import capstone.offflow.Vision.Repository.HeatmapRepository;
-import capstone.offflow.Vision.Repository.TrackingRepository;
 import capstone.offflow.Vision.Service.Kafka.KafkaMessageWrapper;
 import capstone.offflow.Vision.Service.Redis.VisionRedisService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Date;
 
 @Slf4j
 @Service

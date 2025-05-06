@@ -9,6 +9,10 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.time.LocalDateTime;
+import java.util.Map;
 
 
 @RestControllerAdvice
@@ -64,6 +68,20 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.FORBIDDEN)
                 .body(ExceptionResponse.of(e.getMessage(), HttpStatus.FORBIDDEN.value()));
+    }
+
+
+    /**
+     * 아이디, 비밀번호 틀렸을 때 로그인 예외처리
+     */
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<?> handleResponseStatusException(ResponseStatusException ex) {
+        return ResponseEntity.status(ex.getStatusCode())
+                .body(Map.of(
+                        "message", ex.getReason(),
+                        "status", ex.getStatusCode().value(),
+                        "timestamp", LocalDateTime.now()
+                ));
     }
 
 

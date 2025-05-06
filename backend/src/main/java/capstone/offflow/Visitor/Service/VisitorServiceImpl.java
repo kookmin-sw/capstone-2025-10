@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,18 +29,32 @@ public class VisitorServiceImpl implements VisitorService {
     private final VisitHistoryRepository visitHistoryRepository;
 
     @Override
-    public void createVisitor(VisitorDto visitorDto) {
+    public Visitor createVisitor(VisitorDto visitorDto) {
         // 1. 대시보드 조회
         Dashboard dashboard = dashboardRepository.findById(visitorDto.getDashboardId())
                 .orElseThrow(() -> new IllegalArgumentException("대시보드가 존재하지 않습니다."));
 
-        // 2. 전화번호 인증 여부 확인
-        if (visitorDto.getPhoneVerified() == null || !visitorDto.getPhoneVerified()) {
-            throw new IllegalStateException("전화번호 인증이 완료되지 않았습니다.");
-        }
-
-        // 3. 유저 조회 (대시보드 소유자)
+        // 2. 유저 조회 (대시보드 소유자)
         User user = dashboard.getUser();
+
+        //3. 이미 있는 유저면 저장 X
+        Optional<Visitor> existing = visitorRepository.findByUserAndVisitorNameAndPhoneNumber(user, visitorDto.getVisitorName(), visitorDto.getPhoneNumber());
+
+        if (existing.isPresent()) {
+            Visitor visitor = existing.get();
+
+            // 방문한 대시보드인지 체크
+            boolean alreadyVisited = visitor.getVisitHistories().stream()
+                    .anyMatch(h -> h.getDashboard().getId().equals(dashboard.getId()));
+
+            if (!alreadyVisited) {
+                // 방문횟수 증가만 수행 (히스토리 저장 X)
+                visitor.setVisitedCount(visitor.getVisitedCount() + 1);
+                visitorRepository.save(visitor);
+            }
+
+            return visitor;
+        }
 
         // 4. 방문객 생성 및 저장
         Visitor visitor = VisitorDto.convertToEntity(visitorDto, user);
@@ -54,6 +69,7 @@ public class VisitorServiceImpl implements VisitorService {
 
         visitHistoryRepository.save(visitHistory);
 
+        return visitor;
     }
 
     //유저에 따른 방문객 전체 조회
