@@ -17,7 +17,8 @@ public class EventCondition {
 
     private String indicatorName; //지표 이름
 
-    private String operator; //연산자
+    @Enumerated(EnumType.STRING)
+    private ComparisonOperator operator;
 
     private String value;
 

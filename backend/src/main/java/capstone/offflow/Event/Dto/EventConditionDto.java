@@ -1,6 +1,7 @@
 package capstone.offflow.Event.Dto;
 
 
+import capstone.offflow.Event.Domain.ComparisonOperator;
 import capstone.offflow.Event.Domain.Event;
 import capstone.offflow.Event.Domain.EventCondition;
 import lombok.*;
@@ -22,26 +23,25 @@ public class EventConditionDto {
     private Long eventId;
 
 
-    //Entity -> Dto
+    // Entity → Dto
     public static EventConditionDto convertToDto(EventCondition eventCondition) {
         return EventConditionDto.builder()
                 .id(eventCondition.getId())
                 .indicatorName(eventCondition.getIndicatorName())
-                .operator(eventCondition.getOperator())
+                .operator(eventCondition.getOperator().getDisplayName()) // Enum → 한글 표현
                 .value(eventCondition.getValue())
                 .eventId(eventCondition.getEvent().getId())
                 .build();
     }
 
-
-    //Dto -> Entity (생성/수정용)
-    public static EventCondition convertToEntity(EventConditionDto eventConditionDto, Event event) {
-        EventCondition eventCondition = new EventCondition();
-        eventCondition.setId(eventConditionDto.getId());
-        eventCondition.setIndicatorName(eventConditionDto.getIndicatorName());
-        eventCondition.setOperator(eventConditionDto.getOperator());
-        eventCondition.setValue(eventConditionDto.getValue());
-        eventCondition.setEvent(event);
-        return eventCondition;
+    // Dto → Entity
+    public static EventCondition convertToEntity(EventConditionDto dto, Event event) {
+        EventCondition condition = new EventCondition();
+        condition.setId(dto.getId());
+        condition.setIndicatorName(dto.getIndicatorName());
+        condition.setOperator(ComparisonOperator.from(dto.getOperator())); // 한글 → Enum
+        condition.setValue(dto.getValue());
+        condition.setEvent(event);
+        return condition;
     }
 }
