@@ -87,23 +87,47 @@ public class EventServiceImpl implements EventService {
         return eventCondition;
     }
 
-    //이벤트 수정
     @Override
     public Event updateEvent(Long eventId, EventDto eventDto, User user) {
 
-        //1. 이벤트 조회
         Event event = eventRepository.findByIdAndDashboard_User(eventId, user)
-                .orElseThrow(() -> new EntityNotFoundException("해당 이벤트를 찾을 수 없습니다."));
+                .orElseThrow(() -> new EntityNotFoundException("이벤트를 찾을 수 없습니다."));
 
-        //2. 이벤트 조건 변환 (Dto로)
-        List<EventCondition> convertedConditions = eventDto.getEventConditions().stream()
-                .map(dto -> EventConditionDto.convertToEntity(dto, event))
-                .collect(Collectors.toList());
+        List<EventCondition> currentConditions = event.getEventConditions();
 
+        // 1. 요청으로 들어온 조건 ID 리스트 수집
+        List<Long> incomingIds = eventDto.getEventConditions().stream()
+                .map(EventConditionDto::getId)
+                .filter(id -> id != null)
+                .toList();
 
-        //2. 이벤트 수정
+        // 2. 삭제 대상: 현재 있는 조건 중 요청에 없는 것
+        List<EventCondition> toRemove = currentConditions.stream()
+                .filter(ec -> ec.getId() != null && !incomingIds.contains(ec.getId()))
+                .toList();
+        toRemove.forEach(currentConditions::remove); // JPA가 orphanRemoval로 삭제
+
+        // 3. 수정 또는 추가
+        for (EventConditionDto dto : eventDto.getEventConditions()) {
+            if (dto.getId() == null) {
+                // 신규 조건 추가
+                EventCondition newCondition = EventConditionDto.convertToEntity(dto, event);
+                currentConditions.add(newCondition);
+            } else {
+                // 기존 조건 수정
+                currentConditions.stream()
+                        .filter(ec -> ec.getId().equals(dto.getId()))
+                        .findFirst()
+                        .ifPresent(ec -> {
+                            ec.setIndicatorName(dto.getIndicatorName());
+                            ec.setOperator(ComparisonOperator.from(dto.getOperator()));
+                            ec.setValue(dto.getValue());
+                        });
+            }
+        }
+
+        // 이벤트 정보 수정
         event.setEventName(eventDto.getEventName());
-        event.setEventConditions(convertedConditions);
         event.setDescription(eventDto.getDescription());
 
         return event;
