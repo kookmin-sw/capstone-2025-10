@@ -71,7 +71,7 @@ public class SurveyServiceImpl implements SurveyService{
     //Survey 전체 조회
     @Override
     public List<SurveyDto> getAllSurveyByDashboard(Long dashboardId, User user) {
-        List<Survey> surveys = surveyRepository.findAllByDashboardIdAndDashboard_User(dashboardId,user);
+        List<Survey> surveys = surveyRepository.findAllByDashboardIdAndDashboard_User_UserId(dashboardId, user.getUserId());
 
         return surveys.stream()
                 .map(SurveyDto::convertToDto)

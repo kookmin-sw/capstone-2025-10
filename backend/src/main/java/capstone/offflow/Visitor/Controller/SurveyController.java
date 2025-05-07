@@ -36,6 +36,7 @@ public class SurveyController {
     }
 
 
+
     //Survey 조회 (전체)
     @GetMapping("/{dashboardId}")
     public ResponseEntity<?> getAllSurvey(
@@ -47,7 +48,7 @@ public class SurveyController {
     }
 
     //Survey 답변 전체조회
-    @GetMapping("/{surveyId}/serveyAnswer")
+    @GetMapping("/{surveyId}/surveyAnswer")
     public ResponseEntity<?> getAllSurveyAnswer(
             @PathVariable(name= "surveyId") Long surveyId,
             @AuthenticationPrincipal UserPrincipal userPrincipal){
@@ -59,7 +60,7 @@ public class SurveyController {
 
 
     //Survey 답변 조회 - 방문객 id
-    @GetMapping("/{surveyId}/serveyAnswer/{answerId}")
+    @GetMapping("/{surveyId}/surveyAnswer/{answerId}")
     public ResponseEntity<?> getSurveyAnswer(
             @PathVariable(name= "surveyId") Long surveyId,
             @PathVariable(name= "answerId") Long answerId,

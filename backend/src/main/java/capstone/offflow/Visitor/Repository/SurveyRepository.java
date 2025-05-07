@@ -15,5 +15,5 @@ public interface SurveyRepository extends JpaRepository<Survey, Long> {
 
     Optional<Survey> findByIdAndDashboard_User(Long surveyId, User user);
 
-    List<Survey> findAllByDashboardIdAndDashboard_User(Long dashboardId, User user);
+    List<Survey> findAllByDashboardIdAndDashboard_User_UserId(Long dashboardId, String userId);
 }
