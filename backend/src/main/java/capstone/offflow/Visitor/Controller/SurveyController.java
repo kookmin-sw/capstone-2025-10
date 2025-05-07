@@ -1,18 +1,20 @@
 package capstone.offflow.Visitor.Controller;
 
 
-import capstone.offflow.Visitor.Domain.Visitor;
-import capstone.offflow.Visitor.Dto.VisitorDto;
-import capstone.offflow.Visitor.Service.VisitorService;
+import capstone.offflow.User.Service.UserPrincipal;
+import capstone.offflow.Visitor.Domain.Survey;
+import capstone.offflow.Visitor.Dto.SurveyAnswerDto;
+import capstone.offflow.Visitor.Dto.SurveyDto;
+import capstone.offflow.Visitor.Service.SurveyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 
 @RestController
@@ -21,52 +23,62 @@ import java.util.Map;
 @RequestMapping("api/survey")
 public class SurveyController {
 
-    private final VisitorService visitorService;
+    private final SurveyService surveyService;
 
-
-    //방문객 등록
-    //별도 예외처리 필요없음 -> 예외 핸들러가 예외발생시 중간 개입후 처리
+    //설문조사 등록
     @PostMapping
-    public ResponseEntity<?> createVisitor(
-            @RequestBody @Validated VisitorDto visitorDto){
-        try {
-            Visitor visitor = visitorService.createVisitor(visitorDto);
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(VisitorDto.convertToDto(visitor));
-        } catch (IllegalStateException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(Map.of("message", e.getMessage()));
-        }
+    public ResponseEntity<?> createSurvey(
+            @RequestBody @Validated SurveyDto surveyDto,
+            @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        Survey survey = surveyService.createSurvey(surveyDto, userPrincipal.getUser());
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(SurveyDto.convertToDto(survey));
     }
 
 
-    //방문객 수정
-    @PatchMapping("/{id}")
-    public ResponseEntity<?> updateVisitor(
-            @PathVariable(name="id") Long id,
-            @RequestBody VisitorDto visitorDto){
+    //Survey 조회 (전체)
+    @GetMapping("/{dashboardId}")
+    public ResponseEntity<?> getAllSurvey(
+            @PathVariable(name= "dashboardId") Long dashboardId,
+            @AuthenticationPrincipal UserPrincipal userPrincipal){
 
-        visitorService.updateVisitor(id, visitorDto);
-        return ResponseEntity.ok("Visitor updated successfully");
-    }
-
-
-    //방문객 조회 (전체)
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getAllVisitor(
-            @PathVariable(name= "id") Long id){
-
-        List<VisitorDto> dto = visitorService.getVisitorByUserId(id);
+        List<SurveyDto> dto = surveyService.getAllSurveyByDashboard(dashboardId, userPrincipal.getUser());
         return ResponseEntity.ok(dto);
     }
 
-    //방문객 삭제
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteVisitor(
-            @PathVariable(name = "id") Long id){
+    //Survey 답변 전체조회
+    @GetMapping("/{surveyId}/serveyAnswer")
+    public ResponseEntity<?> getAllSurveyAnswer(
+            @PathVariable(name= "surveyId") Long surveyId,
+            @AuthenticationPrincipal UserPrincipal userPrincipal){
 
-        visitorService.deleteVisitor(id);
-        return ResponseEntity.ok("Visitor delete Successfully");
+        List<SurveyAnswerDto> dto = surveyService.getAllAnswerBySurvey(surveyId, userPrincipal.getUser());
+        return ResponseEntity.ok(dto);
+    }
+
+
+
+    //Survey 답변 조회 - 방문객 id
+    @GetMapping("/{surveyId}/serveyAnswer/{answerId}")
+    public ResponseEntity<?> getSurveyAnswer(
+            @PathVariable(name= "surveyId") Long surveyId,
+            @PathVariable(name= "answerId") Long answerId,
+            @AuthenticationPrincipal UserPrincipal userPrincipal){
+        SurveyAnswerDto surveyAnswerDto = surveyService.getSurveyAnswer(surveyId,answerId, userPrincipal.getUser());
+        return ResponseEntity.ok(surveyAnswerDto);
+    }
+
+
+    //Survey 삭제
+    @DeleteMapping("/{surveyId}")
+    public ResponseEntity<?> deleteSurvey(
+            @PathVariable(name = "surveyId") Long surveyId,
+            @AuthenticationPrincipal UserPrincipal userPrincipal){
+
+        SurveyDto surveyDto = surveyService.getSurvey(surveyId,userPrincipal.getUser());
+
+        surveyService.deleteSurvey(surveyId, userPrincipal.getUser());
+        return ResponseEntity.ok(surveyDto);
     }
 
 

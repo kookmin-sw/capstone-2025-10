@@ -17,5 +17,5 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     Optional<Event> findByIdAndDashboard_User(@Param("id") Long id, @Param("user") User user);
 
 
-    List<Event> findAllByDashboard_IdAndDashboard_User(Long dashboardId, User user);
+    List<Event> findAllByDashboardIdAndDashboard_User(Long dashboardId, User user);
 }
