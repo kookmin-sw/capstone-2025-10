@@ -2,6 +2,7 @@ package capstone.offflow.Event.Service;
 
 import capstone.offflow.Dashboard.Domain.Dashboard;
 import capstone.offflow.Dashboard.Repository.DashboardRepository;
+import capstone.offflow.Event.Domain.ComparisonOperator;
 import capstone.offflow.Event.Domain.Event;
 import capstone.offflow.Event.Domain.EventCondition;
 import capstone.offflow.Event.Dto.EventConditionDto;
@@ -109,35 +110,10 @@ public class EventServiceImpl implements EventService {
     }
 
 
-    //이벤트 조건 수정
-    @Override
-    public EventCondition updateEventCondition(Long conditionId, EventConditionDto dto, User user) {
-
-        //1. 이벤트 조건 조회
-        EventCondition condition = eventConditionRepository.findByIdAndEvent_Dashboard_User(conditionId, user)
-                .orElseThrow(() -> new EntityNotFoundException("해당 이벤트 조건을 찾을 수 없습니다."));
-
-        condition.setIndicatorName(dto.getIndicatorName());
-        condition.setOperator(dto.getOperator());
-        condition.setValue(dto.getValue());
-
-        return condition;
-    }
-
-
     /**
      * 이벤트 조건도 함께 조회 하기
      */
 
-    //이벤트 조건 삭제 위한 조회 Method
-    @Override
-    @Transactional(readOnly = true)
-    public EventConditionDto getByEventConditionId(Long conditionId, User user) {
-        EventCondition condition = eventConditionRepository.findByIdAndEvent_Dashboard_User(conditionId, user)
-                .orElseThrow(() -> new EntityNotFoundException("이벤트조건을 찾을 수 없습니다."));
-
-        return EventConditionDto.convertToDto(condition);
-    }
 
     @Override
     @Transactional(readOnly = true)
@@ -173,18 +149,43 @@ public class EventServiceImpl implements EventService {
         log.info("이벤트 조건 삭제 완료 {}", event.getId());
     }
 
-    //이벤트 조건 삭제
-    @Override
-    public void deleteEventCondition(Long eventId, Long eventConditionId, User user) {
-        //1. Event 존재여부 확인
-        Event event = eventRepository.findByIdAndDashboard_User(eventId, user)
-                .orElseThrow(() -> new EntityNotFoundException("이벤트를 찾을 수 없습니다."));
+      //이벤트 조건 삭제 위한 조회 Method
+//    @Override
+//    @Transactional(readOnly = true)
+//    public EventConditionDto getByEventConditionId(Long conditionId, User user) {
+//        EventCondition condition = eventConditionRepository.findByIdAndEvent_Dashboard_User(conditionId, user)
+//                .orElseThrow(() -> new EntityNotFoundException("이벤트조건을 찾을 수 없습니다."));
+//
+//        return EventConditionDto.convertToDto(condition);
+//    }
 
-        //2. Event 조건 존재여부 확인
-        EventCondition eventCondition = eventConditionRepository.findByIdAndEvent(eventConditionId, event)
-                .orElseThrow(() -> new EntityNotFoundException("이벤트 조건을 찾을 수 없습니다."));
+    //이벤트 조건 수정
+//    @Override
+//    public EventCondition updateEventCondition(Long conditionId, EventConditionDto dto, User user) {
+//
+//        //1. 이벤트 조건 조회
+//        EventCondition condition = eventConditionRepository.findByIdAndEvent_Dashboard_User(conditionId, user)
+//                .orElseThrow(() -> new EntityNotFoundException("해당 이벤트 조건을 찾을 수 없습니다."));
+//
+//        condition.setIndicatorName(dto.getIndicatorName());
+//        condition.setOperator(ComparisonOperator.from(dto.getOperator())); // 한글 → Enum
+//        condition.setValue(dto.getValue());
+//
+//        return condition;
+//    }
 
-        eventConditionRepository.delete(eventCondition);
-        log.info("이벤트 조건 삭제 완료 {}", eventCondition.getId());
-    }
+//    //이벤트 조건 삭제
+//    @Override
+//    public void deleteEventCondition(Long eventId, Long eventConditionId, User user) {
+//        //1. Event 존재여부 확인
+//        Event event = eventRepository.findByIdAndDashboard_User(eventId, user)
+//                .orElseThrow(() -> new EntityNotFoundException("이벤트를 찾을 수 없습니다."));
+//
+//        //2. Event 조건 존재여부 확인
+//        EventCondition eventCondition = eventConditionRepository.findByIdAndEvent(eventConditionId, event)
+//                .orElseThrow(() -> new EntityNotFoundException("이벤트 조건을 찾을 수 없습니다."));
+//
+//        eventConditionRepository.delete(eventCondition);
+//        log.info("이벤트 조건 삭제 완료 {}", eventCondition.getId());
+//    }
 }
