@@ -3,6 +3,7 @@ package capstone.offflow.Visitor.Controller;
 
 import capstone.offflow.User.Service.UserPrincipal;
 import capstone.offflow.Visitor.Domain.Survey;
+import capstone.offflow.Visitor.Domain.SurveyAnswer;
 import capstone.offflow.Visitor.Dto.SurveyAnswerDto;
 import capstone.offflow.Visitor.Dto.SurveyDto;
 import capstone.offflow.Visitor.Service.SurveyService;
@@ -25,7 +26,7 @@ public class SurveyController {
 
     private final SurveyService surveyService;
 
-    //설문조사 등록
+    //Survey 등록
     @PostMapping
     public ResponseEntity<?> createSurvey(
             @RequestBody @Validated SurveyDto surveyDto,
@@ -35,6 +36,18 @@ public class SurveyController {
                 .body(SurveyDto.convertToDto(survey));
     }
 
+    //Survey 답변 등록
+    @PostMapping("/surveyAnswer")
+    public ResponseEntity<?> createSurveyAnswer(
+            @RequestBody @Validated SurveyAnswerDto surveyAnswerDto,
+            @AuthenticationPrincipal UserPrincipal userPrincipal) {
+
+        SurveyAnswer surveyAnswer = surveyService.createSurveyAnswer(surveyAnswerDto, userPrincipal.getUser());
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(SurveyAnswerDto.convertToDto(surveyAnswer));
+
+    }
 
 
     //Survey 조회 (전체)
@@ -47,7 +60,7 @@ public class SurveyController {
         return ResponseEntity.ok(dto);
     }
 
-    //Survey 답변 전체조회
+    //Survey 답변 전체 조회
     @GetMapping("/{surveyId}/surveyAnswer")
     public ResponseEntity<?> getAllSurveyAnswer(
             @PathVariable(name= "surveyId") Long surveyId,

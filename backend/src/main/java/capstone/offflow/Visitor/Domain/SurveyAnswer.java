@@ -37,15 +37,16 @@ public class SurveyAnswer {
     private Date registerDate;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "visitor_id")
+    @JoinColumn(name = "visitor_id", nullable = false)
     private Visitor visitor;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "survey_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "survey_id", nullable = false)
     private Survey survey;
 
     @PrePersist
     protected void onCreate() {
         this.registerDate = new Date();
     }
+
 }

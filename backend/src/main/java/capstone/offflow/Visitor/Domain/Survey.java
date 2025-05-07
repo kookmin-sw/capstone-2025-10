@@ -34,6 +34,9 @@ public class Survey {
     @JoinColumn(name="dashboard_id")
     private Dashboard dashboard;
 
+    @OneToMany(mappedBy = "survey", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SurveyAnswer> surveyAnswers;
+
     @PrePersist
     protected void onCreate() {
         this.registerDate = new Date();

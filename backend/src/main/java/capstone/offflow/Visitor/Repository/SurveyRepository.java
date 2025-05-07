@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface SurveyRepository extends JpaRepository<Survey, Long> {
 
 
-    Optional<Survey> findByIdAndDashboard_User(Long surveyId, User user);
+    Optional<Survey> findByIdAndDashboard_User_UserId(Long surveyId, String userId);
 
     List<Survey> findAllByDashboardIdAndDashboard_User_UserId(Long dashboardId, String userId);
 }

@@ -2,6 +2,7 @@ package capstone.offflow.Visitor.Service;
 
 import capstone.offflow.User.Domain.User;
 import capstone.offflow.Visitor.Domain.Survey;
+import capstone.offflow.Visitor.Domain.SurveyAnswer;
 import capstone.offflow.Visitor.Dto.SurveyAnswerDto;
 import capstone.offflow.Visitor.Dto.SurveyDto;
 
@@ -10,6 +11,8 @@ import java.util.List;
 public interface SurveyService {
 
     Survey createSurvey(SurveyDto surveyDto, User user);
+
+    SurveyAnswer createSurveyAnswer(SurveyAnswerDto surveyAnswerDto, User user);
 
     SurveyDto getSurvey(Long surveyId, User user);
 

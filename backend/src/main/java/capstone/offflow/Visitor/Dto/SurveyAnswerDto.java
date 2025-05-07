@@ -54,7 +54,6 @@ public class SurveyAnswerDto {
                 .bestThing(dto.getBestThing())
                 .worstThing(dto.getWorstThing())
                 .additionalThing(dto.getAdditionalThing())
-                .registerDate(dto.getRegisterDate())
                 .visitor(visitor)
                 .survey(survey)
                 .build();
