@@ -37,7 +37,6 @@ public class EventConditionDto {
     // Dto → Entity
     public static EventCondition convertToEntity(EventConditionDto dto, Event event) {
         EventCondition condition = new EventCondition();
-        condition.setId(dto.getId());
         condition.setIndicatorName(dto.getIndicatorName());
         condition.setOperator(ComparisonOperator.from(dto.getOperator())); // 한글 → Enum
         condition.setValue(dto.getValue());

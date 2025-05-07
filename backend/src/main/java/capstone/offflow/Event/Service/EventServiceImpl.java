@@ -113,8 +113,6 @@ public class EventServiceImpl implements EventService {
     /**
      * 이벤트 조건도 함께 조회 하기
      */
-
-
     @Override
     @Transactional(readOnly = true)
     public EventDto getByEventId(Long eventId, User user) {
