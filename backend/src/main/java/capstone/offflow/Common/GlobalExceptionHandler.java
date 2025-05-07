@@ -70,6 +70,17 @@ public class GlobalExceptionHandler {
                 .body(ExceptionResponse.of(e.getMessage(), HttpStatus.FORBIDDEN.value()));
     }
 
+    /**
+     * 논리적으로 허용되지 않은 상태일 때 (예: 중복 응답 등)
+     */
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<ExceptionResponse> handleIllegalState(IllegalStateException e) {
+        log.warn("비즈니스 로직 예외 발생: {}", e.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(ExceptionResponse.of(e.getMessage(), HttpStatus.CONFLICT.value()));
+    }
+
 
     /**
      * 아이디, 비밀번호 틀렸을 때 로그인 예외처리
