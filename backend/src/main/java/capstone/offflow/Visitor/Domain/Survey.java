@@ -34,5 +34,9 @@ public class Survey {
     @JoinColumn(name="dashboard_id")
     private Dashboard dashboard;
 
+    @PrePersist
+    protected void onCreate() {
+        this.registerDate = new Date();
+    }
 
 }

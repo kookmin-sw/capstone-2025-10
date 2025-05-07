@@ -44,4 +44,8 @@ public class SurveyAnswer {
     @JoinColumn(name = "survey_id")
     private Survey survey;
 
+    @PrePersist
+    protected void onCreate() {
+        this.registerDate = new Date();
+    }
 }
