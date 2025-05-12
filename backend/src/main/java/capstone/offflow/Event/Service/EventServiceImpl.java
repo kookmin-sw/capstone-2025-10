@@ -153,7 +153,7 @@ public class EventServiceImpl implements EventService {
     @Override
     @Transactional(readOnly = true)
     public List<EventDto> getAllByDashboardId(Long dashboardId, User user) {
-        List<Event> events = eventRepository.findAllByDashboard_IdAndDashboard_User(dashboardId, user);
+        List<Event> events = eventRepository.findAllByDashboardIdAndDashboard_User(dashboardId, user);
 
         return events.stream()
                 .map(EventDto::convertToDto)
