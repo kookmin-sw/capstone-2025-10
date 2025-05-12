@@ -46,7 +46,6 @@ public class EventDto {
     //Dto -> Entity (생성/수정용)
     public static Event convertToEntity(EventDto eventDto, Dashboard dashboard) {
         Event event = new Event();
-        event.setId(eventDto.getId());
         event.setEventName(eventDto.getEventName());
         event.setDescription(eventDto.getDescription());
         event.setEventConditions(new ArrayList<>()); // 빈 리스트로 초기화

@@ -71,19 +71,6 @@ public class EventController {
     }
 
 
-    //event 조건 수정
-    @PatchMapping("/{eventId}/conditions/{eventConditionId}")
-    public ResponseEntity<?> updateEventCondition(
-            @PathVariable(name = "eventId") Long eventId,
-            @RequestBody EventConditionDto conditionDto,
-            @AuthenticationPrincipal UserPrincipal userPrincipal){
-
-        EventCondition eventCondition = eventService.updateEventCondition(eventId, conditionDto, userPrincipal.getUser());
-        return ResponseEntity.ok(EventConditionDto.convertToDto(eventCondition));
-    }
-
-
-
     //event 삭제
     @DeleteMapping("/{eventId}")
     public ResponseEntity<?> deleteEvent(
@@ -95,16 +82,4 @@ public class EventController {
         return ResponseEntity.ok(eventDto);
     }
 
-    //eventCondition 삭제
-    //eventId를 통해 잘못된 event에 대한 condition삭제 방지 가능
-    @DeleteMapping("/{eventId}/condition/{eventConditionId}")
-    public ResponseEntity<?> deleteEventCondition(
-            @PathVariable(name = "eventId") Long eventId,
-            @PathVariable(name = "eventConditionId") Long eventConditionId,
-            @AuthenticationPrincipal UserPrincipal userPrincipal){
-
-        EventConditionDto conditionDto = eventService.getByEventConditionId(eventConditionId, userPrincipal.getUser());
-        eventService.deleteEventCondition(eventId, eventConditionId, userPrincipal.getUser());
-        return ResponseEntity.ok(conditionDto);
-    }
 }
