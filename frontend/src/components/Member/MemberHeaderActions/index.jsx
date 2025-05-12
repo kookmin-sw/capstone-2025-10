@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./index.module.scss";
 import Link from "next/link";
 
-const MemberHeaderActions = ({ searchTerm, setSearchTerm }) => {
+const MemberHeaderActions = ({ searchTerm, setSearchTerm, handleDeleteSelected }) => {
   return (
     <div className={styles.headerActions}>
       <div className={styles.searchContainer}>
@@ -33,7 +33,12 @@ const MemberHeaderActions = ({ searchTerm, setSearchTerm }) => {
       <button className={styles.createButton}>
         <Link href="/member/create">계정 생성</Link>
       </button>
-      <button className={styles.primaryButton}>계정 삭제</button>
+      <button 
+        className={styles.primaryButton}
+        onClick={handleDeleteSelected}
+      >
+        계정 삭제
+      </button>
     </div>
   );
 };
