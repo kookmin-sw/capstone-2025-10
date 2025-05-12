@@ -14,9 +14,12 @@ export default function VisitorPage() {
     totalPages,
     searchTerm,
     setSearchTerm,
+    loading,
+    error,
     handlePageChange,
     handleCheckboxClick,
-    handleDetail
+    handleDetail,
+    handleDeleteSelected
   } = useVisitorManagement();
 
   return (
@@ -27,19 +30,26 @@ export default function VisitorPage() {
           headerActions={
             <MemberHeaderActions 
               searchTerm={searchTerm} 
-              setSearchTerm={setSearchTerm} 
+              setSearchTerm={setSearchTerm}
+              handleDeleteSelected={handleDeleteSelected}
             />
           }
         >
-          <MemberTable
-            visitors={visitors}
-            checkedItems={checkedItems}
-            currentPage={currentPage}
-            totalPages={totalPages}
-            handleCheckboxClick={handleCheckboxClick}
-            handleDetail={handleDetail}
-            handlePageChange={handlePageChange}
-          />
+          {loading ? (
+            <div className={styles.loadingContainer}>데이터를 불러오고 있습니다...</div>
+          ) : error ? (
+            <div className={styles.errorContainer}>{error}</div>
+          ) : (
+            <MemberTable
+              visitors={visitors}
+              checkedItems={checkedItems}
+              currentPage={currentPage}
+              totalPages={totalPages}
+              handleCheckboxClick={handleCheckboxClick}
+              handleDetail={handleDetail}
+              handlePageChange={handlePageChange}
+            />
+          )}
         </CardContainer>
       </div>
     </div>

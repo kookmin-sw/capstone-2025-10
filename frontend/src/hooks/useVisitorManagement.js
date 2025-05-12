@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { fetchUsers, mapUserFromBackend } from "@/lib/api/user";
+import { fetchVisitors, deleteVisitor } from "@/lib/api/visitor";
 
 // 예시용 방문객 데이터
 const dummyVisitors = [
@@ -16,6 +16,11 @@ const dummyVisitors = [
 
 export default function useVisitorManagement() {
   const router = useRouter();
+  // 방문자 목록 상태
+  const [visitors, setVisitors] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   // 체크박스 상태 관리
   const [checkedItems, setCheckedItems] = useState({});
   const [allChecked, setAllChecked] = useState(false);
@@ -26,39 +31,35 @@ export default function useVisitorManagement() {
 
   // 검색 상태
   const [searchTerm, setSearchTerm] = useState("");
-  
-  // 방문객 데이터 상태
-  const [visitors, setVisitors] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
 
-  // API에서 방문객 데이터 가져오기
+  // 방문자 데이터 로드
   useEffect(() => {
-    const getVisitors = async () => {
-      setIsLoading(true);
+    const loadVisitors = async () => {
       try {
-        const data = await fetchUsers();
-        // 백엔드 데이터를 프론트엔드 형식으로 변환
-        const mappedData = data.map(user => mapUserFromBackend(user));
-        setVisitors(mappedData);
+        setLoading(true);
+        const data = await fetchVisitors();
+        setVisitors(data);
         setError(null);
       } catch (err) {
-        console.error("방문객 데이터 로딩 실패:", err);
-        setError("방문객 데이터를 불러오는데 실패했습니다.");
+        console.error("방문자 목록을 로드하는 중 오류 발생:", err);
+        setError("방문자 목록을 로드하는데 실패했습니다.");
         // 개발용 더미 데이터 사용 (실제 환경에서는 제거)
         setVisitors([
-          { id: 1, name: "김민준", phone: "010-1234-1234", date: "2025.02.06", visits: 0 },
-          { id: 2, name: "이서준", phone: "010-2345-2345", date: "2025.02.05", visits: 0 },
-          { id: 3, name: "박도윤", phone: "010-3456-3456", date: "2025.02.04", visits: 0 },
-          { id: 4, name: "최시우", phone: "010-4567-4567", date: "2025.02.03", visits: 0 },
-          { id: 5, name: "강지호", phone: "010-5678-5678", date: "2025.02.02", visits: 0 }
+          { id: 1, name: "kea", phone: "010-1111-1111", date: "2025.01.01", visits: 1 },
+          { id: 2, name: "theyday1", phone: "010-2222-2222", date: "2025.02.02", visits: 12 },
+          { id: 3, name: "ashercom", phone: "010-3333-3333", date: "2025.03.03", visits: 5 },
+          { id: 4, name: "jungdo1000", phone: "010-4444-4444", date: "2025.04.04", visits: 80 },
+          { id: 5, name: "minjae97", phone: "010-5555-5555", date: "2025.05.05", visits: 3 },
+          { id: 6, name: "devsunny", phone: "010-6666-6666", date: "2025.06.06", visits: 42 },
+          { id: 7, name: "codeman", phone: "010-7777-7777", date: "2025.07.07", visits: 15 },
+          { id: 8, name: "techstar", phone: "010-8888-8888", date: "2025.08.08", visits: 27 },
         ]);
       } finally {
-        setIsLoading(false);
+        setLoading(false);
       }
     };
 
-    getVisitors();
+    loadVisitors();
   }, []);
 
   // 검색어로 필터링된 데이터
@@ -110,6 +111,40 @@ export default function useVisitorManagement() {
     router.push(`/member/detail/${visitorId}`);
   };
 
+  // 선택된 방문자 삭제 핸들러
+  const handleDeleteSelected = async () => {
+    const selectedIds = Object.keys(checkedItems)
+      .filter(id => checkedItems[id])
+      .map(id => parseInt(id));
+
+    if (selectedIds.length === 0) {
+      alert("삭제할 방문자를 선택해주세요.");
+      return;
+    }
+
+    if (confirm(`선택한 ${selectedIds.length}명의 방문자를 삭제하시겠습니까?`)) {
+      try {
+        // 선택된 방문자들 삭제
+        for (const id of selectedIds) {
+          await deleteVisitor(id);
+        }
+
+        // 삭제 후 목록 다시 로드
+        const updatedVisitors = await fetchVisitors();
+        setVisitors(updatedVisitors);
+        
+        // 체크박스 상태 초기화
+        setCheckedItems({});
+        setAllChecked(false);
+        
+        alert("선택한 방문자가 삭제되었습니다.");
+      } catch (error) {
+        console.error("방문자 삭제 중 오류 발생:", error);
+        alert("방문자 삭제에 실패했습니다.");
+      }
+    }
+  };
+
   return {
     visitors: currentItems,
     checkedItems,
@@ -118,11 +153,12 @@ export default function useVisitorManagement() {
     totalPages,
     searchTerm,
     setSearchTerm,
+    loading,
+    error,
     handlePageChange,
     handleCheckboxClick,
     handleSelectAll,
     handleDetail,
-    isLoading,
-    error
+    handleDeleteSelected
   };
 } 

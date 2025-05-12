@@ -40,33 +40,21 @@
   }
 }
 
-/* 로딩 및 에러 상태 스타일 */
-.loading, .error {
+/* 로딩 및 에러 컨테이너 */
+.loadingContainer, .errorContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 300px;
-  padding: 30px;
-  background-color: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  font-family: 'Noto Sans KR', sans-serif;
+  padding: 40px;
   text-align: center;
-}
-
-.loading {
-  color: #004bd6;
-  font-size: 18px;
-}
-
-.error {
-  color: #df373c;
+  color: #666;
+  font-family: 'Noto Sans KR', sans-serif;
   font-size: 16px;
-  
-  button {
-    margin-top: 20px;
-  }
+}
+
+.errorContainer {
+  color: #d32f2f;
 }
 
 /* 폼 스타일 */
