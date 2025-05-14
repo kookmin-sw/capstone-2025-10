@@ -1,0 +1,30 @@
+.section {
+  display: flex;
+  flex: 1;
+  gap: 32px;
+  width: 100%;
+  height: 100%;
+}
+
+
+.image-grid-wrapper {
+  width: 1280px;
+  height: 720px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  & > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+  }
+
+  .canvas {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+  }
+}
