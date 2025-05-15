@@ -1,10 +1,13 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/gFPznrUY)
 # AI 비전 기반 오프라인 데이터 시각화 서비스, OFFFLOW
+<br/> <br/> 
 <div align="center"> 
     <p align = "center">
-        <img src = "./assets/offflow_logo.svg" width = "30%"/>
+        <img src = "https://raw.githubusercontent.com/kookmin-sw/capstone-2025-10/master/assets/offflow_logo.svg"" width = "40%"/>
     </p>
 </div>
+
+<br/> <br/> 
 
 ## 🔗 목차 
 [💡 프로젝트 소개](#-프로젝트-소개) 
@@ -29,9 +32,10 @@
 
 ## 💡 프로젝트 소개
 
+<br/>
 <div align="center"> 
     <p align = "center">
-    <img src = "./assets/poster.png" width = "70%"/>
+    <img src = "https://raw.githubusercontent.com/kookmin-sw/capstone-2025-10/master/assets/poster.png" width = "70%"/>
     </p>
 </div>
 
@@ -167,9 +171,11 @@ AI 분석 결과는 Redis 및 Kafka를 활용하여 비동기식 메모리큐에
 <br/>
 
 ## 🌐 시스템 구조
+<br/>
+
 <div align="center"> 
     <p align = "center">
-    <img src = "./assets/system_architecture.png" width = 900/>
+    <img src = "https://raw.githubusercontent.com/kookmin-sw/capstone-2025-10/master/assets/system_architecture.png" width = 90%/>
     </p>
 </div>
 
