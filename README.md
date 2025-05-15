@@ -32,10 +32,9 @@
 
 ## 💡 프로젝트 소개
 
-<br/>
 <div align="center"> 
     <p align = "center">
-    <img src = "https://raw.githubusercontent.com/kookmin-sw/capstone-2025-10/master/assets/poster.png" width = "70%"/>
+    <img src = "https://raw.githubusercontent.com/kookmin-sw/capstone-2025-10/master/assets/poster.png" width = "60%"/>
     </p>
 </div>
 
@@ -134,7 +133,7 @@ AI 분석 결과는 Redis 및 Kafka를 활용하여 비동기식 메모리큐에
     </tr>
     <tr align="center">
         <td>
-            팀장, Backend
+            팀장, Backend, DB
         </td>
         <td>
             Frontend, Infra
@@ -229,8 +228,7 @@ AI 분석 결과는 Redis 및 Kafka를 활용하여 비동기식 메모리큐에
 
 |역할|종류|
 |-|-|
-|**Web Service**| ![AmazonEC2](https://img.shields.io/badge/Amazon_EC2-FF9900?style=for-the-badge&logo=AmazonEC2&logoColor=white)
-|**CI/CD**| ![Docker](https://img.shields.io/badge/Docker-2088FF?style=for-the-badge&logo=Docker&logoColor=white) 
+|**Deployment**| ![AmazonEC2](https://img.shields.io/badge/Amazon_EC2-FF9900?style=for-the-badge&logo=AmazonEC2&logoColor=white) ![Docker](https://img.shields.io/badge/Docker-2088FF?style=for-the-badge&logo=Docker&logoColor=white) 
 
 <br/>
 
@@ -267,7 +265,14 @@ AI 분석 결과는 Redis 및 Kafka를 활용하여 비동기식 메모리큐에
 <br/>
 
 ## 📝 참고 자료
-### [논문]()
+### 논문
+<a href="" target="_blank">
+<p align = "center">
+  <img src="https://raw.githubusercontent.com/kookmin-sw/capstone-2025-10/master/assets/paper_1.png" width="40%">
+<a href="" target="_blank">
+  <img src="https://raw.githubusercontent.com/kookmin-sw/capstone-2025-10/master/assets/paper_2.png" width="40%">
+</a>
+
 ### [중간 발표 자료]()
 ### [중간 보고서]()
 ### [시연 동영상]()
