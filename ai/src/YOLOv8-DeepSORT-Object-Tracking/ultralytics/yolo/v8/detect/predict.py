@@ -218,7 +218,7 @@ class DetectionPredictor(BasePredictor):
     def __init__(self, cfg):
         super().__init__(cfg)
         self.producer = KafkaProducer(
-            bootstrap_servers='192.168.110.252:9092',
+            bootstrap_servers='15.164.214.248:9092',
             value_serializer=lambda v: json.dumps(v).encode('utf-8'),
         )
 
