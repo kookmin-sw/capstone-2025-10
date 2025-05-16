@@ -31,9 +31,16 @@ public class GenderAgeServiceImpl implements GenderAgeService{
         String redisKey = GENDER_AGE_KEY_PREFIX + dashboardId + ":" + user.getId();
 
         // 1. Redis에서 먼저 찾는다
-        List<GenderAgeDto> cached = (List<GenderAgeDto>) redisTemplate.opsForValue().get(redisKey);
-        if (cached != null) {
-            return cached;
+        try {
+            Object cachedRaw = redisTemplate.opsForValue().get(redisKey);
+            if (cachedRaw instanceof List<?> cachedList && !cachedList.isEmpty()) {
+                // 안전하게 캐스팅
+                if (cachedList.get(0) instanceof GenderAgeDto) {
+                    return (List<GenderAgeDto>) cachedRaw;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // 로그만 찍고 계속 진행
         }
 
         // 2. Redis에 없으면 DB 조회

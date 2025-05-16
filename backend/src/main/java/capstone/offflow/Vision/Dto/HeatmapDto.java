@@ -1,5 +1,6 @@
 package capstone.offflow.Vision.Dto;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import capstone.offflow.Dashboard.Domain.Dashboard;
 import capstone.offflow.Vision.Domain.Heatmap;
 import lombok.*;
@@ -10,6 +11,7 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
 public class HeatmapDto {
 
     private Long id;

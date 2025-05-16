@@ -1,5 +1,6 @@
 package capstone.offflow.Vision.Dto;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import capstone.offflow.Dashboard.Domain.Dashboard;
 import capstone.offflow.Vision.Domain.GenderAge;
 import lombok.*;
