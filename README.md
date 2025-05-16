@@ -162,7 +162,7 @@ AI 분석 결과는 Redis 및 Kafka를 활용하여 비동기식 메모리큐에
             <span style="font-size: 12px;">juku1133@gmail.com</span>
         </td>
                 <td>
-            <span style="font-size: 12px;">nornen20@gmail.com</span>
+            <span style="font-size: 12px;">nornen20@kookmin.ac.kr</span>
         </td>
     </tr>
 </table>
