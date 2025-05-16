@@ -32,16 +32,26 @@ public class VisitorDto {
     private Date reservationDate;
 
     private List<String> visitedDashboards; // 응답용: 방문한 대시보드 이름 목록
+    private int visitedCount; //방문횟수
 
     // Entity → DTO
     public static VisitorDto convertToDto(Visitor visitor) {
 
-        //NPE 고려
+        // 방문기록에서 대시보드 이름 추출 (null 방어 포함 : NPE)
         List<String> dashboards = Optional.ofNullable(visitor.getVisitHistories())
                 .orElse(Collections.emptyList())
                 .stream()
-                .map(history -> history.getDashboard().getDashboardName()) // 방문했던 대시보드 이름 (기준)
-                .distinct() //중복제거
+                .map(history -> {
+                    try {
+                        // 프록시 예외 방지
+                        return Optional.ofNullable(history.getDashboard())
+                                .map(d -> d.getDashboardName())
+                                .orElse("Unknown Dashboard");
+                    } catch (Exception e) {
+                        return "Invalid Dashboard";
+                    }
+                })
+                .distinct()
                 .collect(Collectors.toList());
 
         return VisitorDto.builder()
@@ -54,7 +64,8 @@ public class VisitorDto {
                 .phoneVerified(visitor.getPhoneVerified())
                 .registerDate(visitor.getRegisterDate())
                 .reservationDate(visitor.getReservationDate())
-                .visitedDashboards(dashboards) //방문했던 대시보드 이름 추가
+                .visitedDashboards(dashboards)
+                .visitedCount(visitor.getVisitedCount())
                 .build();
     }
 
@@ -69,6 +80,7 @@ public class VisitorDto {
         visitor.setPhoneVerified(dto.getPhoneVerified());
         visitor.setRegisterDate(new Date());
         visitor.setUser(user);
+        visitor.setVisitedCount(dto.getVisitedCount());
         return visitor;
     }
 }

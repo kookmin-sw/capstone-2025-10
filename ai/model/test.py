@@ -36,7 +36,7 @@ model.eval()
 # 방문자(객체) 추적을 위한 간단한 딕셔너리
 tracked_visitors = {}  # key: visitor_id, value: dict with center, start_time, last_seen, predictions
 TRACKING_THRESHOLD = 75  # 픽셀 단위, 중심 좌표 차이 임계값
-MIN_DETECTION_DURATION = 10  # 30초 이상 머무른 방문자에 대해 서버에 전송
+MIN_DETECTION_DURATION = 10  # 10초 이상 머무른 방문자에 대해 서버에 전송
 EXPIRE_TIME = 60  # 60초 이상 보이지 않으면 해당 방문자 삭제
 
 def get_face_center(box):
@@ -173,7 +173,7 @@ def process_frame(frame, face_detector, model, transform, device, tracked_visito
 # 메인 루프: 실시간 영상 처리 및 시각화
 cap = cv2.VideoCapture("rtsp://offflow:offflow1234@192.168.219.188/stream1")
 frame_count = 0
-DETECTION_INTERVAL = 10  # 예: 10프레임마다 YOLO 검출 실행
+DETECTION_INTERVAL = 10  # 10프레임마다 YOLO 검출 실행
 
 while True:
     ret, frame = cap.read()
@@ -185,7 +185,7 @@ while True:
     if frame_count % DETECTION_INTERVAL == 0:
         processed_frame = process_frame(frame, face_detector, model, face_transform, device, tracked_visitors, run_detection=True)
     else:
-        # 이전 검출 결과(트래킹)만 업데이트: run_detection=False이면 새 검출은 수행하지 않고, 기존 방문자 정보만 업데이트 (예: 타임스탬프 갱신)
+        # 이전 검출 결과(트래킹)만 업데이트: run_detection=False이면 새 검출은 수행하지 않고, 기존 방문자 정보만 업데이트 
         processed_frame = process_frame(frame, face_detector, model, face_transform, device, tracked_visitors, run_detection=False)
 
     processed_frame_bgr = cv2.cvtColor(processed_frame, cv2.COLOR_RGB2BGR)

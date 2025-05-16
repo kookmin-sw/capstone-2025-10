@@ -34,9 +34,16 @@ public class HeatmapServiceImpl implements HeatmapService {
         String redisKey = HEATMAP_KEY_PREFIX + dashboardId;
 
         // 1. Redis에서 먼저 찾는다
-        List<HeatmapDto> cached = (List<HeatmapDto>) redisTemplate.opsForValue().get(redisKey);
-        if (cached != null) {
-            return cached;
+        try {
+            Object cachedRaw = redisTemplate.opsForValue().get(redisKey);
+            if (cachedRaw instanceof List<?> cachedList && !cachedList.isEmpty()) {
+                // 안전하게 캐스팅
+                if (cachedList.get(0) instanceof HeatmapDto) {
+                    return (List<HeatmapDto>) cachedRaw;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // 로그만 찍고 계속 진행
         }
 
         // 2. Redis에 없으면 (Cache Miss) DB에서 찾는다
