@@ -1,0 +1,146 @@
+.upload-card {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  padding: 40px;
+  border-radius: 20px;
+  background-color: white;
+  box-shadow: 0 10px 40px 0 #00000026;
+  gap: 32px;
+}
+
+.section-name-card {
+  margin: 32px 24px;
+}
+
+
+.right-wrapper {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: end;
+  height: 100%;
+
+  .button-wrapper {
+    margin-left: auto;
+    margin-bottom: 16px;
+  }
+
+  .list-wrapper {
+    height: 480px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--gray-3);
+    border-radius: 12px;
+    overflow: hidden;
+    overflow-y: scroll;
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--black);
+
+    -ms-overflow-style: none; /* 인터넷 익스플로러 */
+    scrollbar-width: none; /* 파이어폭스 */
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    & > div {
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 24px;
+
+      & > input {
+        background: transparent;
+        background: var(--white);
+        padding: 8px;
+        font-size: 18px;
+        font-weight: bold;
+        color: var(--black);
+
+        &:disabled {
+          background: transparent;
+          border: none;
+        }
+      }
+    }
+
+    & > div + div {
+      border-top: 1px solid var(--gray-3);
+    }
+  }
+}
+
+.image-grid-wrapper {
+  width: 480px;
+  height: 480px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  & > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+
+// PRODUCT LIST
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding: 0 8px;
+}
+
+.card {
+  display: flex;
+  gap: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 12px;
+  cursor: pointer;
+  background-color: #fff;
+
+  &.selected {
+    border: 2px solid #d83c3c;
+  }
+}
+
+.index {
+  font-weight: bold;
+  color: #555;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+}
+
+.titleLine {
+  display: flex;
+  gap: 6px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.name {
+  color: #111;
+}
+
+.price {
+  color: #333;
+}
+
+.description {
+  font-size: 13px;
+  color: #666;
+}

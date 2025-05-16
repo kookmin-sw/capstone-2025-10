@@ -2,7 +2,7 @@ from kafka import KafkaProducer
 import json
 import time
 import threading
-
+import uuid
 import cv2
 import torch
 import numpy as np
@@ -61,7 +61,7 @@ def request_kafka(points):
        "payload": {
            "dashboardId": 1,
            "detectedTime": int(time.time() * 1000),
-           "gridList": "[" + ",".join(f"{{{int(x)},{int(y)}}}" for x, y in points) + "]"
+           "gridList": "[" + ",".join(f"[{int(x)},{int(y)}]" for x, y in points) + "]"
        }
     }
 
@@ -104,6 +104,22 @@ def inference_and_restore(model, device, frame_rgb, threshold=0.5, save_path='ou
 # 5. 스트리밍 캡처 루프
 # -----------------------------
 def get_image():
+#     image_path = "./73C3FABD-2202-4AA9-8C89-5644DE33D2C3_1_102_o.jpeg"  # 사용하고자 하는 이미지 경로로 바꿔주세요
+#
+#     frame = cv2.imread(image_path)
+#     crop_width, crop_height = 1920, 1080
+#     frame = frame[0:crop_height, 0:crop_width]
+#     frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+#
+#     model, cfg, device = load_model('./configs/SHHA_test.yml', './SHHA_best.pth')
+#     name = uuid.uuid4()
+#     inference_and_restore(
+#         model=model,
+#         device=device,
+#         frame_rgb=frame_rgb,
+#         threshold=0.5,
+#         save_path=str(name) + 'output_result.jpg'
+#     )
     cap = cv2.VideoCapture("rtsp://offflow:offflow1234@192.168.219.188/stream1")
     if cap.isOpened():
         ret, frame = cap.read()

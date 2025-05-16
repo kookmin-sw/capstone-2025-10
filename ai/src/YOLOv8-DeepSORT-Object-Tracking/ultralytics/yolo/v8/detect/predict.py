@@ -29,6 +29,13 @@ data_deque = {}
 
 deepsort = None
 
+producer = KafkaProducer(
+    bootstrap_servers='192.168.219.115:9092',
+    value_serializer=lambda v: json.dumps(v).encode('utf-8'),
+    linger_ms=10,             # 최대 10ms까지 모았다가 전송
+    compression_type='gzip'   # 메시지 압축 적용 (CPU 비용 vs 전송량 절약)
+)
+
 def init_tracker():
     global deepsort
     cfg_deep = get_config()
@@ -248,12 +255,6 @@ class DetectionPredictor(BasePredictor):
             object_id = outputs[:, -1]
 
             draw_boxes(im0, bbox_xyxy, self.model.names, object_id,identities)
-            producer = KafkaProducer(
-                bootstrap_servers='192.168.219.180:9092',
-                value_serializer=lambda v: json.dumps(v).encode('utf-8'),
-                linger_ms=10,             # 최대 10ms까지 모았다가 전송
-                compression_type='gzip'   # 메시지 압축 적용 (CPU 비용 vs 전송량 절약)
-            )
 
             batch_messages = []
             print(bbox_xyxy, identities, object_id)
@@ -266,8 +267,8 @@ class DetectionPredictor(BasePredictor):
                     "payload": {
                         "dashboardId": 1,
                         "detectedTime": int(time.time() * 1000),
-                        "visitorLabel": int(object_id[i]),
-                        "gridList": f"[[{int((x1 + x2) / 2)}, {int((y1 + y2) / 2)}]]"
+                        "visitorLabel": int(identities[i]),
+                        "gridList": f"[[{int((x2+x1)/ 2)}, {int((y2+y2)/2)}]]"
                     }
                 }
                 print(tracking_message)
