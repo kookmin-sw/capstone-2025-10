@@ -85,7 +85,7 @@ AI 분석 결과는 Redis 및 Kafka를 활용하여 비동기식 메모리큐에
 
 <table>
     <tr align="center">
-        <td style="min-width: 150px;">
+        <td style="min-width: 100px;">
             <a href="https://github.com/millook">
               <img src="https://avatars.githubusercontent.com/u/134192611?v=4" width="80">
               <br />
@@ -94,7 +94,7 @@ AI 분석 결과는 Redis 및 Kafka를 활용하여 비동기식 메모리큐에
             <br/>
               20171591
         </td>
-        <td style="min-width: 150px;">
+        <td style="min-width: 100px;">
             <a href="https://github.com/skan9708">
               <img src="https://avatars.githubusercontent.com/u/19978313?v=4" width="80">
               <br />
@@ -103,7 +103,7 @@ AI 분석 결과는 Redis 및 Kafka를 활용하여 비동기식 메모리큐에
             <br/>
               20171715
         </td>
-        <td style="min-width: 150px;">
+        <td style="min-width: 100px;">
             <a href="https://github.com/HO22">
               <img src="https://avatars.githubusercontent.com/u/38872856?v=4" width="80">
               <br />
@@ -112,7 +112,7 @@ AI 분석 결과는 Redis 및 Kafka를 활용하여 비동기식 메모리큐에
             <br/>
               20181581
         </td>
-        <td style="min-width: 150px;">
+        <td style="min-width: 100px;">
             <a href="https://github.com/seongjeongkyu1">
               <img src="https://avatars.githubusercontent.com/u/113752290?v=4" width="80">
               <br />
@@ -121,7 +121,7 @@ AI 분석 결과는 Redis 및 Kafka를 활용하여 비동기식 메모리큐에
             <br/>
               20191610
         </td>
-        <td style="min-width: 150px;">
+        <td style="min-width: 100px;">
             <a href="https://github.com/minsang22">
               <img src="https://avatars.githubusercontent.com/u/55175192?v=4" width="80">
               <br />
@@ -159,7 +159,7 @@ AI 분석 결과는 Redis 및 Kafka를 활용하여 비동기식 메모리큐에
             <span style="font-size: 12px;">flsghl@kookmin.ac.kr</span>
         </td>
                 <td>
-            <span style="font-size: 12px;">juku1133@gmail.com</span>
+            <span style="font-size: 12px;">juku1133@kookmin.ac.kr</span>
         </td>
                 <td>
             <span style="font-size: 12px;">nornen20@kookmin.ac.kr</span>
