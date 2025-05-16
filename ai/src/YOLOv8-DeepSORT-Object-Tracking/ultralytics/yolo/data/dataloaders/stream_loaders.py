@@ -1,22 +1,100 @@
 # Ultralytics YOLO 🚀, GPL-3.0 license
 
+import base64
 import glob
+import json
 import math
 import os
 import time
 from pathlib import Path
+from queue import Queue, Empty
 from threading import Thread
 from urllib.parse import urlparse
 
 import cv2
 import numpy as np
 import torch
-
+from kafka import KafkaConsumer
 from ultralytics.yolo.data.augment import LetterBox
 from ultralytics.yolo.data.utils import IMG_FORMATS, VID_FORMATS
 from ultralytics.yolo.utils import LOGGER, is_colab, is_kaggle, ops
 from ultralytics.yolo.utils.checks import check_requirements
 
+
+class KafkaStreamLoader:
+    def __init__(self, topic='vision-frame-topic', bootstrap_servers='localhost:9092',
+                 imgsz=640, stride=32, auto=True, transforms=None, buffer_size=64):
+        self.consumer = KafkaConsumer(
+            'vision-frame-topic',
+            bootstrap_servers='15.164.214.248:9092',
+            auto_offset_reset='latest',
+            group_id='vision-consumer-group-100',
+            value_deserializer=lambda m: json.loads(m.decode('utf-8'))
+        )
+        self.imgsz = imgsz
+        self.stride = stride
+        self.auto = auto
+        self.transforms = transforms
+        self.mode = 'stream'
+        self.source_name = f'kafka://{topic}'
+        self.buffer = Queue(maxsize=buffer_size)
+        self.running = True
+
+        print(f"[KafkaStreamLoader] Subscribed to topic: {topic}")
+
+        self.thread = Thread(target=self._background_loop, daemon=True)
+        self.thread.start()
+
+    def _background_loop(self):
+        for message in self.consumer:
+            if not self.running:
+                break
+            try:
+                self.buffer.put(message.value, timeout=1)
+            except:
+                continue  # buffer full, skip
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if not self.thread.is_alive() and self.buffer.empty():
+            raise StopIteration
+
+        try:
+            value = self.buffer.get(timeout=5)
+        except Empty:
+            raise StopIteration
+
+        b64img = value.get("image")
+        if b64img is None:
+            raise ValueError("No 'image' key found in Kafka message")
+        print("-------------------------------")
+        print(b64img)
+        print("-------------------------------")
+        frame_data = base64.b64decode(b64img)
+        np_img = np.frombuffer(frame_data, np.uint8)
+        im0 = cv2.imdecode(np_img, cv2.IMREAD_COLOR)  # BGR
+
+        if im0 is None:
+            raise ValueError("Failed to decode image from Kafka message")
+
+        if self.transforms:
+            im = self.transforms(im0)
+        else:
+            im = LetterBox(self.imgsz, self.auto, stride=self.stride)(image=im0)
+            im = im.transpose((2, 0, 1))[::-1]  # HWC → CHW, BGR → RGB
+            im = np.ascontiguousarray(im)
+
+        return self.source_name, im, im0, None, '[Kafka frame]'
+
+    def __len__(self):
+        return 1_000_000_000  # virtually infinite stream
+
+    def close(self):
+        self.running = False
+        self.consumer.close()
+        print("[KafkaStreamLoader] Closed consumer and stopped thread.")
 
 class LoadStreams:
     # YOLOv5 streamloader, i.e. `python detect.py --source 'rtsp://example.com/media.mp4'  # RTSP, RTMP, HTTP streams`

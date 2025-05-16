@@ -1,52 +1,89 @@
 # Ultralytics YOLO 🚀, GPL-3.0 license
 
-from kafka import KafkaProducer
 import json
 import time
-
-import hydra
-import torch
-import argparse
-import time
-from pathlib import Path
+from collections import deque
 
 import cv2
+import hydra
+import numpy as np
 import torch
-import torch.backends.cudnn as cudnn
+import torch.nn.functional as F
+from kafka import KafkaProducer
 from numpy import random
+from torchvision import transforms
 from ultralytics.yolo.engine.predictor import BasePredictor
 from ultralytics.yolo.utils import DEFAULT_CONFIG, ROOT, ops
 from ultralytics.yolo.utils.checks import check_imgsz
-from ultralytics.yolo.utils.plotting import Annotator, colors, save_one_box
+from ultralytics.yolo.utils.plotting import Annotator
 
-import cv2
-from deep_sort_pytorch.utils.parser import get_config
+from config import cfg as base_cfg, merge_from_file
 from deep_sort_pytorch.deep_sort import DeepSort
-from collections import deque
-import numpy as np
+from deep_sort_pytorch.utils.parser import get_config
+from models import build_model
+
 palette = (2 ** 11 - 1, 2 ** 15 - 1, 2 ** 20 - 1)
 data_deque = {}
 
 deepsort = None
 
-producer = KafkaProducer(
-    bootstrap_servers='192.168.219.115:9092',
-    value_serializer=lambda v: json.dumps(v).encode('utf-8'),
-    linger_ms=10,             # 최대 10ms까지 모았다가 전송
-    compression_type='gzip'   # 메시지 압축 적용 (CPU 비용 vs 전송량 절약)
-)
 
 def init_tracker():
     global deepsort
     cfg_deep = get_config()
     cfg_deep.merge_from_file("deep_sort_pytorch/configs/deep_sort.yaml")
 
-    deepsort= DeepSort(cfg_deep.DEEPSORT.REID_CKPT,
-                            max_dist=cfg_deep.DEEPSORT.MAX_DIST, min_confidence=cfg_deep.DEEPSORT.MIN_CONFIDENCE,
-                            nms_max_overlap=cfg_deep.DEEPSORT.NMS_MAX_OVERLAP, max_iou_distance=cfg_deep.DEEPSORT.MAX_IOU_DISTANCE,
-                            max_age=cfg_deep.DEEPSORT.MAX_AGE, n_init=cfg_deep.DEEPSORT.N_INIT, nn_budget=cfg_deep.DEEPSORT.NN_BUDGET,
-                            use_cuda=True)
-##########################################################################################
+    deepsort = DeepSort(cfg_deep.DEEPSORT.REID_CKPT,
+                        max_dist=cfg_deep.DEEPSORT.MAX_DIST, min_confidence=cfg_deep.DEEPSORT.MIN_CONFIDENCE,
+                        nms_max_overlap=cfg_deep.DEEPSORT.NMS_MAX_OVERLAP,
+                        max_iou_distance=cfg_deep.DEEPSORT.MAX_IOU_DISTANCE,
+                        max_age=cfg_deep.DEEPSORT.MAX_AGE, n_init=cfg_deep.DEEPSORT.N_INIT,
+                        nn_budget=cfg_deep.DEEPSORT.NN_BUDGET,
+                        use_cuda=True)
+
+
+    # ---------- APGCC 모델 로드 ----------
+    global apgcc_model
+    global device_apgcc
+
+    cfg_apgcc = merge_from_file(base_cfg, "./configs/SHHA_test.yml")
+    cfg_apgcc.test = True
+    apgcc_model = build_model(cfg_apgcc, training=False)
+    apgcc_model.load_state_dict(torch.load("./SHHA_best.pth", map_location='cpu'))
+    apgcc_model.eval()
+    device_apgcc = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    apgcc_model.to(device_apgcc)
+
+    global transform
+    transform = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+    ])
+
+def resize_and_pad(image, max_len=1024, block=128):
+    orig_h, orig_w = image.shape[:2]
+    scale = min(max_len / orig_h, max_len / orig_w)
+    new_w = int(orig_w * scale)
+    new_h = int(orig_h * scale)
+    image_resized = cv2.resize(image, (new_w, new_h))
+    pad_h = ((new_h - 1) // block + 1) * block - new_h
+    pad_w = ((new_w - 1) // block + 1) * block - new_w
+    padded_image = np.zeros((new_h + pad_h, new_w + pad_w, 3), dtype=image_resized.dtype)
+    padded_image[:new_h, :new_w, :] = image_resized
+    return padded_image, (new_h, new_w), (orig_h, orig_w), scale
+
+@torch.no_grad()
+def inference_and_restore(model, device, frame_rgb, threshold=0.5):
+    padded_image, (new_h, new_w), _, scale = resize_and_pad(frame_rgb)
+    input_tensor = transform(padded_image).unsqueeze(0).to(device)
+    output = model(input_tensor)
+    scores = F.softmax(output['pred_logits'], dim=-1)[0, :, 1]
+    points = output['pred_points'][0][scores > threshold].detach().cpu().numpy()
+    points[:, 0] = np.clip(points[:, 0], 0, new_w - 1) / scale
+    points[:, 1] = np.clip(points[:, 1], 0, new_h - 1) / scale
+    return points.tolist()
+
+
 def xyxy_to_xywh(*xyxy):
     """" Calculates the relative bounding box from absolute pixel values. """
     bbox_left = min([xyxy[0].item(), xyxy[2].item()])
@@ -178,6 +215,13 @@ def draw_boxes(img, bbox, names,object_id, identities=None, offset=(0, 0)):
 
 
 class DetectionPredictor(BasePredictor):
+    def __init__(self, cfg):
+        super().__init__(cfg)
+        self.producer = KafkaProducer(
+            bootstrap_servers='15.164.214.248:9092',
+            value_serializer=lambda v: json.dumps(v).encode('utf-8'),
+        )
+
 
     def get_annotator(self, img):
         return Annotator(img, line_width=self.args.line_thickness, example=str(self.model.names))
@@ -275,11 +319,29 @@ class DetectionPredictor(BasePredictor):
                 batch_messages.append(tracking_message)
 
             for msg in batch_messages:
-                producer.send("vision-data-topic", msg)
+                self.producer.send("vision-data-topic", msg)
 
+            self.producer.flush()
             # 명시적으로 flush할 수도 있음
-            producer.flush()
+        frame_rgb = cv2.cvtColor(im0, cv2.COLOR_BGR2RGB)
+        points = inference_and_restore(apgcc_model, device_apgcc, frame_rgb)
 
+        # 시각화
+        for pt in points:
+            cv2.circle(im0, (int(pt[0]), int(pt[1])), 3, (0, 0, 255), -1)
+
+        # Kafka로 heatmap 메시지 전송
+        heatmap_msg = {
+            "type": "heatmap",
+            "payload": {
+                "dashboardId": 1,
+                "detectedTime": int(time.time() * 1000),
+                "gridList": json.dumps([[int(x), int(y)] for x, y in points])
+            }
+        }
+        print(heatmap_msg)
+        self.producer.send("vision-data-topic", heatmap_msg)
+        self.producer.flush()
         return log_string
 
 
