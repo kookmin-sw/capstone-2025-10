@@ -11,7 +11,7 @@ public interface ProductService {
     //상품 생성
     Product createProduct(ProductDto dto, User user);
 
-    //상품 수정
+    //상품 수정 (product Id)
     Product updateProduct(Long id, ProductDto dto, User user);
 
     //상품 조회 (Product Id 기준)
