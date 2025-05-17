@@ -124,21 +124,31 @@ const BlueprintCard = ({ sections, setSections, upload, dashboardId }) => {
         focusClear();
       }}
     >
-      <div
-        style={{ width: "480px", height: "480px", position: "relative" }}
-        onMouseUp={handleMouseUp}
-      >
-        <ImageUploader {...upload} />
-        {upload.file !== null && !upload.isUploading && (
-          <ImageGrid
-            selected={selected}
-            sections={sections}
-            focusIndex={focusIndex}
-            handleMouseDown={handleMouseDown}
-            handleMouseEnter={handleMouseEnter}
-            handleMouseClick={handleMouseClick}
-          />
+      <div>
+        {upload.file !== null && !upload.isUploading ? (
+          <h3 style={{ marginBottom: "12px" }} className={styles.title}>
+            <span className={styles["step-badge"]}>STEP 2</span>
+            섹션 추가
+          </h3>
+        ) : (
+          <></>
         )}
+        <div
+          style={{ width: "480px", height: "480px", position: "relative" }}
+          onMouseUp={handleMouseUp}
+        >
+          <ImageUploader {...upload} />
+          {upload.file !== null && !upload.isUploading && (
+            <ImageGrid
+              selected={selected}
+              sections={sections}
+              focusIndex={focusIndex}
+              handleMouseDown={handleMouseDown}
+              handleMouseEnter={handleMouseEnter}
+              handleMouseClick={handleMouseClick}
+            />
+          )}
+        </div>
       </div>
       {upload.file !== null && !upload.isUploading ? (
         <div
@@ -157,9 +167,11 @@ const BlueprintCard = ({ sections, setSections, upload, dashboardId }) => {
               return (
                 <div
                   key={idx}
-                  style={{
-                    border: idx === focusIndex ? "1px solid #000" : "",
-                  }}
+                  style={
+                    {
+                      //border: idx === focusIndex ? "1px solid #000" : "",
+                    }
+                  }
                   onClick={(e) => {
                     e.preventDefault();
                     setFocusIndex(idx);
@@ -186,7 +198,7 @@ const BlueprintCard = ({ sections, setSections, upload, dashboardId }) => {
                       handleDeleteSection(idx);
                     }}
                   >
-                    삭제
+                    <img src="/x.svg" alt="delete button" />
                   </button>
                 </div>
               );

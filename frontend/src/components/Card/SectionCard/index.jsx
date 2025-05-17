@@ -69,19 +69,31 @@ const SectionCard = ({ sections, setSections, image, dashboardId }) => {
     await getProducts();
     closeModal();
   };
+  function updateHSLAAlpha(hslaStr, newAlpha) {
+    return hslaStr.replace(
+      /hsla\(([^,]+),\s*([^,]+),\s*([^,]+),\s*[^)]+\)/,
+      `hsla($1, $2, $3, ${newAlpha})`,
+    );
+  }
 
   return (
     <div className={styles["upload-card"]}>
-      <div className={styles["image-grid-wrapper"]}>
-        {image && (
-          <img src={URL.createObjectURL(image)} alt="Uploaded Preview" />
-        )}
-        <ImageGrid
-          sections={sections}
-          handleMouseClick={onSectionClick}
-          focusIndex={focusIndex}
-          selected={new Set(sections[focusIndex]?.cells)}
-        />
+      <div>
+        <h3 style={{ marginBottom: "12px" }} className={styles.title}>
+          <span className={styles["step-badge"]}>STEP 4</span>
+          상품 배치
+        </h3>
+        <div className={styles["image-grid-wrapper"]}>
+          {image && (
+            <img src={URL.createObjectURL(image)} alt="Uploaded Preview" />
+          )}
+          <ImageGrid
+            sections={sections}
+            handleMouseClick={onSectionClick}
+            focusIndex={focusIndex}
+            selected={new Set(sections[focusIndex]?.cells)}
+          />
+        </div>
       </div>
       <div
         className={styles["right-wrapper"]}
@@ -90,7 +102,14 @@ const SectionCard = ({ sections, setSections, image, dashboardId }) => {
         <div className={styles["button-wrapper"]}>
           <Button onClick={handleAddSection}>Add Product</Button>
         </div>
-        <div className={styles["list-wrapper"]}>
+        <div
+          className={styles["list-wrapper"]}
+          style={{
+            backgroundColor: sections[focusIndex]?.color
+              ? updateHSLAAlpha(sections[focusIndex]?.color, 0.1)
+              : "#FAFAFA",
+          }}
+        >
           {products.map((product, idx) => {
             return (
               <div
@@ -106,7 +125,7 @@ const SectionCard = ({ sections, setSections, image, dashboardId }) => {
                     handleDeleteSection(idx);
                   }}
                 >
-                  삭제
+                  <img src="/x.svg" alt="delete button" />
                 </button>
               </div>
             );
@@ -145,7 +164,7 @@ const ProductList = ({ products, onSave }) => {
         ))}
       </div>
 
-      <div style={{ marginLeft: "auto" }}>
+      <div style={{ display: "flex", justifyContent: "right", width: "100%" }}>
         <Button
           onClick={() => onSave(products[Array.from(selectedIndex)[0]].id)}
         >
