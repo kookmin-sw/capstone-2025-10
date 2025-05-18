@@ -8,7 +8,7 @@ const SurveyHeaderActions = ({ searchTerm, setSearchTerm, handleDeleteSelected, 
       <div className={styles.searchContainer}>
         <input
           type="text"
-          placeholder="설문조사명 검색"
+          placeholder="ID 검색"
           className={styles.searchInput}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -33,7 +33,7 @@ const SurveyHeaderActions = ({ searchTerm, setSearchTerm, handleDeleteSelected, 
       <button 
         className={styles.refreshButton}
         onClick={refreshSurveys}
-        title="설문조사 목록 새로고침"
+        title="설문 응답 목록 새로고침"
       >
         <svg 
           xmlns="http://www.w3.org/2000/svg" 
@@ -54,13 +54,13 @@ const SurveyHeaderActions = ({ searchTerm, setSearchTerm, handleDeleteSelected, 
       </button>
 
       <button className={styles.createButton}>
-        <Link href="/survey/create">설문조사 생성</Link>
+        <Link href="/survey/create">설문 응답 추가</Link>
       </button>
       <button 
         className={styles.primaryButton}
         onClick={handleDeleteSelected}
       >
-        설문조사 삭제
+        설문 응답 삭제
       </button>
     </div>
   );

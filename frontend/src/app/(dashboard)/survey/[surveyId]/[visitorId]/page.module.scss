@@ -10,8 +10,24 @@
 }
 
 /* 글로벌 헤더 숨김 처리 */
-:global(header), :global(.header), :global(nav) {
+:global(header), 
+:global(.header), 
+:global(nav), 
+:global(.sidebar), 
+:global(.sideNav), 
+:global(.sideNavigation),
+:global(.side-navigation),
+:global(#sideNav) {
   display: none !important;
+  width: 0 !important;
+}
+
+/* 콘텐츠 영역 너비 조정 */
+:global(.content) {
+  display: block !important;
+  width: 100% !important;
+  margin-left: 0 !important;
+  padding-left: 0 !important;
 }
 
 .title {
