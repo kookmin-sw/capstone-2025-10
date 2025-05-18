@@ -13,6 +13,7 @@ async function getVisitorData(id) {
 export default async function Dashboard({ params }) {
   const { id } = await params;
   const visitors = await getVisitorData(id);
+  console.log(visitors);
 
   return (
     <div className={styles.page}>

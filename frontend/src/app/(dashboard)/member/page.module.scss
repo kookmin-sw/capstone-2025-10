@@ -160,3 +160,20 @@
   color: #555555;
   border-color: #555555;
 }
+
+/* 로딩 및 에러 컨테이너 */
+.loadingContainer, .errorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  text-align: center;
+  color: #666;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 16px;
+}
+
+.errorContainer {
+  color: #d32f2f;
+}

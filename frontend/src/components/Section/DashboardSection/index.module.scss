@@ -5,6 +5,16 @@
   width: 100%;
   padding: 40px;
 
+  .header {
+    display: flex;
+    justify-content: space-between;
+
+    & > p {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+    }
+  }
   .chart-full {
     background: #fff;
     border-radius: 12px;
