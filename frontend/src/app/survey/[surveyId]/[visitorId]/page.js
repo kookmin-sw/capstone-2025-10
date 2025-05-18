@@ -166,124 +166,130 @@ export default function SurveyPage() {
 
   return (
     <>
-      <form className={styles.form} onSubmit={handleSubmit}>
-        <h1 className={styles.title}>설문조사</h1>
-        
-        {/* 1. 연령대 질문 */}
-        <div className={styles.question}>
-          <p>1. 귀하의 연령대는 무엇입니까?</p>
-          {ageOptions.map((age) => (
-            <button
-              key={age}
-              type="button"
-              className={`${styles.routeButton} ${formData.ageQuestion === age ? styles.selected : ''}`}
-              onClick={() => handleOptionSelect('ageQuestion', age)}
-            >
-              {age}
-            </button>
-          ))}
-          {errors.ageQuestion && <p className={styles.errorText}>{errors.ageQuestion}</p>}
-        </div>
-        
-        {/* 2. 성별 질문 */}
-        <div className={styles.question}>
-          <p>2. 귀하의 성별은 무엇입니까?</p>
-          {genderOptions.map((gender) => (
-            <button
-              key={gender}
-              type="button"
-              className={`${styles.routeButton} ${formData.genderQuestion === gender ? styles.selected : ''}`}
-              onClick={() => handleOptionSelect('genderQuestion', gender)}
-            >
-              {gender}
-            </button>
-          ))}
-          {errors.genderQuestion && <p className={styles.errorText}>{errors.genderQuestion}</p>}
-        </div>
-        
-        {/* 3. 팝업을 알게된 경로 */}
-        <div className={styles.question}>
-          <p>3. 해당 팝업을 알게된 경로가 무엇입니까? (복수 선택 가능)</p>
-          {routeOptions.map((route) => (
-            <button
-              key={route}
-              type="button"
-              className={`${styles.routeButton} ${formData.knowRoute.includes(route) ? styles.selected : ''}`}
-              onClick={() => handleRouteSelect(route)}
-            >
-              {route}
-            </button>
-          ))}
-          
-          {errors.knowRoute && <p className={styles.errorText}>{errors.knowRoute}</p>}
-          
-          {formData.knowRoute.includes('기타') && (
-            <div>
-              <label className={styles.otherLabel}>기타의 내용을 작성해주세요. (주관식)</label>
-              <input
-                type="text"
-                name="otherRoute"
-                value={formData.otherRoute}
-                onChange={handleTextChange}
-                maxLength={80}
-                placeholder="내용을 입력해주세요."
-                className={styles.otherInput}
-              />
-              {errors.otherRoute && <p className={styles.errorText}>{errors.otherRoute}</p>}
-            </div>
-          )}
-        </div>
-        
-        {/* 4. 좋았던 점 */}
-        <div className={styles.question}>
-          <p>4. 해당 행사에서 가장 좋았던 점은 무엇입니까? (주관식)</p>
-          <textarea
-            name="bestThing"
-            value={formData.bestThing}
-            onChange={handleTextChange}
-            maxLength={160}
-            placeholder="내용을 입력해주세요."
-            className={styles.textarea}
-          />
-          <div className={styles.charCount}>{formData.bestThing.length}/160</div>
-        </div>
-        
-        {/* 5. 안좋았던 점 */}
-        <div className={styles.question}>
-          <p>5. 해당 행사에서 가장 안좋았던 점은 무엇입니까? (주관식)</p>
-          <textarea
-            name="worstThing"
-            value={formData.worstThing}
-            onChange={handleTextChange}
-            maxLength={160}
-            placeholder="내용을 입력해주세요."
-            className={styles.textarea}
-          />
-          <div className={styles.charCount}>{formData.worstThing.length}/160</div>
-        </div>
-        
-        {/* 6. 추가 사항 */}
-        <div className={styles.question}>
-          <p>6. 추가적으로 바라는 사항은 무엇입니까? (주관식)</p>
-          <textarea
-            name="additionalThing"
-            value={formData.additionalThing}
-            onChange={handleTextChange}
-            maxLength={160}
-            placeholder="내용을 입력해주세요."
-            className={styles.textarea}
-          />
-          <div className={styles.charCount}>{formData.additionalThing.length}/160</div>
-        </div>
-        
-        <button
-          type="submit"
-          className={`${styles.submitButton} ${isRequiredCompleted ? styles.active : ''}`}
-          disabled={isSubmitting}
+      <div style={{ width: "100%" }}>
+        <form 
+          className={styles.form} 
+          onSubmit={handleSubmit}
+          style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}
         >
-          {isSubmitting ? '제출 중...' : '제출하기'}
-        </button>
-      </form>
+          <h1 className={styles.title}>설문조사</h1>
+          
+          {/* 1. 연령대 질문 */}
+          <div className={styles.question}>
+            <p>1. 귀하의 연령대는 무엇입니까?</p>
+            {ageOptions.map((age) => (
+              <button
+                key={age}
+                type="button"
+                className={`${styles.routeButton} ${formData.ageQuestion === age ? styles.selected : ''}`}
+                onClick={() => handleOptionSelect('ageQuestion', age)}
+              >
+                {age}
+              </button>
+            ))}
+            {errors.ageQuestion && <p className={styles.errorText}>{errors.ageQuestion}</p>}
+          </div>
+          
+          {/* 2. 성별 질문 */}
+          <div className={styles.question}>
+            <p>2. 귀하의 성별은 무엇입니까?</p>
+            {genderOptions.map((gender) => (
+              <button
+                key={gender}
+                type="button"
+                className={`${styles.routeButton} ${formData.genderQuestion === gender ? styles.selected : ''}`}
+                onClick={() => handleOptionSelect('genderQuestion', gender)}
+              >
+                {gender}
+              </button>
+            ))}
+            {errors.genderQuestion && <p className={styles.errorText}>{errors.genderQuestion}</p>}
+          </div>
+          
+          {/* 3. 팝업을 알게된 경로 */}
+          <div className={styles.question}>
+            <p>3. 해당 팝업을 알게된 경로가 무엇입니까? (복수 선택 가능)</p>
+            {routeOptions.map((route) => (
+              <button
+                key={route}
+                type="button"
+                className={`${styles.routeButton} ${formData.knowRoute.includes(route) ? styles.selected : ''}`}
+                onClick={() => handleRouteSelect(route)}
+              >
+                {route}
+              </button>
+            ))}
+            
+            {errors.knowRoute && <p className={styles.errorText}>{errors.knowRoute}</p>}
+            
+            {formData.knowRoute.includes('기타') && (
+              <div>
+                <label className={styles.otherLabel}>기타의 내용을 작성해주세요. (주관식)</label>
+                <input
+                  type="text"
+                  name="otherRoute"
+                  value={formData.otherRoute}
+                  onChange={handleTextChange}
+                  maxLength={80}
+                  placeholder="내용을 입력해주세요."
+                  className={styles.otherInput}
+                />
+                {errors.otherRoute && <p className={styles.errorText}>{errors.otherRoute}</p>}
+              </div>
+            )}
+          </div>
+          
+          {/* 4. 좋았던 점 */}
+          <div className={styles.question}>
+            <p>4. 해당 행사에서 가장 좋았던 점은 무엇입니까? (주관식)</p>
+            <textarea
+              name="bestThing"
+              value={formData.bestThing}
+              onChange={handleTextChange}
+              maxLength={160}
+              placeholder="내용을 입력해주세요."
+              className={styles.textarea}
+            />
+            <div className={styles.charCount}>{formData.bestThing.length}/160</div>
+          </div>
+          
+          {/* 5. 안좋았던 점 */}
+          <div className={styles.question}>
+            <p>5. 해당 행사에서 가장 안좋았던 점은 무엇입니까? (주관식)</p>
+            <textarea
+              name="worstThing"
+              value={formData.worstThing}
+              onChange={handleTextChange}
+              maxLength={160}
+              placeholder="내용을 입력해주세요."
+              className={styles.textarea}
+            />
+            <div className={styles.charCount}>{formData.worstThing.length}/160</div>
+          </div>
+          
+          {/* 6. 추가 사항 */}
+          <div className={styles.question}>
+            <p>6. 추가적으로 바라는 사항은 무엇입니까? (주관식)</p>
+            <textarea
+              name="additionalThing"
+              value={formData.additionalThing}
+              onChange={handleTextChange}
+              maxLength={160}
+              placeholder="내용을 입력해주세요."
+              className={styles.textarea}
+            />
+            <div className={styles.charCount}>{formData.additionalThing.length}/160</div>
+          </div>
+          
+          <button
+            type="submit"
+            className={`${styles.submitButton} ${isRequiredCompleted ? styles.active : ''}`}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? '제출 중...' : '제출하기'}
+          </button>
+        </form>
+      </div>
 
       {/* 완료 모달 */}
       {showModal && (

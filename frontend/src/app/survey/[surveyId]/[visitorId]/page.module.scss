@@ -1,10 +1,12 @@
 .form {
   max-width: 100%;
   width: 100%;
-  margin: 0 auto;
+  margin: 0;
   padding: 16px;
   background-color: #FFFFFF;
   box-sizing: border-box;
+  display: block;
+  position: relative;
 }
 
 /* 글로벌 헤더 숨김 처리 */
