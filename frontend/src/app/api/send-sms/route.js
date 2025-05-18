@@ -60,7 +60,7 @@ export async function POST(request) {
     
     // 요청 본문
     const body = {
-      type,
+      type: 'LMS',
       contentType: 'COMM',
       countryCode: '82',
       from: SENDER_PHONE,
