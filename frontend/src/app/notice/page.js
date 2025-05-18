@@ -13,6 +13,7 @@ import MessegeView from '@/components/NoticeList/MessegeView';
 import useNoticeMessage from '@/hooks/useNoticeMessage';
 import useNoticeRecipient from '@/hooks/useNoticeRecipient';
 import { isButtonActive, sendMessage } from '@/utils/messageUtils';
+import { sendSMS } from '@/app/api/sms';
 // import styles from './page.module.scss'; - 레이아웃 컴포넌트로 이동되어 더 이상 필요하지 않음
 
 export default function AlarmSendPage() {
@@ -78,25 +79,52 @@ export default function AlarmSendPage() {
       // 팝업 닫기
       setShowSendConfirmPopup(false);
       
-      // 메시지 전송 API 호출
-      const messageData = {
-        title: messageTitle,
-        content: messageContent,
-        type: messageType,
-        recipients: recipientList
-      };
+      // 디버깅용 - 실제 recipientList 구조 확인
+      console.log('수신자 목록:', recipientList);
       
-      const result = await sendMessage(messageData);
+      // 수신자 전화번호 목록 추출
+      let recipients = [];
       
-      // 전송 성공 시 상태 업데이트
-      if (result.success) {
-        setMessageSent(true);
-        // 메시지 카운트 갱신
-        handleRefresh();
+      if (recipientList && recipientList.length > 0) {
+        // 전화번호 추출 코드
+        recipients = recipientList.map(item => {
+          // 기본 형태가 전화번호인 경우
+          if (typeof item === 'string') {
+            return item;
+          }
+          // 객체 형태로 저장된 경우, 전화번호 필드 추출
+          if (item && item.phone) {
+            return item.phone;
+          }
+          // ID 필드가 전화번호인 경우
+          if (item && item.id) {
+            return item.id;
+          }
+          return null;
+        }).filter(phone => phone !== null);
       }
+      
+      console.log('추출된 전화번호 목록:', recipients);
+      
+      // SENS API를 통한 메시지 발송
+      const result = await sendSMS({
+        recipients,
+        content: messageContent,
+        title: messageTitle,
+        type: messageType
+      });
       
       // 전송 완료 팝업 표시
       setShowSendCompletePopup(true);
+      
+      // 나머지 코드는 유지
+      if (result.success) {
+        setMessageSent(true);
+        handleRefresh();
+      } else {
+        console.error('메시지 전송 실패:', result.error);
+        alert('메시지 전송에 실패했습니다.');
+      }
     } catch (error) {
       console.error('메시지 전송 중 오류:', error);
       alert('메시지 전송 중 오류가 발생했습니다.');
@@ -115,14 +143,7 @@ export default function AlarmSendPage() {
   // 좌측 컨텐츠 영역 구성
   const leftContent = (
     <>
-      {/* 메시지 잔여 건수 카드 */}
-      <MessegeCount 
-        messageCount={messageCount}
-        messageInfo={messageInfo}
-        isLoading={isLoading}
-        handleRefresh={handleRefresh}
-        togglePopup={togglePopup}
-      />
+
       
       {/* 메시지 발송 대상 카드 */}
       <MessegeCustomer
@@ -148,15 +169,17 @@ export default function AlarmSendPage() {
 
   // 우측 컨텐츠 영역 구성
   const rightContent = (
-    <MessegeView 
-      messageTitle={messageTitle}
-      messageContent={messageContent}
-      messageType={messageType}
-      isButtonActive={checkButtonActive}
-      onMessageSent={handleMessageSent}
-      onSendClick={handleSendClick}
-      isSending={isSending}
-    />
+    <div style={{ paddingRight: '40px' }}>
+      <MessegeView 
+        messageTitle={messageTitle}
+        messageContent={messageContent}
+        messageType={messageType}
+        isButtonActive={checkButtonActive}
+        onMessageSent={handleMessageSent}
+        onSendClick={handleSendClick}
+        isSending={isSending}
+      />
+    </div>
   );
 
   return (
