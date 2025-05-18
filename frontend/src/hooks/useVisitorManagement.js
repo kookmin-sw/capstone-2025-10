@@ -37,7 +37,7 @@ export default function useVisitorManagement() {
     const loadVisitors = async () => {
       try {
         setLoading(true);
-        const data = await fetchVisitors();
+        const data = await fetchVisitors(1);
         setVisitors(data);
         setError(null);
       } catch (err) {
@@ -61,6 +61,26 @@ export default function useVisitorManagement() {
 
     loadVisitors();
   }, []);
+
+  // 방문자 목록 새로고침 함수
+  const refreshVisitors = async () => {
+    try {
+      setLoading(true);
+      // 대시보드 ID 1로 방문자 목록 새로고침
+      const data = await fetchVisitors(1);
+      setVisitors(data);
+      setError(null);
+
+      // 체크박스 상태 초기화
+      setCheckedItems({});
+      setAllChecked(false);
+    } catch (err) {
+      console.error("방문자 목록 새로고침 중 오류 발생:", err);
+      setError("방문자 목록을 새로고침하는데 실패했습니다.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // 검색어로 필터링된 데이터
   const filteredVisitors = visitors.filter(visitor => 
@@ -124,13 +144,13 @@ export default function useVisitorManagement() {
 
     if (confirm(`선택한 ${selectedIds.length}명의 방문자를 삭제하시겠습니까?`)) {
       try {
-        // 선택된 방문자들 삭제
+        // 선택된 방문자들 삭제 (대시보드 ID 1 사용)
         for (const id of selectedIds) {
-          await deleteVisitor(id);
+          await deleteVisitor(id, 1);
         }
 
-        // 삭제 후 목록 다시 로드
-        const updatedVisitors = await fetchVisitors();
+        // 삭제 후 목록 다시 로드 (대시보드 ID 1 사용)
+        const updatedVisitors = await fetchVisitors(1);
         setVisitors(updatedVisitors);
         
         // 체크박스 상태 초기화
@@ -159,6 +179,7 @@ export default function useVisitorManagement() {
     handleCheckboxClick,
     handleSelectAll,
     handleDetail,
-    handleDeleteSelected
+    handleDeleteSelected,
+    refreshVisitors
   };
 } 

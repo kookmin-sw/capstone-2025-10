@@ -25,7 +25,8 @@ export default function MemberDetailPage({ params }) {
       try {
         setLoading(true);
         const visitorId = parseInt(id);
-        const visitorData = await fetchVisitorById(visitorId);
+        // 대시보드 ID를 1로 설정하여 방문객 상세 정보 가져오기
+        const visitorData = await fetchVisitorById(visitorId, 1);
         
         if (visitorData) {
           setMemberInfo({
