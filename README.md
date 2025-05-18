@@ -37,6 +37,12 @@
     <img src = "https://raw.githubusercontent.com/kookmin-sw/capstone-2025-10/master/assets/poster.png" width = "60%"/>
     </p>
 </div>
+<a href="https://drive.google.com/file/d/101BuD1QRINqIVViTEKw_8v96uTytM03h/view?usp=sharing" target="_blank">
+<p align = "center">
+  <img src="https://raw.githubusercontent.com/kookmin-sw/capstone-2025-10/master/assets/paper_1.png" width="40%">
+<a href="https://drive.google.com/file/d/1zuieTjI2CBtVPmgTzUbhb4PyNx5jjB6E/view?usp=sharing" target="_blank">
+  <img src="https://raw.githubusercontent.com/kookmin-sw/capstone-2025-10/master/assets/paper_2.png" width="40%">
+</a>
 
 ### | AI 비전 기반 오프라인 데이터 시각화 서비스
 -  **OFFFLOW**는 팝업스토어와 같은 오프라인 공간에서 AI기반 객체인식 기술을 활용하여 **고객 동선 및 군중 밀집도를 실시간으로 분석**하고 방문 고객의 **성별, 연령대와 체류 시간을 온라인 데이터로 변환 및 시각화**하여 제공합니다.
@@ -265,18 +271,19 @@ AI 분석 결과는 Redis 및 Kafka를 활용하여 비동기식 메모리큐에
 <br/>
 
 ## 📝 참고 자료
-### 논문
-<a href="" target="_blank">
-<p align = "center">
-  <img src="https://raw.githubusercontent.com/kookmin-sw/capstone-2025-10/master/assets/paper_1.png" width="40%">
-<a href="" target="_blank">
-  <img src="https://raw.githubusercontent.com/kookmin-sw/capstone-2025-10/master/assets/paper_2.png" width="40%">
-</a>
 
-### [중간 발표 자료]()
-### [중간 보고서]()
-### [시연 동영상]()
-### [포스터]()
-### [최종 발표 자료]()
-### [결과 보고서]()
-### [회의록]()
+### <a href="https://drive.google.com/file/d/101BuD1QRINqIVViTEKw_8v96uTytM03h/view?usp=sharing" target="_blank">논문1</a> | <a href="https://drive.google.com/file/d/1zuieTjI2CBtVPmgTzUbhb4PyNx5jjB6E/view?usp=sharing" target="_blank">논문2</a>
+
+### <a href="https://drive.google.com/file/d/1pW4vdfuD9rNDTnepp86kpLcfVblzdRKL/view?usp=sharing" target="_blank">수행 계획서</a>
+
+### <a href="https://drive.google.com/file/d/1NgPYaJ0WWilvp6KvgJUXREqFU6bwhMLK/view?usp=sharing" target="_blank">중간 발표 자료</a>
+
+### <a href="" target="_blank">시연 동영상</a>
+
+### <a href="https://drive.google.com/file/d/1l8P5uDkvgciT3G50BEa2qxZpi9-E_244/view?usp=sharing" target="_blank">포스터</a>
+
+### <a href="https://drive.google.com/file/d/1cN-sJrkvVY67GOnmQtYVh9RUbG3kZ9rW/view?usp=sharing" target="_blank">최종 발표 자료</a>
+
+### <a href="" target="_blank">결과 보고서</a>
+
+### <a href="https://stingy-class-db5.notion.site/183bbb466427805fbbc4c5304230a5f6?pvs=4" target="_blank">회의록</a>
