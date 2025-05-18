@@ -1,7 +1,7 @@
 // app/dashboard/[id]/page.jsx
-import DashboardSection from "@/components/Section/DashboardSection";
 import styles from "./page.module.scss";
 import { fetchWithSession } from "@/lib/fetchWithSession";
+import VisitorStatsSection from "@/components/Section/VisitorStatsSection";
 
 async function getVisitorData(id) {
   return await fetchWithSession(`http://localhost:8080/api/gender/${id}`, {
@@ -10,7 +10,7 @@ async function getVisitorData(id) {
   });
 }
 
-export default async function Dashboard({ params }) {
+export default async function VisitorStats({ params }) {
   const { id } = await params;
   const visitors = await getVisitorData(id);
   console.log(visitors);
@@ -18,7 +18,7 @@ export default async function Dashboard({ params }) {
   return (
     <div className={styles.page}>
       <main className={styles.main}>
-        <DashboardSection visitors={visitors} dashboardId={id} />
+        <VisitorStatsSection visitors={visitors} dashboardId={id} />
       </main>
       <footer className={styles.footer}></footer>
     </div>

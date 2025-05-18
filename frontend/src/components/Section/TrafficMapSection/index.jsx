@@ -7,6 +7,7 @@ import RequireLogin from "@/components/Login/RequireLogin";
 import ArrowCanvas from "@/components/Canvas/ArrowCanvas";
 import DashboardTable from "@/components/Table/DashboardTable";
 import Image from "next/image";
+import DateFilter from "@/components/Filter/DateFilter";
 
 const gridCols = 10;
 const cellSize = 480 / 10;
@@ -74,13 +75,21 @@ function generateArrowsFromTracking(
 
 const TrafficMapSection = ({ sections, trafficPoints, image }) => {
   const canvasRef = useRef(null);
+  const [dateRange, setDateRange] = useState([
+    new Date("2024-01-01"),
+    new Date("2024-12-31"),
+  ]);
+  const filteredTraffic = trafficPoints.filter((p) => {
+    const d = new Date(p.createdAt);
+    return d >= dateRange[0] && d <= dateRange[1];
+  });
   const [selectedSectionId, setSelectedSectionId] = useState(null);
 
   const allArrows = generateArrowsFromTracking(
-    trafficPoints,
+    filteredTraffic,
     sections,
-    1280,
     720,
+    480,
     10,
     10,
     1280,
@@ -108,13 +117,17 @@ const TrafficMapSection = ({ sections, trafficPoints, image }) => {
   return (
     <RequireLogin>
       <section className={styles.section}>
+        <div className={styles["header"]}>
+          <p>동선 추적</p>
+          <DateFilter dateRange={dateRange} setDateRange={setDateRange} />
+        </div>
         <CardContainer showDivider={false} margin="40px">
           <div className={styles["image-grid-wrapper"]}>
             <Image
               src="/output_result.jpg"
               alt={"img"}
-              width={1280}
-              height={720}
+              width={1080}
+              height={608}
             />
             {/*{image && <img src={"output_result.jpg"} alt="Uploaded Preview" />}*/}
             <div className={styles.canvas}>
@@ -129,7 +142,7 @@ const TrafficMapSection = ({ sections, trafficPoints, image }) => {
           </div>
 
           <DashboardTable
-            trafficPoints={trafficPoints}
+            trafficPoints={filteredTraffic}
             onSectionSelect={setSelectedSectionId}
           />
         </CardContainer>

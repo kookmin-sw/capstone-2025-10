@@ -1,5 +1,6 @@
 'use client';
 
+
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import styles from './page.module.scss';
@@ -188,9 +189,6 @@ export default function VisitorRegistration() {
         </div>
         
         <div className={styles.divider} />
-                
-        
-        
         <div className={styles.termsContainer}>
           <div className={styles.termsCheckbox} onClick={toggleTermsAgreement}>
             <Image 

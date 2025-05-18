@@ -90,7 +90,7 @@ const ProductCard = ({ mode = "edit", dashboardId }) => {
     <div className={styles.card}>
       <div className={styles.content}>
         <div className={styles.header}>
-          <span className={styles["step-badge"]}>STEP 2</span>
+          <span className={styles["step-badge"]}>STEP 3</span>
           <h3 className={styles["title"]}>상품 관리</h3>
         </div>
         <div className={styles["image-wrapper"]}>
@@ -176,7 +176,8 @@ const ProductCard = ({ mode = "edit", dashboardId }) => {
             <div
               key={idx}
               style={{
-                border: "1px solid #000",
+                border: "1px solid #E8E8E8",
+                borderRadius: "10px",
               }}
               onClick={(e) => {
                 e.preventDefault();
@@ -184,14 +185,16 @@ const ProductCard = ({ mode = "edit", dashboardId }) => {
                 setOriginalProduct(product); // 초기값 저장
               }}
             >
-              {product.name}
+              <p>
+                {product.name} | {product.price}원
+              </p>
               <button
                 onClick={(e) => {
                   e.preventDefault();
                   onDeleteClick(product.id);
                 }}
               >
-                삭제
+                <img src="/x.svg" alt="delete button" />
               </button>
             </div>
           );

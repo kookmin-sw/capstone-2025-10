@@ -17,6 +17,7 @@ import {
 
 import styles from "./index.module.scss";
 import RequireLogin from "@/components/Login/RequireLogin";
+import DateFilter from "@/components/Filter/DateFilter";
 
 ChartJS.register(
   CategoryScale,
@@ -93,9 +94,18 @@ const getChartDataFromVisitors = (visitors) => {
 };
 
 const DashboardSection = ({ visitors }) => {
+  const [dateRange, setDateRange] = useState([
+    new Date("2024-01-01"), // 시작일
+    new Date("2024-01-07"), // 종료일
+  ]);
   const [test, setTest] = useState(visitors);
+
+  const filteredVisitors = visitors.filter((v) => {
+    const date = new Date(v.detectedTime);
+    return date >= dateRange[0] && date <= dateRange[1];
+  });
   const { genderCount, ageGroups, timeGender } =
-    getChartDataFromVisitors(visitors);
+    getChartDataFromVisitors(filteredVisitors);
 
   const totalGenderCount = genderCount.male + genderCount.female;
   const dominantGender =
@@ -191,6 +201,10 @@ const DashboardSection = ({ visitors }) => {
   return (
     <RequireLogin>
       <section className={styles["visitor-stats-section"]}>
+        <div className={styles["header"]}>
+          <p>매장방문</p>
+          <DateFilter dateRange={dateRange} setDateRange={setDateRange} />
+        </div>
         <div className={styles["chart-full"]}>
           <h3>
             <b>{maxMaleTime.label}</b>에는 <b>남성</b>이{" "}
