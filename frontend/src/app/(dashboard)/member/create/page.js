@@ -4,8 +4,12 @@ import styles from "./page.module.scss";
 import Header from "@/components/Header";
 import CardContainer from "@/components/CardContainer";
 import TextInput from "@/components/Input/TextInput";
+import { createVisitor } from "@/lib/api/visitor";
+import { useRouter } from "next/navigation";
 
 export default function MemberCreatePage() {
+  const router = useRouter();
+  
   // 회원 정보 상태
   const [memberInfo, setMemberInfo] = useState({
     name: "",
@@ -18,6 +22,7 @@ export default function MemberCreatePage() {
   // 폼 유효성 상태
   const [isValid, setIsValid] = useState(false);
   const [passwordMatch, setPasswordMatch] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   // 입력값 변경 처리
   const handleInputChange = (e) => {
@@ -43,12 +48,31 @@ export default function MemberCreatePage() {
   }, [memberInfo, passwordMatch]);
 
   // 저장 버튼 핸들러
-  const handleSave = () => {
-    if (!isValid) {return;}
+  const handleSave = async () => {
+    if (!isValid || loading) return;
 
-    // 실제 저장 로직 구현
-    console.log("저장된 회원 정보:", memberInfo);
-    alert("방문객 계정이 생성되었습니다.");
+    try {
+      setLoading(true);
+      
+      // 서버에 전송할 데이터 준비
+      const visitorData = {
+        name: memberInfo.name,
+        userId: memberInfo.userId,
+        password: memberInfo.password,
+        phone: memberInfo.phone
+      };
+      
+      // 대시보드 ID 1로 방문객 생성 API 호출
+      await createVisitor(visitorData, 1);
+      
+      alert("방문객 계정이 생성되었습니다.");
+      router.push('/member'); // 목록 페이지로 이동
+    } catch (error) {
+      console.error("방문객 계정 생성 중 오류 발생:", error);
+      alert("방문객 계정 생성에 실패했습니다.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   // 취소 버튼 핸들러
@@ -56,7 +80,7 @@ export default function MemberCreatePage() {
     // 취소 로직 (예: 이전 페이지로 이동)
     if(confirm("입력 내용이 저장되지 않습니다. 취소하시겠습니까?")) {
       // 취소 처리 (페이지 이동 등)
-      window.history.back();
+      router.back();
     }
   };
 
@@ -66,15 +90,16 @@ export default function MemberCreatePage() {
       <button
         className={styles.cancelButton}
         onClick={handleCancel}
+        disabled={loading}
       >
         취소
       </button>
       <button
         className={`${styles.createButton} ${isValid ? styles.active : ''}`}
         onClick={handleSave}
-        disabled={!isValid}
+        disabled={!isValid || loading}
       >
-        생성
+        {loading ? "생성 중..." : "생성"}
       </button>
     </>
   );

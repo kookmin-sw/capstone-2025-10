@@ -19,7 +19,8 @@ export default function VisitorPage() {
     handlePageChange,
     handleCheckboxClick,
     handleDetail,
-    handleDeleteSelected
+    handleDeleteSelected,
+    refreshVisitors
   } = useVisitorManagement();
 
   return (
@@ -32,6 +33,7 @@ export default function VisitorPage() {
               searchTerm={searchTerm} 
               setSearchTerm={setSearchTerm}
               handleDeleteSelected={handleDeleteSelected}
+              refreshVisitors={refreshVisitors}
             />
           }
         >
