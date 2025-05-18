@@ -12,8 +12,18 @@ const SurveyTable = ({
   handleDetail, 
   handlePageChange 
 }) => {
+  // 날짜 포맷 함수
+  const formatDate = (dateString) => {
+    if (!dateString) return '-';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('ko-KR', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    });
+  };
+
   return (
- 
     <div style={{ width: "100%" }}>
       <div className={styles.tableContainer}>
         <table className={styles.table}>
@@ -22,10 +32,10 @@ const SurveyTable = ({
               <th className={styles.checkboxColumn}>
                 {/* 헤더의 체크박스 칸은 비워둠 */}
               </th>
-              <th>설문조사명</th>
-              <th>생성일</th>
-              <th>응답수</th>
-              <th>상태</th>
+              <th>ID</th>
+              <th>설문조사일</th>
+              <th>나이대</th>
+              <th>성별</th>
               <th>상세</th>
             </tr>
           </thead>
@@ -42,10 +52,10 @@ const SurveyTable = ({
                     onClick={() => handleCheckboxClick(survey.id)}
                   />
                 </td>
-                <td>{survey.title}</td>
-                <td>{survey.createdAt}</td>
-                <td>{survey.responseCount}개</td>
-                <td>{survey.status}</td>
+                <td>{survey.id}</td>
+                <td>{formatDate(survey.registerDate)}</td>
+                <td>{survey.ageQuestion || '-'}</td>
+                <td>{survey.genderQuestion || '-'}</td>
                 <td>
                   <button
                     className={styles.detailButton}

@@ -1,4 +1,4 @@
-"use client";
+ "use client";
 import React from "react";
 import styles from "./page.module.scss";
 import CardContainer from "@/components/CardContainer";
@@ -24,36 +24,38 @@ export default function SurveyListPage() {
   } = useSurveyManagement();
 
   return (
-    <div className={styles.layout}>
-      <div className={styles.mainContent}>
-        <CardContainer
-          title="설문조사 관리"
-          headerActions={
-            <SurveyHeaderActions 
-              searchTerm={searchTerm} 
-              setSearchTerm={setSearchTerm}
-              handleDeleteSelected={handleDeleteSelected}
-              refreshSurveys={refreshSurveys}
-            />
-          }
-        >
-          {loading ? (
-            <div className={styles.loadingContainer}>데이터를 불러오고 있습니다...</div>
-          ) : error ? (
-            <div className={styles.errorContainer}>{error}</div>
-          ) : (
-            <SurveyTable
-              surveys={surveys}
-              checkedItems={checkedItems}
-              currentPage={currentPage}
-              totalPages={totalPages}
-              handleCheckboxClick={handleCheckboxClick}
-              handleDetail={handleDetail}
-              handlePageChange={handlePageChange}
-            />
-          )}
-        </CardContainer>
+    <div style={{ width: "100%" }}>
+      <div className={styles.layout}>
+        <div className={styles.mainContent}>
+          <CardContainer
+            title="설문 응답 관리"
+            headerActions={
+              <SurveyHeaderActions 
+                searchTerm={searchTerm} 
+                setSearchTerm={setSearchTerm}
+                handleDeleteSelected={handleDeleteSelected}
+                refreshSurveys={refreshSurveys}
+              />
+            }
+          >
+            {loading ? (
+              <div className={styles.loadingContainer}>데이터를 불러오고 있습니다...</div>
+            ) : error ? (
+              <div className={styles.errorContainer}>{error}</div>
+            ) : (
+              <SurveyTable
+                surveys={surveys}
+                checkedItems={checkedItems}
+                currentPage={currentPage}
+                totalPages={totalPages}
+                handleCheckboxClick={handleCheckboxClick}
+                handleDetail={handleDetail}
+                handlePageChange={handlePageChange}
+              />
+            )}
+          </CardContainer>
+        </div>
       </div>
     </div>
   );
-} 
+}
