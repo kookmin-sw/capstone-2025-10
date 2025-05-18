@@ -17,9 +17,7 @@
   }
   .chart-full {
     background: #fff;
-    border-radius: 12px;
     padding: 42px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   }
 
   .chart-half-wrapper {
@@ -49,5 +47,42 @@
   canvas {
     width: 100% !important;
     height: auto !important;
+  }
+}
+
+.contents {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.table-wrapper {
+  background: #fff;
+  padding: 32px;
+  overflow-x: auto;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+
+    th, td {
+      border: 1px solid #e0e0e0;
+      padding: 16px;
+      font-size: 14px;
+    }
+
+    th {
+      background-color: #fcfcfc;
+      font-weight: 600;
+    }
+
+    td span {
+      display: block;
+      font-size: 12px;
+      color: #7f7f7f;
+      margin-top: 4px;
+    }
   }
 }

@@ -46,6 +46,16 @@ const SideNavigation = () => {
         >
           <span>히트맵</span>
         </a>
+        <a
+          className={
+            isActive("/visitor-stats")
+              ? styles["menu-item-active"]
+              : styles["menu-item"]
+          }
+          href="/visitor-stats/1"
+        >
+          <span>사용자 통계</span>
+        </a>
       </div>
     </div>
   );

@@ -53,7 +53,7 @@ export default function HeatmapCanvas({
   originalHeight = 480,
 }) {
   const draw = (ctx) => {
-    ctx.clearRect(0, 0, 1280, 720);
+    ctx.clearRect(0, 0, 1080, 608);
     console.log(
       "ctx.canvas.width, ctx.canvas.height",
       ctx.canvas.width,

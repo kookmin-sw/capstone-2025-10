@@ -21,13 +21,16 @@ const HeatmapSection = ({ heatmapData, sections, image }) => {
   return (
     <RequireLogin>
       <section className={styles.section}>
+        <div className={styles["header"]}>
+          <p>실시간 HEATMAP</p>
+        </div>
         <CardContainer showDivider={false} margin="40px">
           <div className={styles["image-grid-wrapper"]}>
             <Image
               src="/output_result.jpg"
               alt={"img"}
-              width={1280}
-              height={720}
+              width={1080}
+              height={608}
             />
             {/*<ImageGrid sections={sections} />*/}
             <div className={styles.canvas}>

@@ -30,6 +30,8 @@ function transformToHeatmapData(data) {
     heatmapData[key] = (heatmapData[key] || 0) + 1;
   });
 
+  console.log(heatmapData);
+
   return heatmapData;
 }
 
