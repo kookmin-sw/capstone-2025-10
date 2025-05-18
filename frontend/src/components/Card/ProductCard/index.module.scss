@@ -43,7 +43,7 @@
     .title {
       font-family: Noto Sans KR;
       font-weight: 700;
-      font-size: 28px;
+      font-size: 24px;
     }
   }
 
@@ -107,6 +107,8 @@
 .list-wrapper {
   width: 320px;
   height: 100%;
+  padding: 14px;
+  gap: 14px;
   display: flex;
   flex-direction: column;
   border: 1px solid var(--gray-3);
@@ -114,8 +116,9 @@
   overflow: hidden;
   overflow-y: scroll;
   font-size: 16px;
-  font-weight: bold;
+  font-weight: 500;
   color: var(--black);
+  background: #FAFAFA;
 
   -ms-overflow-style: none; /* 인터넷 익스플로러 */
   scrollbar-width: none; /* 파이어폭스 */
@@ -129,7 +132,15 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 8px 24px;
+    padding: 8px 16px;
+    background: #FFF;
+    white-space: pre;
+
+
+    & > p {
+      width: 220px;
+      overflow: hidden;
+    }
 
     & > input {
       background: transparent;
@@ -144,9 +155,5 @@
         border: none;
       }
     }
-  }
-
-  & > div + div {
-    border-top: 1px solid var(--gray-3);
   }
 }

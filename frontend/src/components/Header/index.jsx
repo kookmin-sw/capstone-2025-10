@@ -25,8 +25,8 @@ export default function Header() {
       path: "/campaign/1",
     },
     {
-      title: "제품관리",
-      path: "/product",
+      title: "이벤트",
+      path: "/event/1",
     },
     {
       title: "회원 관리",
