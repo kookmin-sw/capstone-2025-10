@@ -11,7 +11,7 @@ const EventSection = ({ events }) => {
   const router = useRouter();
 
   const handleAddEvent = () => {
-    router.push("/event/create");
+    router.push("/event/1/create");
   };
 
   return (

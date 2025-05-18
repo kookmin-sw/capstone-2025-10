@@ -29,22 +29,28 @@ export default function CreateEventPage() {
 
   const handleSubmit = async () => {
     const payload = {
-      name: eventName,
+      eventName,
       description: eventDescription,
-      dashboard,
-      conditions,
+      dashboardId: Number(dashboard), // 문자열 → 숫자 변환
+      eventConditions: conditions.map((cond) => ({
+        indicatorName: cond.metric,
+        operator: cond.operator,
+        value: cond.value,
+      })),
     };
 
     try {
-      const res = await fetch("/api/events", {
+      const res = await fetch("http://localhost:8080/api/event", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
+        credentials: "include",
       });
 
       if (!res.ok) {
         throw new Error("이벤트 생성 실패");
       }
+
       alert("이벤트가 성공적으로 생성되었습니다.");
       setEventName("");
       setEventDescription("");
@@ -90,8 +96,8 @@ export default function CreateEventPage() {
             onChange={(e) => setDashboard(e.target.value)}
           >
             <option value="">대시보드 이름</option>
-            <option value="dashboard1">대시보드 1</option>
-            <option value="dashboard2">대시보드 2</option>
+            <option value="1">대시보드 1</option>
+            <option value="2">대시보드 2</option>
           </select>
         </label>
 
@@ -116,8 +122,15 @@ export default function CreateEventPage() {
               }
             >
               <option value="같음">같음</option>
-              <option value="보다 큼">보다 큼</option>
-              <option value="보다 작음">보다 작음</option>
+              <option value="같지 않음">같지 않음</option>
+              <option value="다음값보다 큼">다음값보다 큼</option>
+              <option value="다음값보다 크거나 같음">
+                다음값보다 크거나 같음
+              </option>
+              <option value="다음값보다 작음">다음값보다 작음</option>
+              <option value="다음값보다 작거나 같음">
+                다음값보다 작거나 같음
+              </option>
             </select>
 
             <input

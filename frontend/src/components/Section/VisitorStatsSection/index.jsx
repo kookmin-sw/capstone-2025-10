@@ -27,53 +27,143 @@ ChartJS.register(
   Legend,
 );
 
-// 시간대 구간
+const GRID_WIDTH = 10;
+const GRID_HEIGHT = 10;
+const CANVAS_WIDTH = 640;
+const CANVAS_HEIGHT = 640;
+const CELL_WIDTH = CANVAS_WIDTH / GRID_WIDTH;
+const CELL_HEIGHT = CANVAS_HEIGHT / GRID_HEIGHT;
+
 const timeSlots = [
-  { label: "09-11시", start: 9, end: 11 },
-  { label: "11-13시", start: 11, end: 13 },
-  { label: "13-15시", start: 13, end: 15 },
-  { label: "15-17시", start: 15, end: 17 },
-  { label: "17-19시", start: 17, end: 19 },
-  { label: "19-21시", start: 19, end: 21 },
-  { label: "21-23시", start: 21, end: 23 },
+  { label: "00-03시", start: 0, end: 3 },
+  { label: "03-06시", start: 3, end: 6 },
+  { label: "06-09시", start: 6, end: 9 },
+  { label: "09-12시", start: 9, end: 12 },
+  { label: "12-15시", start: 12, end: 15 },
+  { label: "15-18시", start: 15, end: 18 },
+  { label: "18-21시", start: 18, end: 21 },
+  { label: "21-24시", start: 21, end: 24 },
 ];
 
-// 섹션별 시간대 사용자 수 계산
-const getSectionTimeSeries = (visitors) => {
-  const sectionSeries = {
-    A: timeSlots.map(() => 0),
-    B: timeSlots.map(() => 0),
-    C: timeSlots.map(() => 0),
-  };
-
-  visitors.forEach((v) => {
-    const date = new Date(
-      new Date(v.detectedTime).getTime() + 9 * 60 * 60 * 1000,
-    ); // KST
-    const hour = date.getHours();
-    const section = v.section?.toUpperCase(); // sectionA, sectionB 등
-
-    if (["A", "B", "C"].includes(section)) {
-      const index = timeSlots.findIndex(
-        (slot) => hour >= slot.start && hour < slot.end,
-      );
-      if (index !== -1) sectionSeries[section][index]++;
-    }
-  });
-
-  return sectionSeries;
+const evaluateCondition = (a, operator, b) => {
+  console.log(a, b);
+  a = parseFloat(a);
+  b = parseFloat(b);
+  switch (operator) {
+    case "같음":
+      return a === b;
+    case "같지 않음":
+      return a !== b;
+    case "다음값보다 큼":
+      return a > b;
+    case "다음값보다 크거나 같음":
+      return a >= b;
+    case "다음값보다 작음":
+      return a < b;
+    case "다음값보다 작거나 같음":
+      return a <= b;
+    default:
+      return false;
+  }
 };
 
-// 요약 데이터 계산
-const getSummaryStats = (visitors) => {
-  const total = visitors.length;
-  const avgStayTime =
-    total > 0
+const getSectionStats = (sections, tracking, dateRange) => {
+  const result = {};
+  const stayTimeMap = {};
+  const sectionTimeSeries = {};
+  const sectionRecentVisitors = {};
+
+  sections.forEach((s) => {
+    result[s.name] = new Set();
+    stayTimeMap[s.name] = {};
+    sectionTimeSeries[s.name] = timeSlots.map(() => 0);
+    sectionRecentVisitors[s.name] = new Set();
+  });
+
+  const now = Date.now();
+  const fiveMinAgo = now - 5 * 60 * 1000;
+
+  tracking.forEach((t) => {
+    const time = new Date(t.detectedTime);
+    if (time < dateRange[0] || time > dateRange[1]) return;
+
+    const [x, y] = JSON.parse(t.gridList)[0];
+    const cellX = Math.floor(x / CELL_WIDTH);
+    const cellY = Math.floor(y / CELL_HEIGHT);
+    const cell = cellX + cellY * GRID_WIDTH;
+    const hour = time.getHours();
+
+    sections.forEach((s) => {
+      if (s.positionList.includes(String(cell))) {
+        result[s.name].add(t.visitorLabel);
+
+        const ts = time.getTime();
+        if (!stayTimeMap[s.name][t.visitorLabel])
+          stayTimeMap[s.name][t.visitorLabel] = [];
+        stayTimeMap[s.name][t.visitorLabel].push(ts);
+
+        const slotIdx = timeSlots.findIndex(
+          (slot) => hour >= slot.start && hour < slot.end,
+        );
+        if (slotIdx !== -1) sectionTimeSeries[s.name][slotIdx]++;
+
+        if (ts >= fiveMinAgo) {
+          sectionRecentVisitors[s.name].add(t.visitorLabel);
+        }
+      }
+    });
+  });
+
+  const counts = {};
+  const avgTimes = {};
+  const recentCounts = {};
+  const userDurations = {};
+  for (const name in result) {
+    counts[name] = result[name].size;
+    recentCounts[name] = sectionRecentVisitors[name].size;
+    userDurations[name] = {};
+    for (const label in stayTimeMap[name]) {
+      const times = stayTimeMap[name][label];
+      const dur =
+        times.length > 1 ? Math.max(...times) - Math.min(...times) : 0;
+      userDurations[name][label] = Math.floor(dur);
+    }
+    const allDurations = Object.values(userDurations[name]);
+    avgTimes[name] = allDurations.length
       ? Math.floor(
-          visitors.reduce((sum, v) => sum + (v.stayTime || 0), 0) / total,
+          allDurations.reduce((a, b) => a + b, 0) / allDurations.length,
         )
       : 0;
+  }
+  console.log(userDurations);
 
+  return { counts, avgTimes, sectionTimeSeries, recentCounts, userDurations };
+};
+
+const VisitorStatusSection = ({ visitors, trackingData, sections, events }) => {
+  const [dateRange, setDateRange] = useState([
+    new Date("2024-01-01"),
+    new Date("2024-01-07"),
+  ]);
+
+  if (!visitors || visitors.length === 0) {
+    return <RequireLogin />;
+  }
+
+  const filtered = visitors.filter((v) => {
+    const t = new Date(v.detectedTime);
+    return t >= dateRange[0] && t <= dateRange[1];
+  });
+
+  const {
+    counts: sectionCounts,
+    avgTimes: sectionAvgTimes,
+    sectionTimeSeries,
+    recentCounts,
+    userDurations,
+  } = getSectionStats(sections, trackingData, dateRange);
+
+  const total = filtered.length;
   const genderCount = { male: 0, female: 0 };
   const ageGroupCount = {
     "9세 이하": 0,
@@ -84,9 +174,8 @@ const getSummaryStats = (visitors) => {
     "50대": 0,
     "60대 이상": 0,
   };
-  const sectionUserCount = { A: 0, B: 0, C: 0 };
 
-  visitors.forEach((v) => {
+  filtered.forEach((v) => {
     const gender = v.gender?.toLowerCase();
     if (gender === "male" || gender === "female") genderCount[gender]++;
 
@@ -104,9 +193,6 @@ const getSummaryStats = (visitors) => {
       else if (age <= 59) ageGroupCount["50대"]++;
       else ageGroupCount["60대 이상"]++;
     }
-
-    const section = v.section?.toUpperCase();
-    if (["A", "B", "C"].includes(section)) sectionUserCount[section]++;
   });
 
   const mostGender =
@@ -117,75 +203,60 @@ const getSummaryStats = (visitors) => {
   const mostAge = Object.entries(ageGroupCount).reduce((a, b) =>
     a[1] > b[1] ? a : b,
   );
-  const mostAgeGroup = `${mostAge[0]} (${((mostAge[1] / total) * 100).toFixed(0)}%)`;
-
-  return {
-    total,
-    avgStayTime,
-    mostGender,
-    mostAgeGroup,
-    sectionUserCount,
-  };
-};
-
-const VisitorStatusSection = ({ visitors }) => {
-  const [dateRange, setDateRange] = useState([
-    new Date("2024-01-01"),
-    new Date("2024-01-07"),
-  ]);
-
-  if (!visitors || visitors.length === 0) {
-    return <RequireLogin />;
-  }
-
-  console.log(visitors);
-
-  const filtered = visitors.filter((v) => {
-    const t = new Date(v.detectedTime);
-    return t >= dateRange[0] && t <= dateRange[1];
-  });
-
-  const sectionSeries = getSectionTimeSeries(filtered);
-  const { total, avgStayTime, mostGender, mostAgeGroup, sectionUserCount } =
-    getSummaryStats(filtered);
+  const mostAgeGroup = `${mostAge[0]} (${((mostAge[1] / total) * 100).toFixed(
+    0,
+  )}%)`;
 
   const lineData = {
     labels: timeSlots.map((s) => s.label),
-    datasets: [
-      {
-        label: "섹션A",
-        data: sectionSeries.A,
-        borderColor: "#0047AB",
-        backgroundColor: "#0047AB",
-        tension: 0.3,
-      },
-      {
-        label: "섹션B",
-        data: sectionSeries.B,
-        borderColor: "#00C896",
-        backgroundColor: "#00C896",
-        tension: 0.3,
-      },
-      {
-        label: "섹션C",
-        data: sectionSeries.C,
-        borderColor: "#7FFFD4",
-        backgroundColor: "#7FFFD4",
-        tension: 0.3,
-      },
-    ],
+    datasets: sections.map((s, i) => ({
+      label: s.name,
+      data: sectionTimeSeries[s.name],
+      borderColor: `hsl(${(i * 90) % 360}, 70%, 50%)`,
+      backgroundColor: `hsl(${(i * 90) % 360}, 70%, 50%)`,
+      tension: 0.3,
+    })),
   };
 
+  const eventCount = events?.reduce((acc, ev) => {
+    const conditionMet = ev.eventConditions.every((cond) => {
+      const val = parseFloat(cond.value);
+      if (cond.indicatorName === "averageStayTime") {
+        console.log("tette", Object.values(userDurations));
+        return Object.entries(userDurations).map((entry) =>
+          Object.values(entry[1]).map((t) => {
+            if (!acc[entry[0]]) {
+              acc[entry[0]] = 0;
+            }
+            if (evaluateCondition(t, cond.operator, val)) {
+              ++acc[entry[0]];
+              console.log(entry[0], acc[entry[0]]);
+            }
+          }),
+        );
+      } else if (cond.indicatorName === "totalVisitors") {
+        return Object.entries(recentCounts).map((entry) => {
+          if (!acc[entry[0]]) {
+            acc[entry[0]] = 0;
+          }
+          if (evaluateCondition(entry[1], cond.operator, val)) {
+            ++acc[entry[0]];
+          }
+        });
+      }
+      return false;
+    });
+    return acc;
+  }, {});
+  console.log(eventCount);
   return (
     <RequireLogin>
       <section className={styles["visitor-stats-section"]}>
-        {/* 상단 필터 */}
         <div className={styles["header"]}>
           <p>사용자 통계</p>
           <DateFilter dateRange={dateRange} setDateRange={setDateRange} />
         </div>
 
-        {/* 라인 차트 */}
         <div className={styles.contents}>
           <div className={styles["chart-full"]}>
             <h3>사용자 통계 : 시간 경과에 따른 섹션 참여 사용자 수</h3>
@@ -197,13 +268,12 @@ const VisitorStatusSection = ({ visitors }) => {
             </div>
           </div>
 
-          {/* 통계 테이블 */}
           <div className={styles["table-wrapper"]}>
             <table>
               <thead>
                 <tr>
-                  <th></th>
-                  <th>사용자수</th>
+                  <th>섹션 이름</th>
+                  <th>고유 방문자 수</th>
                   <th>평균 체류시간</th>
                   <th>가장 많은 성별</th>
                   <th>가장 많은 연령대</th>
@@ -211,40 +281,14 @@ const VisitorStatusSection = ({ visitors }) => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>합계</td>
-                  <td>
-                    {total}명<br />
-                    <span>총 건수와 동일</span>
-                  </td>
-                  <td>
-                    {avgStayTime}초<br />
-                    <span>평균과 동일</span>
-                  </td>
-                  <td>
-                    {mostGender}
-                    <br />
-                    <span>평균과 동일</span>
-                  </td>
-                  <td>
-                    {mostAgeGroup}
-                    <br />
-                    <span>평균과 동일</span>
-                  </td>
-                  <td>
-                    53건
-                    <br />
-                    <span>총 건수와 동일</span>
-                  </td>
-                </tr>
-                {["A", "B", "C"].map((sec) => (
-                  <tr key={sec}>
-                    <td>섹션{sec}</td>
-                    {Array(5)
-                      .fill(null)
-                      .map((_, i) => (
-                        <td key={i}>{sectionUserCount[sec]} (A%)</td>
-                      ))}
+                {sections.map((sec) => (
+                  <tr key={sec.name}>
+                    <td>{sec.name}</td>
+                    <td>{sectionCounts[sec.name] || 0}</td>
+                    <td>{sectionAvgTimes[sec.name] || 0}초</td>
+                    <td>{mostGender}</td>
+                    <td>{mostAgeGroup}</td>
+                    <td>{eventCount[sec.name]}</td>
                   </tr>
                 ))}
               </tbody>
