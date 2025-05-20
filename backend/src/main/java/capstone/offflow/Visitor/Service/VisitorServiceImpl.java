@@ -85,6 +85,15 @@ public class VisitorServiceImpl implements VisitorService {
     }
 
     @Override
+    public VisitorDto getVisitorById(Long visitorId) {
+        Visitor visitor = visitorRepository.findById(visitorId)
+                .orElseThrow(() -> new EntityNotFoundException("방문객이 존재하지 않습니다."));
+
+        return VisitorDto.convertToDto(visitor);
+
+    }
+
+    @Override
     public void updateVisitor(Long id, VisitorDto visitorDto) {
         Visitor visitor = visitorRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("방문객을 찾을 수 없습니다."));
