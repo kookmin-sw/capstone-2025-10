@@ -14,7 +14,8 @@ export default function MemberDetailPage({ params }) {
     password: "",
     phone: "",
     date: "",
-    visits: 0
+    visits: 0,
+    privacyAccepted: false
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -35,7 +36,8 @@ export default function MemberDetailPage({ params }) {
             password: visitorData.password || "********",
             phone: visitorData.phone || "-",
             date: visitorData.date || "-",
-            visits: visitorData.visits || 0
+            visits: visitorData.visits || 0,
+            privacyAccepted: visitorData.privacyAccepted
           });
           setError(null);
         } else {
@@ -69,7 +71,8 @@ export default function MemberDetailPage({ params }) {
             password: visitor.password,
             phone: visitor.phone,
             date: visitor.date,
-            visits: visitor.visits
+            visits: visitor.visits,
+            privacyAccepted: false
           });
         }
       } finally {
@@ -147,32 +150,6 @@ export default function MemberDetailPage({ params }) {
               </div>
 
               <div className={styles.formRow}>
-                <label className={styles.formLabel}>아이디</label>
-                <div className={styles.formInput}>
-                  <input
-                    type="text"
-                    name="userId"
-                    value={memberInfo.userId}
-                    readOnly
-                    className={styles.inputField}
-                  />
-                </div>
-              </div>
-
-              <div className={styles.formRow}>
-                <label className={styles.formLabel}>비밀번호</label>
-                <div className={styles.formInput}>
-                  <input
-                    type="password"
-                    name="password"
-                    value={memberInfo.password}
-                    readOnly
-                    className={styles.inputField}
-                  />
-                </div>
-              </div>
-
-              <div className={styles.formRow}>
                 <label className={styles.formLabel}>전화번호</label>
                 <div className={styles.formInput}>
                   <input
@@ -186,12 +163,12 @@ export default function MemberDetailPage({ params }) {
               </div>
 
               <div className={styles.formRow}>
-                <label className={styles.formLabel}>첫 방문일</label>
+                <label className={styles.formLabel}>개인정보제공동의</label>
                 <div className={styles.formInput}>
                   <input
                     type="text"
-                    name="date"
-                    value={memberInfo.date}
+                    name="privacyAccepted"
+                    value={memberInfo.privacyAccepted ? "동의" : "비동의"}
                     readOnly
                     className={styles.inputField}
                   />
@@ -199,12 +176,12 @@ export default function MemberDetailPage({ params }) {
               </div>
 
               <div className={styles.formRow}>
-                <label className={styles.formLabel}>방문 횟수</label>
+                <label className={styles.formLabel}>방문일</label>
                 <div className={styles.formInput}>
                   <input
                     type="text"
-                    name="visits"
-                    value={`${memberInfo.visits}회`}
+                    name="date"
+                    value={memberInfo.date}
                     readOnly
                     className={styles.inputField}
                   />

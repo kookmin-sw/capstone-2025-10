@@ -12,8 +12,13 @@ const transformVisitorData = (apiData) => {
     phone: apiData.phoneNumber,
     date: apiData.registerDate ? new Date(apiData.registerDate).toLocaleDateString('ko-KR') : '-',
     visits: apiData.visitedCount || 0,
-    // 추가 필드가 필요한 경우
-    userId: apiData.userId || '-'
+    // 추가 필드
+    userId: apiData.userId || '-',
+    privacyAccepted: apiData.privacyAccepted,
+    serviceAccepted: apiData.serviceAccepted,
+    marketingAccepted: apiData.marketingAccepted,
+    phoneVerified: apiData.phoneVerified,
+    registerDate: apiData.registerDate
   };
 };
 
