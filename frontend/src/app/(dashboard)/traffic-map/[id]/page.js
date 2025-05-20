@@ -55,7 +55,6 @@ export default async function TrafficMapPage({ params }) {
       <main className={styles.main}>
         <TrafficMapSection
           sections={getSectionFromCampaign(campaign)}
-          trafficPoints={trafficPoints}
           dashboardId={id}
         />
       </main>

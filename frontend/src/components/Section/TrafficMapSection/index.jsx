@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import styles from "./index.module.scss";
 import CardContainer from "@/components/CardContainer";
 import RequireLogin from "@/components/Login/RequireLogin";
@@ -14,105 +14,118 @@ const cellSize = 480 / 10;
 
 function generateArrowsFromTracking(
   trackingData,
-  sections,
   imageWidth,
   imageHeight,
-  gridCols,
-  gridRows,
   originalImageWidth,
   originalImageHeight,
 ) {
   const scaleX = imageWidth / originalImageWidth;
   const scaleY = imageHeight / originalImageHeight;
-
-  const normalized = trackingData.map((track) => ({
-    x: track.x * scaleX,
-    y: track.y * scaleY,
-  }));
-
-  const cellSizeX = imageWidth / gridCols;
-  const cellSizeY = imageHeight / gridRows;
-
-  const visited = [];
-
-  for (const { x, y } of normalized) {
-    const col = Math.floor(x / cellSizeX);
-    const row = Math.floor(y / cellSizeY);
-    const cellIndex = row * gridCols + col;
-
-    const section = sections.find((s) => s.cells.includes(cellIndex));
-    const last = visited[visited.length - 1];
-
-    if (section && (!last || last.id !== section.id)) {
-      const cellsXY = section.cells.map((idx) => [
-        idx % gridCols,
-        Math.floor(idx / gridCols),
-      ]);
-      visited.push({ id: section.id, cells: cellsXY });
-    } else if (!section) {
-      // 구역 없는 경우도 연결해주기 위해 직접 XY 추가
-      visited.push({
-        id: `untracked-${x},${y}`,
-        cells: [[Math.floor(x / cellSizeX), Math.floor(y / cellSizeY)]],
-      });
-    }
-  }
-
   const arrows = [];
-  for (let i = 0; i < trackingData.length - 1; i++) {
-    arrows.push({
-      from: { x: trackingData[i].x * scaleX, y: trackingData[i].y * scaleY },
-      to: {
-        x: trackingData[i + 1].x * scaleX,
-        y: trackingData[i + 1].y * scaleY,
-      },
-      userId: trackingData[i]?.userLabel || `user-${i}`,
-    });
+
+  const userGroups = new Map();
+  trackingData.forEach((item) => {
+    const userId = item.userLabel ?? "unknown";
+    if (!userGroups.has(userId)) userGroups.set(userId, []);
+    userGroups.get(userId).push(item);
+  });
+
+  for (const [userId, tracks] of userGroups.entries()) {
+    tracks.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+    for (let i = 0; i < tracks.length - 1; i++) {
+      const fromX = tracks[i].x * scaleX;
+      const fromY = tracks[i].y * scaleY;
+      const toX = tracks[i + 1].x * scaleX;
+      const toY = tracks[i + 1].y * scaleY;
+
+      const isInBounds =
+        fromX >= 0 &&
+        fromX <= imageWidth &&
+        fromY >= 0 &&
+        fromY <= imageHeight &&
+        toX >= 0 &&
+        toX <= imageWidth &&
+        toY >= 0 &&
+        toY <= imageHeight;
+
+      if (isInBounds) {
+        arrows.push({
+          from: { x: fromX, y: fromY },
+          to: { x: toX, y: toY },
+          userId: userId,
+        });
+      }
+    }
   }
 
   return arrows;
 }
 
-const TrafficMapSection = ({ sections, trafficPoints, image }) => {
+const TrafficMapSection = ({ sections, dashboardId }) => {
   const canvasRef = useRef(null);
   const [dateRange, setDateRange] = useState([
     new Date("2024-01-01"),
     new Date("2024-12-31"),
   ]);
-  const filteredTraffic = trafficPoints.filter((p) => {
-    const d = new Date(p.createdAt);
-    return d >= dateRange[0] && d <= dateRange[1];
-  });
   const [selectedSectionId, setSelectedSectionId] = useState(null);
+  const [filteredTraffic, setFilteredTraffic] = useState([]);
+  const [arrows, setArrows] = useState([]);
 
-  const allArrows = generateArrowsFromTracking(
-    filteredTraffic,
-    sections,
-    720,
-    480,
-    10,
-    10,
-    1280,
-    720, // 👈 원본 이미지 height
-  );
+  const fetchTraffic = useCallback(async () => {
+    try {
+      const res = await fetch(
+        `http://localhost:8080/api/tracking/${dashboardId}`,
+        {
+          cache: "no-store",
+          credentials: "include",
+        },
+      );
+      const data = await res.json();
 
-  const [arrows, setArrows] = useState(allArrows);
+      const parsed = data.map((item) => {
+        const [gridX, gridY] = JSON.parse(item.gridList)[0].map(Number);
+        return {
+          id: item.id,
+          dashboardId: item.dashboardId,
+          createdAt: item.detectedTime,
+          x: gridX,
+          y: gridY,
+          userLabel: item.visitorLabel,
+        };
+      });
+
+      const [start, end] = dateRange;
+      const filtered = parsed.filter((p) => {
+        const d = new Date(p.createdAt);
+        return d >= start && d <= end;
+      });
+
+      setFilteredTraffic(filtered);
+
+      const newArrows = generateArrowsFromTracking(
+        filtered,
+        1080,
+        608,
+        1280,
+        720,
+      );
+
+      const mappedArrows = newArrows.map((arrow) => ({
+        ...arrow,
+        isDimmed: selectedSectionId ? arrow.userId !== selectedSectionId : true,
+      }));
+
+      setArrows(mappedArrows);
+    } catch (err) {
+      console.error("❌ fetchTraffic 실패", err);
+    }
+  }, [dashboardId, dateRange, selectedSectionId]);
 
   useEffect(() => {
-    setArrows(
-      allArrows.map((arrow) => {
-        if (!selectedSectionId) return { ...arrow, isDimmed: true };
-        return {
-          ...arrow,
-          isDimmed: arrow.userId === selectedSectionId,
-        };
-      }),
-    );
-  }, [selectedSectionId]);
-  //if (Object.keys(sections).length === 0) {
-  //  //router.push("/login");
-  //  return <RequireLogin></RequireLogin>;
-  //}
+    const interval = setInterval(fetchTraffic, 1000);
+    fetchTraffic(); // 초기 1회
+    return () => clearInterval(interval);
+  }, [fetchTraffic]);
 
   return (
     <RequireLogin>
@@ -124,33 +137,24 @@ const TrafficMapSection = ({ sections, trafficPoints, image }) => {
         <CardContainer showDivider={false} margin="40px">
           <div className={styles["image-grid-wrapper"]}>
             <Image
-              src="/output_result.jpg"
+              src="/output_result.png"
               alt={"img"}
               width={1080}
               height={608}
             />
-            {/*{image && <img src={"output_result.jpg"} alt="Uploaded Preview" />}*/}
             <div className={styles.canvas}>
               <ArrowCanvas
                 canvasRef={canvasRef}
                 sections={sections}
                 arrows={arrows}
-                gridCols={gridCols}
-                cellSize={cellSize}
               />
             </div>
           </div>
-
           <DashboardTable
             trafficPoints={filteredTraffic}
             onSectionSelect={setSelectedSectionId}
           />
         </CardContainer>
-        {/*<CardContainer showDivider={false} margin="40px">*/}
-        {/*  /!* User List *!/*/}
-        {/*</CardContainer>*/}
-
-        {/*<div className={styles["filter-wrapper"]}></div>*/}
       </section>
     </RequireLogin>
   );
