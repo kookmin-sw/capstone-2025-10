@@ -579,7 +579,135 @@
             </div>
         </div>
     </section>
+    <style>
+        section#tech-stack {
+            padding: 80px 0;
+            background-color: #fff;
+        }
 
+        section#tech-stack h2,
+        section#tech-stack h3 {
+            font-family: 'Gmarket Sans';
+            text-align: left;
+            color: #000;
+        }
+
+        section#tech-stack h2 {
+            font-size: 36px;
+            font-weight: 500;
+            margin-bottom: 30px;
+        }
+
+        section#tech-stack h3 {
+            font-size: 28px;
+            font-weight: 400;
+            /*margin-bottom: 24px;*/
+            /*margin: 50px 0 20px;*/
+            position: relative;
+        }
+
+        /*section#tech-stack h3::before {*/
+        /*    content: "";*/
+        /*    display: block;*/
+        /*    width: 60px;*/
+        /*    height: 3px;*/
+        /*    background-color: #004BD6;*/
+        /*    margin-bottom: 10px;*/
+        /*}*/
+
+        .stack-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .stack-group + h3 {
+            margin-top: 48px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 12px;
+            font-size: 14px;
+            font-family: 'Gmarket Sans';
+            font-weight: 500;
+            color: #fff;
+            border-radius: 6px;
+            text-transform: uppercase;
+        }
+
+        .badge i {
+            margin-right: 6px;
+        }
+    </style>
+
+    <section id="tech-stack" style="background: #F7F9FA">
+	    <div class="container" >
+		    <div class="section-header" style="text-align: center;">
+			    <span style="color: var(--main, #004BD6); font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 100%; margin-bottom: 10px; display: block; text-align: left">Technology</span>
+			    <h2 style="color: #000; font-family: 'Gmarket Sans'; font-size: 36px; font-style: normal; font-weight: 400; line-height: 140%; margin-bottom: 50px;">
+				    기술스택</h2>
+		    </div>
+
+
+		    <div style="background: #ffffff; padding: 48px;">
+			    <h3>💻 Frontend</h3>
+			    <div class="stack-group">
+				    <span class="badge" style="background-color:#F7DF1E; color:#000"><i class="fab fa-js"></i>Javascript</span>
+				    <span class="badge" style="background-color:#000"><i class="fab fa-react"></i>Next.js</span>
+				    <span class="badge" style="background-color:#CC6699"><i class="fab fa-sass"></i>Sass</span>
+				    <span class="badge" style="background-color:#4B32C3"><i class="fas fa-code"></i>ESLint</span>
+				    <span class="badge" style="background-color:#F7B93E"><i class="fas fa-paint-brush"></i>Prettier</span>
+				    <span class="badge" style="background-color:#2C8EBB"><i class="fab fa-yarn"></i>Yarn</span>
+				    <span class="badge" style="background-color:#009639"><i class="fab fa-linux"></i>Nginx</span>
+			    </div>
+
+			    <h3>💻 Backend</h3>
+			    <div class="stack-group">
+				    <span class="badge" style="background-color:#007396"><i class="fab fa-java"></i>Java</span>
+				    <span class="badge" style="background-color:#6DB33F"><i class="fas fa-leaf"></i>Spring Boot</span>
+				    <span class="badge" style="background-color:#02303A"><i class="fas fa-hammer"></i>Gradle</span>
+				    <span class="badge" style="background-color:#000"><i class="fas fa-plug"></i>Rest API</span>
+				    <span class="badge" style="background-color:#4169E1"><i class="fas fa-database"></i>PostgreSQL</span>
+				    <span class="badge" style="background-color:#FF4438"><i class="fas fa-memory"></i>Redis</span>
+				    <span class="badge" style="background-color:#231F20"><i class="fas fa-stream"></i>Kafka</span>
+				    <span class="badge" style="background-color:#03C75A"><i class="fas fa-sms"></i>Naver SMS</span>
+			    </div>
+
+			    <h3>💻 AI</h3>
+			    <div class="stack-group">
+				    <span class="badge" style="background-color:#3776AB"><i class="fab fa-python"></i>Python 3.10</span>
+				    <span class="badge" style="background-color:#E95420"><i class="fab fa-linux"></i>Ubuntu 22.04</span>
+				    <span class="badge" style="background-color:#76B900"><i class="fas fa-microchip"></i>CUDA 11.8</span>
+				    <span class="badge" style="background-color:#EE4C2C"><i class="fas fa-brain"></i>PyTorch</span>
+				    <span class="badge" style="background-color:#013243"><i class="fas fa-square-root-alt"></i>NumPy</span>
+				    <span class="badge" style="background-color:#111F68">YOLO</span>
+				    <span class="badge" style="background-color:#5C3EE8">OpenCV</span>
+				    <span class="badge" style="background-color:#4D4D4D">DeepSORT</span>
+				    <span class="badge" style="background-color:#4D4D4D">APGCC</span>
+				    <span class="badge" style="background-color:#4D4D4D">EfficientNet</span>
+			    </div>
+
+			    <h3>💻 Deployment</h3>
+			    <div class="stack-group">
+				    <span class="badge" style="background-color:#FF9900"><i class="fab fa-aws"></i>Amazon EC2</span>
+				    <span class="badge" style="background-color:#2088FF"><i class="fab fa-docker"></i>Docker</span>
+			    </div>
+
+			    <h3>💻 Common</h3>
+			    <div class="stack-group">
+				    <span class="badge" style="background-color:#5865F2"><i class="fab fa-discord"></i>Discord</span>
+				    <span class="badge" style="background-color:#F24E1E"><i class="fab fa-figma"></i>Figma</span>
+				    <span class="badge" style="background-color:#F05032"><i class="fab fa-git-alt"></i>Git</span>
+				    <span class="badge" style="background-color:#181717"><i class="fab fa-github"></i>GitHub</span>
+				    <span class="badge" style="background-color:#000"><i class="fab fa-notion"></i>Notion</span>
+				    <span class="badge" style="background-color:#0052CC"><i class="fab fa-trello"></i>Trello</span>
+			    </div>
+		    </div>
+	    </div>
+    </section>
     <!-- Font Awesome for icons -->
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
