@@ -1,0 +1,166 @@
+/* 서비스 섹션 스타일 */
+.service-section {
+    padding: 80px 0;
+}
+
+.service-section:nth-child(even),
+.features {
+    background-color: #f9fbff;
+}
+
+.service-section .section-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.section-tag {
+    color: var(--main, #004BD6);
+    font-family: 'Gmarket Sans';
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 100%;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.section-title {
+    color: #000;
+    font-family: 'Gmarket Sans';
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 140%;
+    margin-bottom: 50px;
+}
+
+.service-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 60px;
+}
+
+.service-item:last-child {
+    margin-bottom: 0;
+}
+
+.service-item-reverse {
+    flex-direction: row-reverse;
+}
+
+.service-text {
+    flex: 1;
+    padding: 0 30px;
+}
+
+.function-title,
+.feature-title,
+.case-title {
+    color: #000;
+    font-family: 'Gmarket Sans';
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 140%;
+    margin-bottom: 20px;
+}
+
+.feature-title,
+.case-title {
+    font-size: 28px;
+}
+
+.spacing-36 {
+    height: 36px;
+}
+
+.function-description,
+.feature-description,
+.case-description {
+    color: #000;
+    font-family: 'Gmarket Sans';
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 150%;
+    margin-bottom: 20px;
+}
+
+.function-description:last-child,
+.feature-description:last-child,
+.case-description:last-child {
+    margin-bottom: 0;
+}
+
+.service-image {
+    flex: 1;
+    text-align: center;
+}
+
+.service-img {
+    width: 100%;
+    max-width: 500px;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    margin-bottom: 30px;
+}
+
+.service-img:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.image-gallery {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-top: 50px;
+}
+
+.gallery-item {
+    flex: 0 0 32%;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.gallery-img {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.gallery-img:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* 모바일 대응 */
+@media (max-width: 768px) {
+    .service-item {
+        flex-direction: column;
+    }
+    
+    .service-item-reverse {
+        flex-direction: column;
+    }
+    
+    .service-text,
+    .service-image {
+        flex: 0 0 100%;
+        margin-bottom: 40px;
+    }
+    
+    .service-text {
+        order: 2;
+    }
+    
+    .service-image {
+        order: 1;
+    }
+    
+    .gallery-item {
+        flex: 0 0 100%;
+    }
+} 

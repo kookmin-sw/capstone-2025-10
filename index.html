@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>OFFFLOW - 공간을 읽는 새로운 눈</title>
+	<link rel="stylesheet" href="css/style.css?v=5.2">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
+	      rel="stylesheet">
+	<!-- Gmarket Sans 폰트 추가 -->
+	<link href="https://webfontworld.github.io/gmarket/GmarketSans.css" rel="stylesheet">
+	<style>
+        /* 푸터 버튼 호버 효과 */
+        .footer-btn {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .footer-btn:hover i {
+            transform: translateX(5px);
+        }
+
+        .footer-btn i {
+            transition: transform 0.3s ease;
+        }
+
+        .footer-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 0;
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .footer-btn:active::after {
+            height: 300%;
+            opacity: 1;
+            transition: all 0s;
+        }
+	</style>
+</head>
+<body>
+<header>
+	<div class="container">
+		<div class="logo">
+			<a href="index.html">
+				<img src="images/offflow로고.svg" alt="OFFFLOW" width="145" height="23">
+			</a>
+		</div>
+		<nav>
+			<ul>
+				<li><a href="about.html">오프플로우 소개</a></li>
+				<li><a href="service.html">서비스소개</a></li>
+				<li><a href="https://docs.google.com/forms/d/e/1FAIpQLSc4Vr6WNsv6DZbBiXc4G7FqMY1lrCGoPNdvelwSGsXYPHjraw/viewform" target="_blank" class="login-btn">서비스 문의하기</a></li>
+			</ul>
+		</nav>
+	</div>
+</header>
+
+<section class="hero" style="height: 100vh">
+	<div class="hero-background">
+		<!-- 하단 레이어: SVG 배경 -->
+		<svg xmlns="http://www.w3.org/2000/svg" width="2796" height="768" viewBox="0 0 2796 768" fill="none"
+		     preserveAspectRatio="xMidYMid slice">
+			<g style="mix-blend-mode:screen">
+				<path d="M475.5 552C282.7 552 132.833 696 82 768L0 0H2104L2795.5 714C2600.5 645.167 2373 198 1832 198C1433.5 198 1311 552 1055.5 596C842.141 632.743 716.5 552 475.5 552Z"
+				      fill="url(#paint0_linear_1970_694)" fill-opacity="1"/>
+			</g>
+			<defs>
+				<linearGradient id="paint0_linear_1970_694" x1="226" y1="-131" x2="2154" y2="252.5"
+				                gradientUnits="userSpaceOnUse">
+					<stop stop-color="#0099E6" stop-opacity="1"/>
+					<stop offset="1" stop-color="#A5EFFE"/>
+				</linearGradient>
+			</defs>
+		</svg>
+		<!-- 상단 레이어: 그라데이션 오버레이 -->
+		<div class="hero-gradient-overlay"></div>
+	</div>
+	<div class="container">
+		<div class="hero-content">
+			<div class="hero-text">
+				<h4>OFFLINE & USERFLOW</h4>
+				<h2 style="color: var(--Cooltone-CG00, #FFF); font-family: 'Gmarket Sans'; font-size: 60px; font-style: normal; font-weight: 500; line-height: 80px; white-space: nowrap; margin-bottom: 20px;">
+					공간을 읽는 새로운 눈</h2>
+				<p style="color: var(--Cooltone-CG00, #FFF); font-family: 'Gmarket Sans'; font-size: 36px; font-style: normal; font-weight: 300; line-height: 80px; margin-bottom: 30px;">
+					AI 기반 오프라인 고객 분석 솔루션</p>
+				<button id="scrollToWhyPopup" class="primary-btn">팝업스토어를 해야하는 이유?</button>
+			</div>
+			<div class="hero-image">
+				<div class="hero-circle">
+					<img src="images/hero_logo.svg" alt="OFFFLOW" class="hero-logo">
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section class="why-popup">
+	<div class="container">
+		<div class="section-header" style="text-align: left !important;">
+			<span style="color: var(--main, #004BD6); font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 100%; margin-bottom: 10px; display: block; text-align: left !important;">POPUP STORE</span>
+			<h2 style="color: #000; font-family: 'Gmarket Sans'; font-size: 36px; font-style: normal; font-weight: 400; line-height: 140%; margin-bottom: 29px; text-align: left !important;">
+				왜 팝업스토어를 해야할까?</h2>
+			<p style="color: #000; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 150%; margin-bottom: 50px; text-align: left !important;">
+				MZ세대의 경험중심 소비패턴에 맞춰 해당 신업군이 발빠르게 성장</p>
+		</div>
+		<div class="stats-container">
+			<div class="stat-card">
+				<h3 style="font-family: 'Gmarket Sans'; font-size: 24px; font-style: normal; font-weight: 400; line-height: 140%; margin-bottom: 30px; color: #000; text-align: center;">
+					5년 전 대비 검색량 <span style="font-weight: 700; color: #A64DFF;">564%</span> 증가
+				</h3>
+				<div class="stat-graph"
+				     style="margin-top: 20px; position: relative; z-index: 1; display: flex; justify-content: center; align-items: center;">
+					<img src="images/whypopup_chart.svg" alt="5년 전 대비 검색량 그래프"
+					     style="width: 538px !important; height: 361px !important; max-width: 538px !important; max-height: 361px !important;">
+				</div>
+			</div>
+			<div class="stat-card">
+				<h3 style="font-family: 'Gmarket Sans'; font-size: 24px; font-style: normal; font-weight: 400; line-height: 140%; margin-bottom: 30px; color: #000; text-align: center;">
+					소비자 긍정적 인식 <span style="font-weight: 700; color: #A64DFF;">91.5%</span> 변화
+				</h3>
+				<div class="stat-graph"
+				     style="margin-top: 20px; position: relative; z-index: 1; display: flex; justify-content: center; align-items: center;">
+					<img src="images/whypopup_stick.svg" alt="소비자 긍정적 인식 그래프" width="368" height="426"
+					     style="max-width: 368px; max-height: 426px;">
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section class="why-offflow">
+	<div class="container">
+		<div class="section-header">
+			<span style="color: var(--main, #004BD6); font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 100%; margin-bottom: 10px; display: block; text-align: center;">PAINPOINT</span>
+			<h2 style="color: #000; font-family: 'Gmarket Sans'; font-size: 36px; font-style: normal; font-weight: 400; line-height: 140%; margin-bottom: 29px; text-align: center;">
+				기존 팝업스토어 시스템의 문제점</h2>
+		</div>
+		<div class="stats-container"
+		     style="display: flex; justify-content: space-between; align-items: flex-start; gap: 30px;">
+			<div style="flex: 1; text-align: center;">
+				<div style="margin-top: 20px; position: relative; z-index: 1; display: flex; justify-content: center; align-items: center;">
+					<img src="images/problem_1img.png" alt="팝업스토어 문제점 1"
+					     style="width: 540px !important; height: 350px !important; max-width: 400px !important; max-height: 300px !important;">
+				</div>
+				<h3 style="color: #000; font-family: 'Gmarket Sans'; font-size: 24px; font-style: normal; font-weight: 400; line-height: 140%; margin-top: 30px; margin-bottom: 20px; text-align: center;">
+					스탭의 수기 관리 방식
+				</h3>
+				<p style="color: #000; text-align: center; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 150%; margin-bottom: 10px;">
+					담당자에 따른 기록방식이 상이해 데이터 통일성 부족
+				</p>
+				<p style="color: #000; text-align: center; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 150%; margin-bottom: 10px;">
+					체류시간, 방문시간 등 정량적 지표 확보 어려움
+				</p>
+				<p style="color: #000; text-align: center; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 150%;">
+					성별/연령 기반 마케팅 지표 수집 불가
+				</p>
+			</div>
+			<div style="flex: 1; text-align: center;">
+				<div style="margin-top: 20px; position: relative; z-index: 1; display: flex; justify-content: center; align-items: center;">
+					<img src="images/problem_2ing.png" alt="팝업스토어 문제점 2"
+					     style="width: 540px !important; height: 350px !important; max-width: 400px !important; max-height: 300px !important;">
+				</div>
+				<h3 style="color: #000; font-family: 'Gmarket Sans'; font-size: 24px; font-style: normal; font-weight: 400; line-height: 140%; margin-top: 30px; margin-bottom: 20px; text-align: center;">
+					파편화된 방문객 관리, 마케팅 시스템
+				</h3>
+				<p style="color: #000; text-align: center; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 150%; margin-bottom: 10px;">
+					SNS/오프라인/ 웹 채널 간 연결성 부족
+				</p>
+				<p style="color: #000; text-align: center; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 150%; margin-bottom: 10px;">
+					이벤트, 고객DB, 방문기록 데이터 통합되지 않음
+				</p>
+				<p style="color: #000; text-align: center; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 150%;">
+					성과 분석 어려움 및 맞춤형 마케팅 불가
+				</p>
+			</div>
+		</div>
+	</div>
+</section>
+
+
+<section class="features" style="position: relative; overflow: hidden;">
+	<div class="background-image"
+	     style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; background: url('images/corefunction_backimg.svg') no-repeat right center; background-size:65%; opacity: 0.8;"></div>
+	<div class="container"
+	     style="display: flex; align-items: center; justify-content: space-between; gap: 50px; position: relative; z-index: 1;">
+		<div class="features-text" style="flex: 1; padding-right: 30px;">
+			<span style="color: var(--main, #004BD6); font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 100%; margin-bottom: 10px; display: block;">FUNCTION</span>
+			<h2 style="color: #000; font-family: 'Gmarket Sans'; font-size: 36px; font-style: normal; font-weight: 400; line-height: 140%; margin-bottom: 29px;">
+				오프플로우의 핵심기능</h2>
+			<p style="color: #000; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 150%; margin-bottom: 50px;">
+				오프라인 인구 데이터를 디지털화<br>시각화하는 오프플로우 서비스는<br>4가지 핵심기능을 제공합니다.</p>
+		</div>
+		<div class="features-grid"
+		     style="flex: 1; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 30px;">
+			<div class="feature-item"
+			     style="display: flex; flex-direction: column; align-items: center; width: 230px; height: 206px; flex-shrink: 0; border-radius: 4px; background: #FFF; box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.10); padding: 15px;">
+				<img src="images/corefunction_qr.svg" alt="QR기반 방문자 등록"
+				     style="width: 150px; height: 146px; flex-shrink: 0; aspect-ratio: 75/73; margin-bottom: 10px;">
+				<h4 style="color: #000; font-family: 'Gmarket Sans'; font-size: 18px; font-style: normal; font-weight: 400; line-height: 140%; text-align: center; margin: 0;">
+					QR기반 방문자 등록</h4>
+			</div>
+			<div class="feature-item"
+			     style="display: flex; flex-direction: column; align-items: center; width: 230px; height: 206px; flex-shrink: 0; border-radius: 4px; background: #FFF; box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.10); padding: 15px;">
+				<img src="images/corefunction_event.svg" alt="사용자 커스텀 이벤트"
+				     style="width: 150px; height: 146px; flex-shrink: 0; aspect-ratio: 75/73; margin-bottom: 10px;">
+				<h4 style="color: #000; font-family: 'Gmarket Sans'; font-size: 18px; font-style: normal; font-weight: 400; line-height: 140%; text-align: center; margin: 0;">
+					사용자 커스텀 이벤트</h4>
+			</div>
+			<div class="feature-item"
+			     style="display: flex; flex-direction: column; align-items: center; width: 230px; height: 206px; flex-shrink: 0; border-radius: 4px; background: #FFF; box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.10); padding: 15px;">
+				<img src="images/corefunction_deep.svg" alt="타겟층 기반 객체인식"
+				     style="width: 150px; height: 146px; flex-shrink: 0; aspect-ratio: 75/73; margin-bottom: 10px;">
+				<h4 style="color: #000; font-family: 'Gmarket Sans'; font-size: 18px; font-style: normal; font-weight: 400; line-height: 140%; text-align: center; margin: 0;">
+					타겟층 기반 객체인식</h4>
+			</div>
+			<div class="feature-item"
+			     style="display: flex; flex-direction: column; align-items: center; width: 230px; height: 206px; flex-shrink: 0; border-radius: 4px; background: #FFF; box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.10); padding: 15px;">
+				<img src="images/corefunction_marketing.svg" alt="사후 마케팅 및 연계"
+				     style="width: 150px; height: 146px; flex-shrink: 0; aspect-ratio: 75/73; margin-bottom: 10px;">
+				<h4 style="color: #000; font-family: 'Gmarket Sans'; font-size: 18px; font-style: normal; font-weight: 400; line-height: 140%; text-align: center; margin: 0;">
+					사후 마케팅 및 연계</h4>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section class="how-it-works"
+         style="overflow: hidden; padding: 120px 0; position: relative; background-color: #f9fbff;">
+	<div class="background-image"
+	     style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; background: url('images/offflow-backend.svg') no-repeat center center;"></div>
+	<div class="container" style="max-width: 1200px; margin: 0 auto; position: relative; z-index: 1;">
+		<div class="section-header">
+			<span style="color: var(--main, #004BD6); font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 100%; margin-bottom: 10px; display: block; text-align: left;">PROCESS</span>
+			<h2 style="color: #000; font-family: 'Gmarket Sans'; font-size: 36px; font-style: normal; font-weight: 400; line-height: 140%; margin-bottom: 50px; text-align: left;">
+				방문객 등록부터 마케팅까지<br>하나의 프로세스로 관리합니다.</h2>
+		</div>
+
+		<!-- 완전히 새롭게 재구성한 process 섹션 -->
+		<div class="process-container" id="processContainer" style="position: relative; margin-bottom: 80px;">
+			<!-- 스크롤 가능한 컨테이너 -->
+			<div class="process-scroll" id="processScroll" style="scrollbar-width: none; -ms-overflow-style: none;">
+				<style>
+                    .process-scroll {
+                        overflow-x: auto;
+                        overflow-y: hidden;
+                        scroll-snap-type: x mandatory;
+                        -webkit-overflow-scrolling: touch;
+                        scrollbar-width: none;
+                    }
+                    .process-scroll::-webkit-scrollbar {
+                        display: none;
+                    }
+
+                    .process-items {
+                        display: flex;
+                        width: max-content;
+                        scroll-behavior: smooth;
+                    }
+
+                    .process-item {
+                        flex: 0 0 100vw;
+                        scroll-snap-align: start;
+                        box-sizing: border-box;
+                        padding: 20px;
+                    }
+				</style>
+				<script>
+                  document.addEventListener('DOMContentLoaded', () => {
+                    const container = document.querySelector('section.how-it-works');
+                    const scrollEl = document.getElementById('processScroll');
+
+                    container.addEventListener('wheel', (e) => {
+                      if (!scrollEl) return;
+
+                      const scrollable = scrollEl.scrollWidth > scrollEl.clientWidth;
+                      const atLeft = scrollEl.scrollLeft <= 0;
+                      const atRight = Math.ceil(scrollEl.scrollLeft + scrollEl.clientWidth) >= scrollEl.scrollWidth;
+
+                      // 끝에 도달하지 않았다면 가로 스크롤 처리
+                      if (scrollable && !(atLeft && e.deltaY < 0) && !(atRight && e.deltaY > 0)) {
+                        e.preventDefault();
+                        const SCROLL_SPEED = 10;
+                        scrollEl.scrollLeft += e.deltaY * SCROLL_SPEED;
+                      }
+                      // 끝이면 그냥 세로로 넘어가게 둠
+                    }, { passive: false });
+                  });
+
+				</script>
+				<!-- 프로세스 아이템 컨테이너 -->
+				<div class="process-items" id="processItems">
+					<!-- 아이템 1 -->
+					<div class="process-item" style="flex: 1; text-align: center; padding: 20px 0px;">
+						<div class="process-image"
+						     style="margin-bottom: 40px; height: 280px; display: flex; align-items: center; justify-content: center;">
+							<img src="images/step1.svg" alt="방문객 QR등록"
+							     style="max-width: 100%; transform: scale(0.7); transform-origin: center;">
+						</div>
+						<p style="color: var(--main, #004BD6); font-family: 'Gmarket Sans'; font-size: 24px; font-style: normal; font-weight: 400; line-height: 140%; margin: 0 0 10px 0;">
+							STEP 1</p>
+						<h3 style="color: #000; font-family: 'Gmarket Sans'; font-size: 24px; font-weight: 400; margin: 0;">
+							방문객 QR등록</h3>
+					</div>
+
+					<!-- 아이템 2 -->
+					<div class="process-item" style="flex: 1; text-align: center; padding: 20px 30px;">
+						<div class="process-image"
+						     style="margin-bottom: 40px; height: 280px; display: flex; align-items: center; justify-content: center;">
+							<img src="images/step2_.svg" alt="대시보드 연동"
+							     style="max-width: 100%; transform: scale(1); transform-origin: center;">
+						</div>
+						<p style="color: var(--main, #004BD6); font-family: 'Gmarket Sans'; font-size: 24px; font-style: normal; font-weight: 400; line-height: 140%; margin: 0 0 10px 0;">
+							STEP 2</p>
+						<h3 style="color: #000; font-family: 'Gmarket Sans'; font-size: 24px; font-weight: 400; margin: 0;">
+							대시보드 연동</h3>
+					</div>
+
+					<!-- 아이템 3 -->
+					<div class="process-item" style="flex: 1; text-align: center; padding: 20px 30px;">
+						<div class="process-image"
+						     style="margin-bottom: 40px; height: 280px; display: flex; align-items: center; justify-content: center;">
+							<img src="images/step3_.svg" alt="대시보드 시각화"
+							     style="max-width: 100%; transform: scale(1); transform-origin: center;">
+						</div>
+						<p style="color: var(--main, #004BD6); font-family: 'Gmarket Sans'; font-size: 24px; font-style: normal; font-weight: 400; line-height: 140%; margin: 0 0 10px 0;">
+							STEP 3</p>
+						<h3 style="color: #000; font-family: 'Gmarket Sans'; font-size: 24px; font-weight: 400; margin: 0;">
+							대시보드 시각화</h3>
+					</div>
+
+					<!-- 아이템 4 -->
+					<div class="process-item" style="flex: 1; text-align: center; padding: 20px 30px;">
+						<div class="process-image"
+						     style="margin-bottom: 40px; height: 280px; display: flex; align-items: center; justify-content: center;">
+							<img src="images/step4_.svg" alt="사후 마케팅"
+							     style="max-width: 100%; transform: scale(1); transform-origin: center;">
+						</div>
+						<p style="color: var(--main, #004BD6); font-family: 'Gmarket Sans'; font-size: 24px; font-style: normal; font-weight: 400; line-height: 140%; margin: 0 0 10px 0;">
+							STEP 4</p>
+						<h3 style="color: #000; font-family: 'Gmarket Sans'; font-size: 24px; font-weight: 400; margin: 0;">
+							사후 마케팅</h3>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div style="text-align: center;">
+			<a href="service.html" class="custom-btn"
+			   style="display: flex !important; justify-content: center !important; align-items: center !important; width: 269px !important; height: 60px !important; flex-shrink: 0 !important; border-radius: 30px !important; border: 2px solid var(--main, #004BD6) !important; background-color: #fff !important; color: var(--main, #004BD6) !important; text-align: center !important; font-family: 'Gmarket Sans' !important; font-size: 18px !important; font-style: normal !important; font-weight: 400 !important; line-height: normal !important; text-decoration: none !important; margin: 0 auto !important;">구현
+				기술 보러가기</a>
+		</div>
+	</div>
+</section>
+
+<section class="dashboard" style="background-color: #004BD6;">
+	<div class="container" style="max-width: 1200px; margin: 0 auto; position: relative; padding: 60px 0;">
+		<div class="dashboard-content"
+		     style="display: flex; flex-direction: column; align-items: flex-start; gap: 30px;">
+			<div class="dashboard-text" style="text-align: left; max-width: 600px;">
+				<span style="color: #FFF; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 100%; margin-bottom: 10px; display: block;">VIDEO</span>
+				<h2 style="color: #FFF; font-family: 'Gmarket Sans'; font-size: 36px; font-style: normal; font-weight: 400; line-height: 140%; margin-bottom: 29px;">
+					눈에 보이지 않던 오프라인 흐름<br>오프플로우는 온라인으로 시각화합니다.</h2>
+			</div>
+			<div class="dashboard-video"
+			     style="max-width: 1000px; width: 100%; align-self: center; position: relative;">
+				<!-- 맥북 이미지 프레임 -->
+				<div class="macbook-frame" style="position: relative; width: 1008px; height: 609px">
+					<img src="images/MacBook Pro 14.svg" alt="MacBook Pro 프레임"
+					     style="position: absolute; top: 0px; left: 0px; width: 100%; height: auto; display: block;">
+
+					<!-- 비디오가 들어갈 위치 (맥북 화면 영역) -->
+					<div class="video-container"
+					     style="position: absolute; top: 32px; left: 108px; width: 792px; height: 515px; overflow: hidden; background-color: #000; border-radius: 10px; overflow: hidden">
+						<!-- YouTube 비디오 iframe으로 교체 -->
+						<iframe
+								width="100%"
+								height="100%"
+								src="https://youtu.be/xR-jQg1DCww?si=zwIiv1v5dBJn7Wee"
+								title="오프플로우 대시보드 비디오"
+								frameborder="0"
+								allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+								allowfullscreen
+								style="display: block; position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
+						</iframe>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<footer style="position: relative; overflow: hidden; background-image: url('images/footerback1.svg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+	<!-- 배경 SVG 대신 footerback1.svg 이미지를 배경으로 사용 -->
+	
+	<div class="container" style="max-width: 1200px; margin: 0 auto; padding: 80px 0; position: relative; z-index: 1;">
+		<div class="footer-content" style="display: flex; justify-content: space-between; align-items: center;">
+			<h3 style="color: #FFF; font-family: 'Gmarket Sans'; font-size: 36px; font-style: normal; font-weight: 400; line-height: 150%; text-align: left; margin: 0; max-width: 70%;">
+				오프라인 공간의 눈이되어<br>의사결정을 위한 길잡이가 되겠습니다.</h3>
+
+			<a href="https://docs.google.com/forms/d/e/1FAIpQLSc4Vr6WNsv6DZbBiXc4G7FqMY1lrCGoPNdvelwSGsXYPHjraw/viewform"
+			   target="_blank" class="footer-btn"
+			   style="display: inline-flex; height: 54px; padding: 16px 24px; justify-content: center; align-items: center; gap: 10px; flex-shrink: 0; border: 1px solid #FFF; background: transparent; color: #FFF; text-align: center; font-family: 'Gmarket Sans'; font-size: 18px; font-style: normal; font-weight: 400; line-height: normal; cursor: pointer; text-decoration: none;">
+				서비스 문의하기 <i class="fas fa-arrow-right"></i>
+			</a>
+		</div>
+	</div>
+</footer>
+
+<script src="js/main.js"></script>
+<!-- 인라인 패럴랙스 스크립트 추가 -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // 패럴랙스 효과 즉시 실행 확인
+    console.log('인라인 스크립트 실행');
+
+    const heroCircle = document.querySelector('.hero-circle');
+    const heroLogo = document.querySelector('.hero-logo');
+    const heroSection = document.querySelector('.hero');
+
+    // 스크롤 버튼 이벤트 리스너 추가
+    const scrollButton = document.getElementById('scrollToWhyPopup');
+    const whyPopupSection = document.querySelector('.why-popup');
+
+    if (scrollButton && whyPopupSection) {
+      scrollButton.addEventListener('click', function () {
+        // 부드러운 스크롤로 why-popup 섹션으로 이동
+        whyPopupSection.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      });
+    }
+
+    if (heroCircle && heroSection) {
+      heroSection.addEventListener('mousemove', function (e) {
+        // 마우스 위치를 0~1 범위로 정규화
+        const mouseX = e.clientX / window.innerWidth;
+        const mouseY = e.clientY / window.innerHeight;
+
+        // 이동 범위 (픽셀)
+        const moveRange = 40;
+
+        // 마우스 반대 방향으로 이동
+        const moveX = (0.5 - mouseX) * moveRange * 2;
+        const moveY = (0.5 - mouseY) * moveRange * 2;
+
+        // 로고는 반대로 움직임
+        const logoMoveX = (mouseX - 0.5) * moveRange * 0.6;
+        const logoMoveY = (mouseY - 0.5) * moveRange * 0.6;
+
+        // 즉시 적용
+        heroCircle.style.transform = `translate(${moveX}px, ${moveY}px)`;
+
+        if (heroLogo) {
+          heroLogo.style.transform = `translate(${logoMoveX}px, ${logoMoveY}px)`;
+        }
+      });
+
+      // 마우스가 벗어나면 초기화
+      heroSection.addEventListener('mouseleave', function () {
+        heroCircle.style.transform = 'translate(0, 0)';
+        if (heroLogo) {
+          heroLogo.style.transform = 'translate(0, 0)';
+        }
+      });
+
+      console.log('패럴랙스 효과 바로 적용됨');
+    }
+
+    // 무한 스크롤 구현
+    function setupInfiniteScroll() {
+      const processItems = document.getElementById('processItems');
+      const items = processItems.querySelectorAll('.process-item');
+
+      // 아이템을 여러 번 복제하여 부드러운 무한 스크롤 효과 구현
+      // 더 많은 아이템을 복제하여 끊김 없는 스크롤 구현
+      for (let i = 0; i < 2; i++) {
+        items.forEach(item => {
+          const clone = item.cloneNode(true);
+          processItems.appendChild(clone);
+        });
+      }
+    }
+
+    // 무한 스크롤 초기화
+    //setupInfiniteScroll();
+
+    // 모든 버튼에 대한 alert 제거
+    document.querySelectorAll('.primary-btn, .outline-btn, .dark-btn, .login-btn, .footer-btn').forEach(button => {
+      button.addEventListener('click', function (e) {
+        // alert 대신 콘솔 로그만 출력
+        console.log('버튼 클릭됨:', this.textContent.trim());
+
+        // 특정 링크가 있는 경우에만 기본 동작 허용
+        if (this.tagName !== 'A' || !this.getAttribute('href') || this.getAttribute('href') === '#') {
+          e.preventDefault();
+        }
+      });
+    });
+  });
+</script>
+<!-- 페이지 로드 시 애니메이션 적용 스크립트 -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // 애니메이션 요소들 표시
+    setTimeout(function () {
+      const animatedElements = document.querySelectorAll('.animated');
+      animatedElements.forEach(function (element) {
+        element.classList.add('show');
+      });
+    }, 300);
+  });
+</script>
+</body>
+</html>
