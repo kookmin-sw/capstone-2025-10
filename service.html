@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OFFFLOW - 서비스 소개</title>
+    <link rel="stylesheet" href="css/style.css?v=5.3">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Gmarket Sans 폰트 추가 -->
+    <link href="https://webfontworld.github.io/gmarket/GmarketSans.css" rel="stylesheet">
+    <style>
+        /* 헤더 크기 조정 */
+        header {
+            padding: 10px 0 !important;
+        }
+        
+        /* hero 섹션 높이 설정 */
+        .hero {
+            height: 597px !important;
+            max-height: 597px !important;
+            overflow: hidden !important;
+            position: relative !important;
+        }
+        
+        .hero-background {
+            height: 100% !important;
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+        }
+        
+        .hero-background svg {
+            height: 100% !important;
+            object-fit: cover !important;
+        }
+        
+        .hero-content {
+            padding-top: 80px !important;
+            position: relative !important;
+            z-index: 1 !important;
+        }
+        
+        .hero-text h2 {
+            font-size: 48px !important;
+            line-height: 60px !important;
+            margin-bottom: 15px !important;
+        }
+        
+        .hero-text p {
+            font-size: 24px !important;
+            line-height: 40px !important;
+            margin-bottom: 20px !important;
+        }
+        
+        /* 푸터 버튼 호버 효과 */
+        .footer-btn {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .footer-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .footer-btn:hover i {
+            transform: translateX(5px);
+        }
+        
+        .footer-btn i {
+            transition: transform 0.3s ease;
+        }
+        
+        .footer-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 0;
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+        
+        .footer-btn:active::after {
+            height: 300%;
+            opacity: 1;
+            transition: all 0s;
+        }
+        
+        /* 서비스 문의하기 버튼 호버 효과 */
+        .service-inquiry-btn {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .service-inquiry-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .service-inquiry-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 150%;
+            height: 0;
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+        
+        .service-inquiry-btn:active::after {
+            height: 300%;
+            opacity: 1;
+            transition: all 0s;
+        }
+        
+        /* 서비스 섹션 스타일 */
+        .service-section {
+            padding: 80px 0;
+        }
+        
+        .service-section:nth-child(even) {
+            background-color: #f9fbff;
+        }
+        
+        .service-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 60px;
+        }
+        
+        .service-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .service-item-reverse {
+            flex-direction: row-reverse;
+        }
+        
+        .service-text {
+            flex: 1;
+            padding: 0 30px;
+        }
+        
+        .service-image {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .service-image img {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .service-image img:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <img src="images/offflow로고.svg" alt="OFFFLOW" width="145" height="23">
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="about.html">오프플로우 소개</a></li>
+                    <li><a href="service.html" class="active">서비스소개</a></li>
+                    <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSc4Vr6WNsv6DZbBiXc4G7FqMY1lrCGoPNdvelwSGsXYPHjraw/viewform" target="_blank" class="service-inquiry-btn" style="width: 195px; height: 60px; display: flex; align-items: center; justify-content: center; box-sizing: border-box; text-decoration: none; border-radius: 30px; border: 2px solid var(--Cooltone-CG00, #FFF); background-color: transparent; color: var(--Cooltone-CG00, #FFF); text-align: center; font-family: 'Gmarket Sans'; font-size: 16px; font-style: normal; font-weight: 400; line-height: normal;">서비스 문의하기</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero" style="height: 597px !important; max-height: 597px !important; overflow: hidden !important; position: relative !important;">
+        <div class="hero-background" style="height: 100% !important; position: absolute !important; top: 0 !important; left: 0 !important; width: 100% !important;">
+            <!-- 하단 레이어: SVG 배경 -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="2796" height="768" viewBox="0 0 2796 768" fill="none" preserveAspectRatio="xMidYMid slice" style="height: 100% !important; object-fit: cover !important;">
+                <g style="mix-blend-mode:screen">
+                    <path d="M475.5 552C282.7 552 132.833 696 82 768L0 0H2104L2795.5 714C2600.5 645.167 2373 198 1832 198C1433.5 198 1311 552 1055.5 596C842.141 632.743 716.5 552 475.5 552Z" fill="url(#paint0_linear_1970_694)" fill-opacity="1"/>
+                </g>
+                <defs>
+                    <linearGradient id="paint0_linear_1970_694" x1="226" y1="-131" x2="2154" y2="252.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#0099E6" stop-opacity="1"/>
+                        <stop offset="1" stop-color="#A5EFFE"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+            <!-- 상단 레이어: 그라데이션 오버레이 -->
+            <div class="hero-gradient-overlay"></div>
+        </div>
+        <div class="container">
+            <div class="hero-content" style="padding-top: 80px !important; position: relative !important; z-index: 1 !important;">
+                <div class="hero-text">
+                    <h4>SERVICE</h4>
+                    <h2 style="color: var(--Cooltone-CG00, #FFF); font-family: 'Gmarket Sans'; font-size: 48px !important; font-style: normal; font-weight: 500; line-height: 60px !important; white-space: nowrap; margin-bottom: 15px !important;">서비스 소개</h2>
+                    <p style="color: var(--Cooltone-CG00, #FFF); font-family: 'Gmarket Sans'; font-size: 24px !important; font-style: normal; font-weight: 300; line-height: 40px !important; margin-bottom: 20px !important;">AI 기반 오프라인 고객 분석 솔루션</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 서비스 개요 섹션 -->
+    <section class="service-section">
+        <div class="container">
+            <div class="section-header" style="text-align: center;">
+                <span style="color: var(--main, #004BD6); font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 100%; margin-bottom: 10px; display: block;">Core Function</span>
+                <h2 style="color: #000; font-family: 'Gmarket Sans'; font-size: 36px; font-style: normal; font-weight: 400; line-height: 140%; margin-bottom: 50px;">핵심 기능 3가지</h2>
+            </div>
+            
+            <div class="service-item">
+                <div class="service-text">
+                    <h3 style="color: #000; font-family: 'Gmarket Sans'; font-size: 36px; font-style: normal; font-weight: 400; line-height: 140%;">1. 군중 밀집도 - APGCC 모델</h3>
+                    <div style="height: 36px;"></div>
+                    <p style="color: #000; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 150%; margin-bottom: 20px;">
+                        백본 네트워크로서 CNN 기반의 ResNet과 VGG 계열의 성능을 비교 분석
+                    </p>
+                    <p style="color: #000; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 150%; margin-bottom: 20px;">
+                        상대적으로 우수한 특성 추출 성능을 보인 vgg16-bn 모델을 백본으로 하는 APGCC 모델 선정
+                    </p>
+                    <p style="color: #000; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 150%;">
+                        학습 데이터 셋 : ShanghaiTech Part_A
+                    </p>
+                </div>
+                <div class="service-image">
+                    <img src="images/service_overview.svg" alt="서비스 개요" style="width: 100%; max-width: 500px; margin-bottom: 30px;">
+                </div>
+            </div>
+            
+            <div style="display: flex; justify-content: space-between; flex-wrap: wrap; margin-top: 50px;">
+                <div style="flex: 0 0 32%; text-align: center; margin-bottom: 30px;">
+                    <img src="images/apgcc1.png" alt="APGCC 모델 이미지 1" style="width: 100%; border-radius: 10px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); transition: all 0.3s ease;">
+                </div>
+                <div style="flex: 0 0 32%; text-align: center; margin-bottom: 30px;">
+                    <img src="images/apgcc2.png" alt="APGCC 모델 이미지 2" style="width: 100%; border-radius: 10px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); transition: all 0.3s ease;">
+                </div>
+                <div style="flex: 0 0 32%; text-align: center; margin-bottom: 30px;">
+                    <img src="images/apgcc3.png" alt="APGCC 모델 이미지 3" style="width: 100%; border-radius: 10px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); transition: all 0.3s ease;">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 주요 기능 섹션 -->
+    <section class="service-section" style="background-color: #f9fbff;">
+        <div class="container">
+            <div class="section-header" style="text-align: center;">
+                <span style="color: var(--main, #004BD6); font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 100%; margin-bottom: 10px; display: block;">Features</span>
+                <h2 style="color: #000; font-family: 'Gmarket Sans'; font-size: 36px; font-style: normal; font-weight: 400; line-height: 140%; margin-bottom: 50px;">주요 기능</h2>
+            </div>
+            
+            <div class="service-item service-item-reverse">
+                <div class="service-text">
+                    <h3 style="color: #000; font-family: 'Gmarket Sans'; font-size: 28px; font-style: normal; font-weight: 400; margin-bottom: 20px;">대시보드 시각화</h3>
+                    <p style="color: #000; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 150%; margin-bottom: 20px;">
+                        수집된 데이터는 직관적인 대시보드를 통해 시각화되어 제공됩니다. 방문객 수, 체류 시간, 혼잡도, 인구 통계 정보 등 다양한 지표를 한눈에 확인할 수 있습니다.
+                    </p>
+                    <p style="color: #000; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 150%;">
+                        사용자 맞춤형 대시보드 설정이 가능하며, 필요한 데이터만 선별하여 볼 수 있습니다.
+                    </p>
+                </div>
+                <div class="service-image">
+                    <img src="images/dashboard_preview.svg" alt="대시보드 시각화" style="width: 100%; max-width: 500px;">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 활용 사례 섹션 -->
+    <section class="service-section">
+        <div class="container">
+            <div class="section-header" style="text-align: center;">
+                <span style="color: var(--main, #004BD6); font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 100%; margin-bottom: 10px; display: block;">Use Cases</span>
+                <h2 style="color: #000; font-family: 'Gmarket Sans'; font-size: 36px; font-style: normal; font-weight: 400; line-height: 140%; margin-bottom: 50px;">활용 사례</h2>
+            </div>
+            
+            <div class="service-item">
+                <div class="service-text">
+                    <h3 style="color: #000; font-family: 'Gmarket Sans'; font-size: 28px; font-style: normal; font-weight: 400; margin-bottom: 20px;">팝업 스토어 최적화</h3>
+                    <p style="color: #000; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 150%; margin-bottom: 20px;">
+                        팝업 스토어 운영 시 방문객 데이터를 실시간으로 분석하여 매장 레이아웃, 상품 배치, 운영 시간 등을 최적화할 수 있습니다.
+                    </p>
+                    <p style="color: #000; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 150%;">
+                        고객 행동 패턴을 분석하여 마케팅 효과를 측정하고, 더 나은 고객 경험을 제공할 수 있습니다.
+                    </p>
+                </div>
+                <div class="service-image">
+                    <img src="images/popup_store.svg" alt="팝업 스토어 활용 사례" style="width: 100%; max-width: 500px;">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer style="position: relative; overflow: hidden;">
+        <!-- 배경 SVG -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="1920" height="400" viewBox="0 0 1920 400" fill="none" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;">
+            <g opacity="0.9">
+                <path d="M0 0H1920V400H0V0Z" fill="#071755" style="mix-blend-mode:multiply"/>
+            </g>
+        </svg>
+        
+        <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 80px 0;">
+            <div class="footer-content" style="display: flex; justify-content: space-between; align-items: center;">
+                <h3 style="color: #FFF; font-family: 'Gmarket Sans'; font-size: 36px; font-style: normal; font-weight: 400; line-height: 150%; text-align: left; margin: 0; max-width: 70%;">오프라인 공간의 눈이되어<br>의사결정을 위한 길잡이가 되겠습니다.</h3>
+                
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSc4Vr6WNsv6DZbBiXc4G7FqMY1lrCGoPNdvelwSGsXYPHjraw/viewform" target="_blank" class="footer-btn" style="display: inline-flex; height: 54px; padding: 16px 24px; justify-content: center; align-items: center; gap: 10px; flex-shrink: 0; border: 1px solid #FFF; background: transparent; color: #FFF; text-align: center; font-family: 'Gmarket Sans'; font-size: 18px; font-style: normal; font-weight: 400; line-height: normal; cursor: pointer; text-decoration: none;">
+                    서비스 문의하기 <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <!-- 페이지 로드 시 애니메이션 적용 스크립트 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 애니메이션 요소들 표시
+            setTimeout(function() {
+                const animatedElements = document.querySelectorAll('.animated');
+                animatedElements.forEach(function(element) {
+                    element.classList.add('show');
+                });
+            }, 300);
+            
+            // 헤더 네비게이션 활성화
+            const currentPath = window.location.pathname;
+            const navLinks = document.querySelectorAll('nav ul li a');
+            
+            navLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                if (currentPath.includes(href) && href !== '#') {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

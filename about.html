@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OFFFLOW - 오프플로우 소개</title>
+    <link rel="stylesheet" href="css/style.css?v=5.3">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Gmarket Sans 폰트 추가 -->
+    <link href="https://webfontworld.github.io/gmarket/GmarketSans.css" rel="stylesheet">
+    <style>
+        /* 헤더 크기 조정 */
+        header {
+            padding: 10px 0 !important;
+        }
+        
+        /* hero 섹션 높이 설정 */
+        .hero {
+            height: 597px !important;
+            max-height: 597px !important;
+            overflow: hidden !important;
+            position: relative !important;
+        }
+        
+        .hero-background {
+            height: 100% !important;
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+        }
+        
+        .hero-background svg {
+            height: 100% !important;
+            object-fit: cover !important;
+        }
+        
+        .hero-content {
+            padding-top: 80px !important;
+            position: relative !important;
+            z-index: 1 !important;
+        }
+        
+        .hero-text h2 {
+            font-size: 48px !important;
+            line-height: 60px !important;
+            margin-bottom: 15px !important;
+        }
+        
+        .hero-text p {
+            font-size: 24px !important;
+            line-height: 40px !important;
+            margin-bottom: 20px !important;
+        }
+        
+        /* 푸터 버튼 호버 효과 */
+        .footer-btn {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .footer-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .footer-btn:hover i {
+            transform: translateX(5px);
+        }
+        
+        .footer-btn i {
+            transition: transform 0.3s ease;
+        }
+        
+        .footer-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 0;
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+        
+        .footer-btn:active::after {
+            height: 300%;
+            opacity: 1;
+            transition: all 0s;
+        }
+        
+        /* 서비스 문의하기 버튼 호버 효과 */
+        .service-inquiry-btn {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .service-inquiry-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .service-inquiry-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 150%;
+            height: 0;
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+        
+        .service-inquiry-btn:active::after {
+            height: 300%;
+            opacity: 1;
+            transition: all 0s;
+        }
+        
+        /* 팀원 카드 스타일 */
+        .team-member-card {
+            text-align: center;
+            margin-bottom: 40px;
+            transition: all 0.3s ease;
+        }
+        
+        .team-member-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .member-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto 15px;
+        }
+        
+        .member-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .member-info h4 {
+            color: #000;
+            font-family: 'Gmarket Sans';
+            font-size: 18px;
+            font-style: normal;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .member-role {
+            color: #004BD6;
+            font-family: 'Gmarket Sans';
+            font-size: 16px;
+            font-weight: 400;
+            margin-bottom: 10px;
+        }
+        
+        .member-details {
+            color: #333;
+            font-family: 'Gmarket Sans';
+            font-size: 14px;
+            font-weight: 300;
+            line-height: 1.5;
+        }
+        
+        /* 협업 프로세스 스타일 */
+        .collaboration-process {
+            margin-bottom: 80px;
+        }
+        
+        .process-timeline {
+            position: relative;
+            padding: 30px 0;
+        }
+        
+        .process-timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 2px;
+            height: 100%;
+            background-color: #004BD6;
+            transform: translateX(-50%);
+        }
+        
+        .process-item {
+            display: flex;
+            margin-bottom: 50px;
+            position: relative;
+        }
+        
+        .process-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .process-item-content {
+            background-color: #f9fbff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 80%;
+            max-width: 500px;
+        }
+        
+        /* 프로젝트 관리 스타일 */
+        .project-management {
+            margin-bottom: 80px;
+        }
+        
+        .kanban-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .kanban-column {
+            flex: 1;
+            background-color: #f5f5f5;
+            border-radius: 10px;
+            padding: 20px;
+            min-height: 300px;
+        }
+        
+        .kanban-title {
+            color: #004BD6;
+            font-family: 'Gmarket Sans';
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        /* 프로젝트 관리 이미지 호버 효과 */
+        .management-image {
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        
+        .management-image:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <img src="images/offflow로고.svg" alt="OFFFLOW" width="145" height="23">
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="about.html" class="active">오프플로우 소개</a></li>
+                    <li><a href="#">서비스소개</a></li>
+                    <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSc4Vr6WNsv6DZbBiXc4G7FqMY1lrCGoPNdvelwSGsXYPHjraw/viewform" target="_blank" class="service-inquiry-btn" style="width: 195px; height: 60px; display: flex; align-items: center; justify-content: center; box-sizing: border-box; text-decoration: none; border-radius: 30px; border: 2px solid var(--Cooltone-CG00, #FFF); background-color: transparent; color: var(--Cooltone-CG00, #FFF); text-align: center; font-family: 'Gmarket Sans'; font-size: 16px; font-style: normal; font-weight: 400; line-height: normal;">서비스 문의하기</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero" style="height: 597px !important; max-height: 597px !important; overflow: hidden !important; position: relative !important;">
+        <div class="hero-background" style="height: 100% !important; position: absolute !important; top: 0 !important; left: 0 !important; width: 100% !important;">
+            <!-- 하단 레이어: SVG 배경 -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="2796" height="768" viewBox="0 0 2796 768" fill="none" preserveAspectRatio="xMidYMid slice" style="height: 100% !important; object-fit: cover !important;">
+                <g style="mix-blend-mode:screen">
+                    <path d="M475.5 552C282.7 552 132.833 696 82 768L0 0H2104L2795.5 714C2600.5 645.167 2373 198 1832 198C1433.5 198 1311 552 1055.5 596C842.141 632.743 716.5 552 475.5 552Z" fill="url(#paint0_linear_1970_694)" fill-opacity="1"/>
+                </g>
+                <defs>
+                    <linearGradient id="paint0_linear_1970_694" x1="226" y1="-131" x2="2154" y2="252.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#0099E6" stop-opacity="1"/>
+                        <stop offset="1" stop-color="#A5EFFE"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+            <!-- 상단 레이어: 그라데이션 오버레이 -->
+            <div class="hero-gradient-overlay"></div>
+        </div>
+        <div class="container">
+            <div class="hero-content" style="padding-top: 80px !important; position: relative !important; z-index: 1 !important;">
+                <div class="hero-text">
+                    <h4>ABOUT US</h4>
+                    <h2 style="color: var(--Cooltone-CG00, #FFF); font-family: 'Gmarket Sans'; font-size: 48px !important; font-style: normal; font-weight: 500; line-height: 60px !important; white-space: nowrap; margin-bottom: 15px !important;">오프플로우 소개</h2>
+                    <p style="color: var(--Cooltone-CG00, #FFF); font-family: 'Gmarket Sans'; font-size: 24px !important; font-style: normal; font-weight: 300; line-height: 40px !important; margin-bottom: 20px !important;">AI 기반 오프라인 고객 분석 솔루션</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 오프플로우 핵심 섹션 -->
+    <section class="core" style="padding: 80px 0;">
+        <div class="container">
+            <div class="section-header" style="text-align: left !important;">
+                <span style="color: var(--main, #004BD6); font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 100%; margin-bottom: 36px; display: block; text-align: left !important;">Brand</span>
+                <h2 style="color: #000; font-family: 'Gmarket Sans'; font-size: 36px; font-style: normal; font-weight: 400; line-height: 140%; margin-bottom: 36px; text-align: left !important;">오프플로우의 핵심</h2>
+            </div>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 50px;">
+                <div style="flex: 1;">
+                    <p style="color: #000; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 150%; margin-bottom: 20px; text-align: left !important;">
+                        OFFFLOW는 오프라인 공간의 사람 흐름을 실시간 수집 및 분석하는 AI 기반 대시보드 솔루션입니다.
+                    </p>
+                    <p style="color: #000; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 150%; margin-bottom: 20px; text-align: left !important;">
+                        비전 인식 기술 및 AI 모델을 활용해 방문객의 동선, 체류 시간, 군중 밀집도, 성별·연령 분포를 자동으로 추적합니다.
+                    </p>
+                    <p style="color: #000; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 150%; margin-bottom: 20px; text-align: left !important;">
+                        데이터는 대시보드를 통해 시각화되며 사용자 맞춤형 이벤트 조건 설정과 섹션별 인사이트 분석이 가능합니다.
+                    </p>
+                    <p style="color: #000; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 150%; text-align: left !important;">
+                        OFFFLOW는 오프라인 공간의 흐름을 디지털 데이터로 전환해, 더 스마트한 공간 관리를 실현합니다.
+                    </p>
+                </div>
+                <div style="flex: 1;">
+                    <img src="images/dachboard1.svg" alt="오프플로우 대시보드" style="width: 100%; border-radius: 10px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 팀원 소개 섹션 -->
+    <section class="team-members" style="padding: 80px 0; background-color: #f9fbff;">
+        <div class="container" style="max-width: 1400px;">
+            <div class="section-header">
+                <span style="color: var(--main, #004BD6); font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 100%; margin-bottom: 10px; display: block; text-align: center;">Team Member</span>
+                <h2 style="color: #000; font-family: 'Gmarket Sans'; font-size: 36px; font-style: normal; font-weight: 400; line-height: 140%; margin-bottom: 50px; text-align: center;">팀원 소개</h2>
+            </div>
+            
+            <div style="display: flex; flex-wrap: nowrap; justify-content: space-between; gap: 20px; overflow-x: auto;">
+                <!-- 팀원 1 -->
+                <div class="team-member-card" style="flex: 0 0 auto; width: 240px;">
+                    <div class="member-photo" style="width: 200px; height: 200px; flex-shrink: 0; aspect-ratio: 1/1; margin: 0 auto 15px;">
+                        <img src="images/김민준.svg" alt="김민준" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="member-info">
+                        <div class="member-role" style="color: #000; font-family: NanumSquareOTF; font-size: 20px; font-style: normal; font-weight: 700; line-height: 150%;">Backend & DB</div>
+                        <h4 style="color: #000; font-family: NanumSquareOTF; font-size: 20px; font-style: normal; font-weight: 400; line-height: 150%; margin-bottom: 28px;">김민준 | 20171591</h4>
+                        <div class="member-details" style="color: #000; text-align: center; font-family: NanumSquareOTF; font-size: 20px; font-style: normal; font-weight: 400; line-height: 200%;">
+                            <p>팀장 및 PM 역할 수행</p>
+                            <p>프로젝트 BA, SA기획</p>
+                            <p>백엔드 API서버 구현</p>
+                            <p>DB 스키마 설계 및 구현</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 팀원 2 -->
+                <div class="team-member-card" style="flex: 0 0 auto; width: 240px;">
+                    <div class="member-photo" style="width: 200px; height: 200px; flex-shrink: 0; aspect-ratio: 1/1; margin: 0 auto 15px;">
+                        <img src="images/최진혁.svg" alt="최진혁" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="member-info">
+                        <div class="member-role" style="color: #000; font-family: NanumSquareOTF; font-size: 20px; font-style: normal; font-weight: 700; line-height: 150%;">Frontend & Cloud</div>
+                        <h4 style="color: #000; font-family: NanumSquareOTF; font-size: 20px; font-style: normal; font-weight: 400; line-height: 150%; margin-bottom: 28px;">최진혁 | 20171715</h4>
+                        <div class="member-details" style="color: #000; text-align: center; font-family: NanumSquareOTF; font-size: 20px; font-style: normal; font-weight: 400; line-height: 200%;">
+                            <p>클라우드 관리</p>
+                            <p>외부 API 연동</p>
+                            <p>서비스 UI 구현 및 서버연동</p>
+                            <p>서류 작성</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 팀원 3 -->
+                <div class="team-member-card" style="flex: 0 0 auto; width: 240px;">
+                    <div class="member-photo" style="width: 200px; height: 200px; flex-shrink: 0; aspect-ratio: 1/1; margin: 0 auto 15px;">
+                        <img src="images/김린회.svg" alt="김린회" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="member-info">
+                        <div class="member-role" style="color: #000; font-family: NanumSquareOTF; font-size: 20px; font-style: normal; font-weight: 700; line-height: 150%;">Frontend & Backend</div>
+                        <h4 style="color: #000; font-family: NanumSquareOTF; font-size: 20px; font-style: normal; font-weight: 400; line-height: 150%; margin-bottom: 28px;">김린회 | 20181581</h4>
+                        <div class="member-details" style="color: #000; text-align: center; font-family: NanumSquareOTF; font-size: 20px; font-style: normal; font-weight: 400; line-height: 200%;">
+                            <p>서비스 배포</p>
+                            <p>비전 서버 개발</p>
+                            <p>서비스 UI 구현 및 서버연동</p>
+                            <p>GITHUB 총괄관리</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 팀원 4 -->
+                <div class="team-member-card" style="flex: 0 0 auto; width: 240px;">
+                    <div class="member-photo" style="width: 200px; height: 200px; flex-shrink: 0; aspect-ratio: 1/1; margin: 0 auto 15px;">
+                        <img src="images/성정규.svg" alt="성정규" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="member-info">
+                        <div class="member-role" style="color: #000; font-family: NanumSquareOTF; font-size: 20px; font-style: normal; font-weight: 700; line-height: 150%;">AI</div>
+                        <h4 style="color: #000; font-family: NanumSquareOTF; font-size: 20px; font-style: normal; font-weight: 400; line-height: 150%; margin-bottom: 28px;">성정규 | 20191610</h4>
+                        <div class="member-details" style="color: #000; text-align: center; font-family: NanumSquareOTF; font-size: 20px; font-style: normal; font-weight: 400; line-height: 200%;">
+                            <p>데이터 전처리 및 라벨링</p>
+                            <p>모델 설계 및 학습</p>
+                            <p>모델 성능 측정</p>
+                            <p>모델 인퍼런스 코드 작성</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 팀원 5 -->
+                <div class="team-member-card" style="flex: 0 0 auto; width: 240px;">
+                    <div class="member-photo" style="width: 200px; height: 200px; flex-shrink: 0; aspect-ratio: 1/1; margin: 0 auto 15px;">
+                        <img src="images/윤민상.svg" alt="윤민상" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="member-info">
+                        <div class="member-role" style="color: #000; font-family: NanumSquareOTF; font-size: 20px; font-style: normal; font-weight: 700; line-height: 150%;">AI</div>
+                        <h4 style="color: #000; font-family: NanumSquareOTF; font-size: 20px; font-style: normal; font-weight: 400; line-height: 150%; margin-bottom: 28px;">윤민상 | 20191631</h4>
+                        <div class="member-details" style="color: #000; text-align: center; font-family: NanumSquareOTF; font-size: 20px; font-style: normal; font-weight: 400; line-height: 200%;">
+                            <p>모델 조사 및 실험</p>
+                            <p>모델 설계 및 학습</p>
+                            <p>모델 성능 측정</p>
+                            <p>DeepSORT 알고리즘 개발</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 협업 방식 섹션 -->
+    <section class="collaboration" style="padding: 80px 0;">
+        <div class="container">
+            <div class="section-header" style="text-align: left !important;">
+                <span style="color: var(--main, #004BD6); font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 100%; margin-bottom: 10px; display: block; text-align: left !important;">Cooperation</span>
+                <h2 style="color: #000; font-family: 'Gmarket Sans'; font-size: 36px; font-style: normal; font-weight: 400; line-height: 140%; margin-bottom: -40px; text-align: left !important;">협업방식</h2>
+            </div>
+            
+            <div style="text-align: left !important; margin-bottom: 50px;">
+                <p style="color: #000; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 150%; text-align: left !important;">
+                    깃허브 협업 전략을 채택하여 Issue 중심의 Task 관리를 진행하였습니다.
+                </p>
+            </div>
+            
+            <div style="display: flex; justify-content: center;">
+                <img src="images/cooperation_img.svg" alt="협업 프로세스" style="max-width: 80%; border-radius: 10px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);">
+            </div>
+        </div>
+    </section>
+
+    <!-- 프로젝트 관리 방식 섹션 -->
+    <section class="project-management" style="padding: 80px 0; background-color: #f9fbff;">
+        <div class="container">
+            <div class="section-header" style="text-align: right !important;">
+                <span style="color: var(--main, #004BD6); font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 100%; margin-bottom: 10px; display: block; text-align: right !important;">Management</span>
+                <h2 style="color: #000; font-family: 'Gmarket Sans'; font-size: 36px; font-style: normal; font-weight: 400; line-height: 140%; margin-bottom: -40px; text-align: right !important;">프로젝트 관리방식</h2>
+            </div>
+            
+            <div style="text-align: right; margin-bottom: 50px;">
+                <p style="color: #000; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 150%;">
+                    노션 및 트렐로를 활용하여 일정 및 과업을 정리하였습니다. 
+                </p>
+            </div>
+            
+            <div style="display: flex; justify-content: space-between; gap: 30px;">
+                <div style="flex: 1; text-align: center;">
+                    <img src="images/management1.svg" alt="노션 관리 방식" class="management-image" style="width: 100%; border-radius: 10px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); margin-bottom: 20px;">
+                    <p style="color: #000; text-align: center; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 400; line-height: 150%;">노션을 활용한 관리방식</p>
+                </div>
+                <div style="flex: 1; text-align: center;">
+                    <img src="images/management2.svg" alt="트렐로 관리 방식" class="management-image" style="width: 100%; border-radius: 10px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); margin-bottom: 20px;">
+                    <p style="color: #000; text-align: center; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 400; line-height: 150%;">트렐로를 활용한 관리방식</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer style="position: relative; overflow: hidden;">
+        <!-- 배경 SVG -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="1920" height="400" viewBox="0 0 1920 400" fill="none" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;">
+            <g opacity="0.9">
+                <path d="M0 0H1920V400H0V0Z" fill="#071755" style="mix-blend-mode:multiply"/>
+            </g>
+        </svg>
+        
+        <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 80px 0;">
+            <div class="footer-content" style="display: flex; justify-content: space-between; align-items: center;">
+                <h3 style="color: #FFF; font-family: 'Gmarket Sans'; font-size: 36px; font-style: normal; font-weight: 400; line-height: 150%; text-align: left; margin: 0; max-width: 70%;">오프라인 공간의 눈이되어<br>의사결정을 위한 길잡이가 되겠습니다.</h3>
+                
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSc4Vr6WNsv6DZbBiXc4G7FqMY1lrCGoPNdvelwSGsXYPHjraw/viewform" target="_blank" class="footer-btn" style="display: inline-flex; height: 54px; padding: 16px 24px; justify-content: center; align-items: center; gap: 10px; flex-shrink: 0; border: 1px solid #FFF; background: transparent; color: #FFF; text-align: center; font-family: 'Gmarket Sans'; font-size: 18px; font-style: normal; font-weight: 400; line-height: normal; cursor: pointer; text-decoration: none;">
+                    서비스 문의하기 <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <!-- 페이지 로드 시 애니메이션 적용 스크립트 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 애니메이션 요소들 표시
+            setTimeout(function() {
+                const animatedElements = document.querySelectorAll('.animated');
+                animatedElements.forEach(function(element) {
+                    element.classList.add('show');
+                });
+            }, 300);
+            
+            // 헤더 네비게이션 활성화
+            const currentPath = window.location.pathname;
+            const navLinks = document.querySelectorAll('nav ul li a');
+            
+            navLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                if (currentPath.includes(href) && href !== '#') {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

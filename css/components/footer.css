@@ -1,0 +1,111 @@
+/* 푸터 스타일 */
+footer {
+    position: relative;
+    overflow: hidden;
+}
+
+.footer-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+footer .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 80px 0;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer-text {
+    color: #FFF;
+    font-family: 'Gmarket Sans';
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 150%;
+    text-align: left;
+    margin: 0;
+    max-width: 70%;
+}
+
+.footer-btn {
+    display: inline-flex;
+    height: 54px;
+    padding: 16px 24px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    border: 1px solid #FFF;
+    background: transparent;
+    color: #FFF;
+    text-align: center;
+    font-family: 'Gmarket Sans';
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.footer-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.footer-btn:hover i {
+    transform: translateX(5px);
+}
+
+.footer-btn i {
+    transition: transform 0.3s ease;
+}
+
+.footer-btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 0;
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    opacity: 0;
+    transition: all 0.5s ease;
+}
+
+.footer-btn:active::after {
+    height: 300%;
+    opacity: 1;
+    transition: all 0s;
+}
+
+/* 모바일 대응 */
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .footer-text {
+        font-size: 24px;
+        max-width: 100%;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+} 

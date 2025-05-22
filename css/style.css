@@ -1,0 +1,770 @@
+/* 전체 스타일 초기화 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    position: relative;
+    z-index: 3;
+    text-align: initial;
+}
+
+/* 버튼 스타일 */
+.primary-btn, 
+button.primary-btn,
+.hero-text .primary-btn {
+    background: linear-gradient(93deg, #FF5C00 0%, #FFAD27 74.48%, #FFD64C 100%) !important;
+    color: #FFF !important;
+    border: none !important;
+    padding: 12px 19px !important;
+    border-radius: 30px !important;
+    font-weight: 500 !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 10px rgba(255, 122, 0, 0.2) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    min-width: 320px !important;
+    height: 60px !important;
+    flex-shrink: 0 !important;
+    text-align: center !important;
+    font-family: "Gmarket Sans", sans-serif !important;
+    font-size: 18px !important;
+    font-style: normal !important;
+    line-height: normal !important;
+    white-space: nowrap !important;
+}
+
+.primary-btn:hover,
+button.primary-btn:hover,
+.hero-text .primary-btn:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 15px rgba(255, 122, 0, 0.3) !important;
+    opacity: 0.95 !important;
+}
+
+.outline-btn {
+    background: transparent;
+    color: #0099E6;
+    border: 2px solid #0099E6;
+    padding: 10px 24px;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.outline-btn:hover {
+    background: rgba(0, 153, 230, 0.1);
+    transform: translateY(-2px);
+}
+
+.dark-btn {
+    background: #1A1A2E;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dark-btn:hover {
+    background: #2A2A4E;
+    transform: translateY(-2px);
+}
+
+/* 헤더 스타일 */
+header {
+    background-color: transparent;
+    padding: 20px 0;
+    position: absolute;
+    width: 100%;
+    z-index: 100;
+}
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    height: 36px;
+}
+
+.logo h1 {
+    color: white;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+nav ul li a {
+    color: #FFF;
+    font-family: "Gmarket Sans", sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 160%;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+nav ul li a:hover {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.login-btn {
+    width: 195px;
+    height: 60px;
+    flex-shrink: 0;
+    border-radius: 30px;
+    border: 2px solid #FFF;
+    background: transparent;
+    color: #FFF;
+    text-align: center;
+    font-family: "Gmarket Sans", sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+}
+
+/* 히어로 섹션 */
+.hero {
+    position: relative;
+    min-height: 100vh;
+    padding: 150px 0 80px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.hero-background svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+/* 추가된 SVG 오버레이 스타일 */
+.hero-background svg:nth-child(2) {
+    z-index: 1.5;
+    opacity: 0.8;
+    mix-blend-mode: multiply;
+}
+
+.hero-gradient-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #4DD2FF 0%, #A64DFF 100%);
+    opacity: 0.85;
+    z-index: 2;
+    mix-blend-mode: normal;
+}
+
+.hero-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 50px;
+    position: relative;
+    z-index: 3;
+}
+
+.hero-text {
+    color: white;
+    flex: 1;
+    max-width: 650px;
+}
+
+.hero-text h4 {
+    color: var(--Cooltone-CG00, #FFF);
+    font-family: "Gmarket Sans";
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin-bottom: 20px;
+}
+
+.hero-text h2 {
+    color: var(--Cooltone-CG00, #FFF) !important;
+    font-family: "Gmarket Sans" !important;
+    font-size: 60px !important;
+    font-style: normal !important;
+    font-weight: 500 !important;
+    line-height: 80px !important; /* 133.333% */
+    margin-bottom: 20px !important;
+}
+
+.hero-text p {
+    font-size: 18px;
+    margin-bottom: 30px;
+    opacity: 0.8;
+}
+
+.hero-image {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-circle {
+    width: 400px;
+    height: 400px;
+    flex-shrink: 0;
+    aspect-ratio: 1/1;
+    border-radius: 400px;
+    background: linear-gradient(51deg, rgba(147, 88, 247, 0.90) 0.87%, rgba(123, 120, 242, 0.90) 25.96%, rgba(97, 151, 238, 0.90) 49.23%, rgba(69, 181, 233, 0.90) 74.93%, rgba(16, 215, 226, 0.90) 97.48%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    transition: transform 0.15s ease-out;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    will-change: transform;
+    transform: translate(0, 0);
+}
+
+.hero-logo {
+    width: 320px;
+    height: 56.89px;
+    flex-shrink: 0;
+    transition: transform 0.2s ease-out;
+    will-change: transform;
+    transform: translate(0, 0);
+}
+
+/* 팝업스토어 섹션 */
+.why-popup {
+    padding: 100px 0;
+    background: #FFFFFF;
+    border: 1px solid #E8E8E8;
+}
+
+.why-popup .container {
+    text-align: left !important;
+}
+
+.why-popup .section-header {
+    margin-bottom: 60px;
+    display: block;
+    width: 100%;
+    text-align: left !important;
+}
+
+.why-popup .section-header * {
+    text-align: left !important;
+    margin-left: 0 !important;
+    margin-right: auto !important;
+}
+
+.why-popup .section-header span {
+    display: block;
+    text-align: left !important;
+    margin-bottom: 10px;
+}
+
+.why-popup .section-header h2 {
+    text-align: left !important;
+    margin-bottom: 29px;
+}
+
+.why-popup .section-header p {
+    text-align: left !important;
+    margin-bottom: 50px;
+    margin-left: 0 !important;
+    max-width: none;
+}
+
+.why-popup .stats-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.why-popup .stat-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    padding: 30px;
+    width: 100%;
+    max-width: 560px;
+    flex: 1;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.why-popup .stat-card h3 {
+    text-align: center;
+    margin-bottom: 30px;
+    width: 100%;
+    position: relative;
+    z-index: 2;
+}
+
+.why-popup .stat-graph {
+    margin-top: 20px;
+    height: 426px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+    overflow: visible;
+}
+
+.why-popup .stat-graph img {
+    max-width: 368px;
+    max-height: 426px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+}
+
+/* 왜 오프플로우 섹션 */
+.why-offflow {
+    padding: 100px 0;
+    background: #F8F9FA;
+}
+
+/* 일반 section-header 스타일 (why-popup 다음에 정의하여 우선순위 낮추기) */
+.section-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.section-header span {
+    color: #4481FF;
+    font-weight: 600;
+    font-size: 14px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.section-header h2 {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #1A1A2E;
+}
+
+.section-header p {
+    color: #6C757D;
+    font-size: 16px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.stats-container {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    padding: 25px;
+    width: 100%;
+    max-width: 500px;
+}
+
+.stat-card h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1A1A2E;
+    margin-bottom: 20px;
+}
+
+.stat-card h3 span {
+    color: #4481FF;
+    font-weight: 700;
+}
+
+.stat-graph {
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stat-graph img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* 솔루션 섹션 */
+.solutions {
+    padding: 100px 0;
+    background: white;
+}
+
+.solution-cards {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.solution-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    width: 100%;
+    max-width: 500px;
+}
+
+.solution-image {
+    height: 250px;
+    overflow: hidden;
+}
+
+.solution-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.solution-card:hover .solution-image img {
+    transform: scale(1.05);
+}
+
+.solution-card h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1A1A2E;
+    padding: 20px 20px 10px;
+}
+
+.solution-card p {
+    color: #6C757D;
+    font-size: 15px;
+    padding: 0 20px 20px;
+    line-height: 1.6;
+}
+
+/* 특징 섹션 */
+.features {
+    padding: 100px 0;
+    background: #F8F9FA;
+}
+
+.features-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.features-header h3 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1A1A2E;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 15px;
+}
+
+.features-header h3:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 3px;
+    background: #4481FF;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 30px;
+}
+
+.feature-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    padding: 30px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.feature-icon {
+    margin-bottom: 20px;
+}
+
+.feature-icon img {
+    width: 80px;
+    height: 80px;
+}
+
+.feature-card h4 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1A1A2E;
+}
+
+/* 사용 방법 섹션 */
+.how-it-works {
+    padding: 100px 0;
+    background: white;
+}
+
+.how-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.how-header h2 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #1A1A2E;
+    line-height: 1.4;
+}
+
+.steps {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin-bottom: 50px;
+}
+
+.step {
+    width: 100%;
+    max-width: 300px;
+    position: relative;
+    text-align: center;
+}
+
+.step-image {
+    margin-bottom: 20px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    padding: 20px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.step-image img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.step-number {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #4481FF;
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 5px 15px;
+    border-radius: 20px;
+}
+
+.step h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1A1A2E;
+}
+
+.cta {
+    text-align: center;
+}
+
+/* 대시보드 섹션 */
+.dashboard {
+    padding: 100px 0;
+    background: #0A51CC;
+    color: white;
+}
+
+.dashboard-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.dashboard-text {
+    margin-bottom: 50px;
+}
+
+.dashboard-text span {
+    font-size: 14px;
+    font-weight: 600;
+    opacity: 0.8;
+    display: block;
+    margin-bottom: 15px;
+}
+
+.dashboard-text h2 {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.dashboard-image img {
+    max-width: 100%;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+/* 푸터 */
+footer {
+    padding: 80px 0;
+    background: #111827;
+    color: white;
+}
+
+.footer-content {
+    text-align: center;
+}
+
+.footer-content h3 {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.5;
+    margin-bottom: 30px;
+    opacity: 0.9;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 992px) {
+    .hero-content {
+        flex-direction: column;
+    }
+    
+    .hero-text {
+        text-align: center;
+    }
+    
+    .hero-text h2 {
+        font-size: 40px;
+    }
+    
+    .steps {
+        gap: 50px;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero {
+        padding: 120px 0 60px;
+    }
+    
+    .hero-text h2 {
+        font-size: 32px;
+    }
+    
+    .section-header h2 {
+        font-size: 30px;
+    }
+    
+    .how-header h2 {
+        font-size: 28px;
+    }
+    
+    .dashboard-text h2 {
+        font-size: 28px;
+    }
+}
+
+@media (max-width: 576px) {
+    nav ul {
+        gap: 15px;
+    }
+    
+    .login-btn {
+        padding: 6px 15px;
+    }
+    
+    .hero-text h2 {
+        font-size: 28px;
+    }
+    
+    .primary-btn, .outline-btn, .dark-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* section-header 관련 모든 클래스의 자동 마진 제거 */
+.why-popup .section-header p,
+.why-popup .section-header h2,
+.why-popup .section-header span,
+.why-popup .section-header * {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    max-width: none !important;
+} 
