@@ -221,39 +221,99 @@
     <!-- 서비스 개요 섹션 -->
     <section class="service-section">
         <div class="container">
-            <div class="section-header" style="text-align: center;">
+            <div class="section-header" style="text-align: left;">
                 <span style="color: var(--main, #004BD6); font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 100%; margin-bottom: 10px; display: block;">Core Function</span>
-                <h2 style="color: #000; font-family: 'Gmarket Sans'; font-size: 36px; font-style: normal; font-weight: 400; line-height: 140%; margin-bottom: 50px;">핵심 기능 3가지</h2>
+                <h2 style="color: #000; font-family: 'Gmarket Sans'; font-size: 48px; font-style: normal; font-weight: 400; line-height: 140%; margin-bottom: -30px;">핵심 기능 3가지</h2>
             </div>
             
-            <div class="service-item">
+        <div class="service-item">
                 <div class="service-text">
-                    <h3 style="color: #000; font-family: 'Gmarket Sans'; font-size: 36px; font-style: normal; font-weight: 400; line-height: 140%;">1. 군중 밀집도 - APGCC 모델</h3>
+                    <h3 style="color: #000; font-family: 'Gmarket Sans'; font-size: 36px; font-style: normal; font-weight: 400; line-height: 140%; text-align: left;">1. 군중 밀집도 - APGCC 모델</h3>
                     <div style="height: 36px;"></div>
-                    <p style="color: #000; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 150%; margin-bottom: 20px;">
-                        백본 네트워크로서 CNN 기반의 ResNet과 VGG 계열의 성능을 비교 분석
-                    </p>
-                    <p style="color: #000; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 150%; margin-bottom: 20px;">
-                        상대적으로 우수한 특성 추출 성능을 보인 vgg16-bn 모델을 백본으로 하는 APGCC 모델 선정
-                    </p>
-                    <p style="color: #000; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 150%;">
+                    <p style="color: #000; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 90%; text-align: left;">
+                        백본 네트워크로서 CNN 기반의 ResNet과 VGG 계열의 성능을 비교 분석<br><br>
+                        상대적으로 우수한 특성 추출 성능을 보인 vgg16-bn 모델을 백본으로 하는 APGCC 모델 선정<br><br>
                         학습 데이터 셋 : ShanghaiTech Part_A
                     </p>
                 </div>
-                <div class="service-image">
-                    <img src="images/service_overview.svg" alt="서비스 개요" style="width: 100%; max-width: 500px; margin-bottom: 30px;">
+        </div>
+            
+            <div style="display: flex; justify-content: space-between; flex-wrap: wrap; margin-top: 50px;">
+                <div style="flex: 0 0 32%; text-align: center; margin-bottom: 30px;">
+                    <div style="width: 376.5px; height: 251px; flex-shrink: 0; aspect-ratio: 376.50/251.00; border-radius: 4px; margin: 0 auto;">
+                        <img src="images/apgcc1.png" alt="APGCC 모델 이미지 1" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); transition: all 0.3s ease;">
+                    </div>
+                    <p style="color: #000; text-align: center; font-family: NanumSquareOTF; font-size: 16px; font-style: normal; font-weight: 400; line-height: 200%; margin-top: 15px;">
+                        하이퍼파라미터 : {'BATCH_SIZE': 8, 'EPOCHS': 3500, <br>'LR': 0.0001, 'LR_BACKBONE': 1e-05}
+                    </p>
+                    <p style="color: #000; text-align: center; font-family: NanumSquareOTF; font-size: 16px; font-style: normal; font-weight: 700; line-height: 200%; margin-top: 5px;">
+                        학습 결과 : MAE=48.725275, MSE=76.739892
+                    </p>
                 </div>
+                <div style="flex: 0 0 32%; text-align: center; margin-bottom: 30px;">
+                    <div style="width: 376.5px; height: 251px; flex-shrink: 0; aspect-ratio: 376.50/251.00; border-radius: 4px; margin: 0 auto;">
+                        <img src="images/apgcc2.png" alt="APGCC 모델 이미지 2" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); transition: all 0.3s ease;">
+                    </div>
+                    <p style="color: #000; text-align: center; font-family: NanumSquareOTF; font-size: 16px; font-style: normal; font-weight: 400; line-height: 200%; margin-top: 15px;">
+                        원본 이미지에 찍힌 x,y 좌표값 서버에 전송<br>
+                        원본 이미지의 좌표를 실제 좌표로 연산 후 군집도 시각화
+                    </p>
+                </div>
+                <div style="flex: 0 0 32%; text-align: center; margin-bottom: 30px;">
+                    <div style="width: 376.5px; height: 251px; flex-shrink: 0; aspect-ratio: 376.50/251.00; border-radius: 4px; margin: 0 auto;">
+                        <img src="images/apgcc3.png" alt="APGCC 모델 이미지 3" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); transition: all 0.3s ease;">
+                    </div>
+                    <p style="color: #000; text-align: center; font-family: NanumSquareOTF; font-size: 16px; font-style: normal; font-weight: 400; line-height: 200%; margin-top: 15px;">
+                        분석된 좌표를 토대로 이미지 위에 군집도를 시각화<br>
+                        고밀도 영역은 색깔 구분을 통해 밀집정도 파악 가능
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- APGCC 모델 프로세스 섹션 -->
+    <section class="service-section" style="margin-top: 0px;">
+        <div class="container">
+            <div class="section-header" style="text-align: left;">
+                <h2 style="color: #000; font-family: 'Gmarket Sans'; font-size: 36px; font-style: normal; font-weight: 400; line-height: 140%;">APGCC 모델</h2>
+                <p style="color: #000; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 150%; margin-top: 10px; margin-bottom: 40px; float: left;">
+                    Point-based crowd counting 모델로 다음과 같은 프로세스로 군중밀집도를 처리합니다.
+                </p>
+                <div style="text-align: left; margin-top: 30px;">
+                    <img src="images/apgccmodel.svg" alt="APGCC 모델 프로세스" style="max-width: 100%; border-radius: 10px; display: block; margin-left: 0; margin-right: auto; float: left;">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- EfficientNet-B0 모델 섹션 -->
+    <section class="service-section" style="margin-top: 300px;">
+        <div class="container">
+            <div class="section-header" style="text-align: right;">
+                <h2 style="color: #000; font-family: 'Gmarket Sans'; font-size: 36px; font-style: normal; font-weight: 400; line-height: 140%;">2. 성별, 연령대 분류 - EfficientNet-B0</h2>
+                <p style="color: #000; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 150%; margin-top: 20px; margin-bottom: 40px; text-align: right;">
+                    EfficientNet-B0를 백본으로 하여 기존 classification head을 제거한 후<br>
+                    성별 및 연령대 분류를 위한 맞춤형 헤드를 추가하여 재학습<br>
+                    학습 데이터 셋: AI hub 안면 인식 에이징 이미지 데이터
+                </p>
             </div>
             
             <div style="display: flex; justify-content: space-between; flex-wrap: wrap; margin-top: 50px;">
                 <div style="flex: 0 0 32%; text-align: center; margin-bottom: 30px;">
-                    <img src="images/apgcc1.png" alt="APGCC 모델 이미지 1" style="width: 100%; border-radius: 10px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); transition: all 0.3s ease;">
+                    <div style="width: 376.5px; height: 251px; flex-shrink: 0; aspect-ratio: 376.50/251.00; border-radius: 4px; margin: 0 auto;">
+                        <img src="images/efficient1.svg" alt="EfficientNet 이미지 1" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); transition: all 0.3s ease;">
+                    </div>
                 </div>
                 <div style="flex: 0 0 32%; text-align: center; margin-bottom: 30px;">
-                    <img src="images/apgcc2.png" alt="APGCC 모델 이미지 2" style="width: 100%; border-radius: 10px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); transition: all 0.3s ease;">
+                    <div style="width: 376.5px; height: 280px; flex-shrink: 0; aspect-ratio: 376.50/251.00; border-radius: 4px; margin: 0 auto;">
+                        <img src="images/efficient2.svg" alt="EfficientNet 이미지 2" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px; box-shadow: 0 10px 30px">
+                    </div>
                 </div>
                 <div style="flex: 0 0 32%; text-align: center; margin-bottom: 30px;">
-                    <img src="images/apgcc3.png" alt="APGCC 모델 이미지 3" style="width: 100%; border-radius: 10px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); transition: all 0.3s ease;">
+                    <div style="width: 376.5px; height: 251px; flex-shrink: 0; aspect-ratio: 376.50/251.00; border-radius: 4px; margin: 0 auto;">
+                        <img src="images/efficient3.svg" alt="EfficientNet 이미지 3" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); transition: all 0.3s ease;">
+                    </div>
                 </div>
             </div>
         </div>
