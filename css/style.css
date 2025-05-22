@@ -21,7 +21,7 @@ body {
 }
 
 /* 버튼 스타일 */
-.primary-btn, 
+.primary-btn,
 button.primary-btn,
 .hero-text .primary-btn {
     background: linear-gradient(93deg, #FF5C00 0%, #FFAD27 74.48%, #FFD64C 100%) !important;
@@ -169,7 +169,7 @@ nav ul li a:hover {
 /* 히어로 섹션 */
 .hero {
     position: relative;
-    min-height: 100vh;
+    /*min-height: 100vh;*/
     padding: 150px 0 80px;
     display: flex;
     align-items: center;
@@ -704,15 +704,15 @@ footer {
     .hero-content {
         flex-direction: column;
     }
-    
+
     .hero-text {
         text-align: center;
     }
-    
+
     .hero-text h2 {
         font-size: 40px;
     }
-    
+
     .steps {
         gap: 50px;
     }
@@ -722,19 +722,19 @@ footer {
     .hero {
         padding: 120px 0 60px;
     }
-    
+
     .hero-text h2 {
         font-size: 32px;
     }
-    
+
     .section-header h2 {
         font-size: 30px;
     }
-    
+
     .how-header h2 {
         font-size: 28px;
     }
-    
+
     .dashboard-text h2 {
         font-size: 28px;
     }
@@ -744,15 +744,15 @@ footer {
     nav ul {
         gap: 15px;
     }
-    
+
     .login-btn {
         padding: 6px 15px;
     }
-    
+
     .hero-text h2 {
         font-size: 28px;
     }
-    
+
     .primary-btn, .outline-btn, .dark-btn {
         width: 100%;
         justify-content: center;
@@ -767,4 +767,4 @@ footer {
     margin-left: 0 !important;
     margin-right: 0 !important;
     max-width: none !important;
-} 
+}
