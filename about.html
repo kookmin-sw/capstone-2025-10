@@ -264,12 +264,14 @@
     <header>
         <div class="container">
             <div class="logo">
-                <img src="images/offflow로고.svg" alt="OFFFLOW" width="145" height="23">
+                <a href="index.html">
+                    <img src="images/offflow로고.svg" alt="OFFFLOW" width="145" height="23">
+                </a>
             </div>
             <nav>
                 <ul>
                     <li><a href="about.html" class="active">오프플로우 소개</a></li>
-                    <li><a href="#">서비스소개</a></li>
+                    <li><a href="service.html">서비스소개</a></li>
                     <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSc4Vr6WNsv6DZbBiXc4G7FqMY1lrCGoPNdvelwSGsXYPHjraw/viewform" target="_blank" class="service-inquiry-btn" style="width: 195px; height: 60px; display: flex; align-items: center; justify-content: center; box-sizing: border-box; text-decoration: none; border-radius: 30px; border: 2px solid var(--Cooltone-CG00, #FFF); background-color: transparent; color: var(--Cooltone-CG00, #FFF); text-align: center; font-family: 'Gmarket Sans'; font-size: 16px; font-style: normal; font-weight: 400; line-height: normal;">서비스 문의하기</a></li>
                 </ul>
             </nav>
@@ -478,15 +480,10 @@
         </div>
     </section>
 
-    <footer style="position: relative; overflow: hidden;">
-        <!-- 배경 SVG -->
-        <svg xmlns="http://www.w3.org/2000/svg" width="1920" height="400" viewBox="0 0 1920 400" fill="none" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;">
-            <g opacity="0.9">
-                <path d="M0 0H1920V400H0V0Z" fill="#071755" style="mix-blend-mode:multiply"/>
-            </g>
-        </svg>
+    <footer style="position: relative; overflow: hidden; background-image: url('images/footerback1.svg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+        <!-- 배경 SVG 대신 footerback1.svg 이미지를 배경으로 사용 -->
         
-        <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 80px 0;">
+        <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 80px 0; position: relative; z-index: 1;">
             <div class="footer-content" style="display: flex; justify-content: space-between; align-items: center;">
                 <h3 style="color: #FFF; font-family: 'Gmarket Sans'; font-size: 36px; font-style: normal; font-weight: 400; line-height: 150%; text-align: left; margin: 0; max-width: 70%;">오프라인 공간의 눈이되어<br>의사결정을 위한 길잡이가 되겠습니다.</h3>
                 

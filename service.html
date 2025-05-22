@@ -172,13 +172,126 @@
             transform: translateY(-10px);
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
         }
+        
+        section#tech-stack {
+            padding: 80px 0;
+            background-color: #fff;
+        }
+
+        section#tech-stack h2,
+        section#tech-stack h3 {
+            font-family: 'Gmarket Sans';
+            text-align: left;
+            color: #000;
+        }
+
+        section#tech-stack h2 {
+            font-size: 36px;
+            font-weight: 500;
+            margin-bottom: 30px;
+        }
+
+        section#tech-stack h3 {
+            font-size: 28px;
+            font-weight: 400;
+            /*margin-bottom: 24px;*/
+            /*margin: 50px 0 20px;*/
+            position: relative;
+        }
+
+        /*section#tech-stack h3::before {*/
+        /*    content: "";*/
+        /*    display: block;*/
+        /*    width: 60px;*/
+        /*    height: 3px;*/
+        /*    background-color: #004BD6;*/
+        /*    margin-bottom: 10px;*/
+        /*}*/
+
+        .stack-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .stack-group + h3 {
+            margin-top: 48px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 12px;
+            font-size: 14px;
+            font-family: 'Gmarket Sans';
+            font-weight: 500;
+            color: #fff;
+            border-radius: 6px;
+            text-transform: uppercase;
+        }
+
+        .badge i {
+            margin-right: 6px;
+        }
+        
+        /* 모달 팝업 스타일 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.8);
+        }
+        
+        .modal-content {
+            position: relative;
+            margin: auto;
+            padding: 0;
+            width: 70%;
+            max-width: 960px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .modal-content img {
+            width: 100%;
+            height: auto;
+            max-height: 80vh;
+            object-fit: contain;
+        }
+        
+        .close {
+            color: white;
+            position: absolute;
+            top: -40px;
+            right: 0;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .paper-img {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .paper-img:hover {
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body>
     <header>
         <div class="container">
             <div class="logo">
-                <img src="images/offflow로고.svg" alt="OFFFLOW" width="145" height="23">
+                <a href="index.html">
+                    <img src="images/offflow로고.svg" alt="OFFFLOW" width="145" height="23">
+                </a>
             </div>
             <nav>
                 <ul>
@@ -222,8 +335,8 @@
     <section class="service-section">
         <div class="container">
             <div class="section-header" style="text-align: left;">
-                <span style="color: var(--main, #004BD6); font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 100%; margin-bottom: 10px; display: block;">Core Function</span>
-                <h2 style="color: #000; font-family: 'Gmarket Sans'; font-size: 48px; font-style: normal; font-weight: 400; line-height: 140%; margin-bottom: -30px;">핵심 기능 3가지</h2>
+                <span style="color: var(--main, #004BD6); font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 100%; margin-bottom: 10px; display: block; text-align: left;">Core Function</span>
+                <h2 style="color: #000; font-family: 'Gmarket Sans'; font-size: 48px; font-style: normal; font-weight: 400; line-height: 140%; margin-bottom: -30px; text-align: left;">핵심 기능 3가지</h2>
             </div>
             
         <div class="service-item">
@@ -276,99 +389,196 @@
     <section class="service-section" style="margin-top: 0px;">
         <div class="container">
             <div class="section-header" style="text-align: left;">
-                <h2 style="color: #000; font-family: 'Gmarket Sans'; font-size: 36px; font-style: normal; font-weight: 400; line-height: 140%;">APGCC 모델</h2>
-                <p style="color: #000; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 150%; margin-top: 10px; margin-bottom: 40px; float: left;">
-                    Point-based crowd counting 모델로 다음과 같은 프로세스로 군중밀집도를 처리합니다.
+                <h2 style="color: #000; font-family: 'Gmarket Sans'; font-size: 36px; font-style: normal; font-weight: 400; line-height: 140%; text-align: left;">APGCC 모델</h2>
+                <p style="color: #000; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 150%; margin-top: 10px; margin-bottom: 40px; float: left; text-align: left;">
+                    Point-based crowd counting 모델로<br>다음과 같은 프로세스로 군중밀집도를 처리합니다.
                 </p>
-                <div style="text-align: left; margin-top: 30px;">
+                <div style="text-align: left; margin-top: 30px; margin-bottom: 30px;">
                     <img src="images/apgccmodel.svg" alt="APGCC 모델 프로세스" style="max-width: 100%; border-radius: 10px; display: block; margin-left: 0; margin-right: auto; float: left;">
                 </div>
             </div>
         </div>
+        <div style="clear: both;"></div>
     </section>
 
     <!-- EfficientNet-B0 모델 섹션 -->
-    <section class="service-section" style="margin-top: 300px;">
-        <div class="container">
-            <div class="section-header" style="text-align: right;">
-                <h2 style="color: #000; font-family: 'Gmarket Sans'; font-size: 36px; font-style: normal; font-weight: 400; line-height: 140%;">2. 성별, 연령대 분류 - EfficientNet-B0</h2>
-                <p style="color: #000; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 150%; margin-top: 20px; margin-bottom: 40px; text-align: right;">
+    <section class="service-section" style="margin-top: 100px; clear: both;">
+        <div class="container" style="clear: both; text-align: right !important;">
+            <div class="section-header" style="text-align: right !important; width: 100%; float: right;">
+                <h2 style="color: #000; font-family: 'Gmarket Sans'; font-size: 36px; font-style: normal; font-weight: 400; line-height: 140%; text-align: right !important; width: 100%; margin-left: auto;">2. 성별, 연령대 분류 - EfficientNet-B0</h2>
+                <p style="color: #000; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 150%; margin-top: 20px; margin-bottom: 40px; text-align: right !important; width: 100%; margin-left: auto; direction: rtl;">
                     EfficientNet-B0를 백본으로 하여 기존 classification head을 제거한 후<br>
                     성별 및 연령대 분류를 위한 맞춤형 헤드를 추가하여 재학습<br>
                     학습 데이터 셋: AI hub 안면 인식 에이징 이미지 데이터
                 </p>
             </div>
             
-            <div style="display: flex; justify-content: space-between; flex-wrap: wrap; margin-top: 50px;">
-                <div style="flex: 0 0 32%; text-align: center; margin-bottom: 30px;">
-                    <div style="width: 376.5px; height: 251px; flex-shrink: 0; aspect-ratio: 376.50/251.00; border-radius: 4px; margin: 0 auto;">
-                        <img src="images/efficient1.svg" alt="EfficientNet 이미지 1" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); transition: all 0.3s ease;">
+            <div style="display: flex; justify-content: space-between; flex-wrap: wrap; margin-top: 50px; clear: both; width: 100%;">
+                <div style="flex: 1; text-align: center; margin: 0 10px 30px 10px; max-width: calc(33.33% - 20px);">
+                    <div style="width: 100%; height: 300px; flex-shrink: 0; border-radius: 4px; margin: 0 auto; overflow: hidden;">
+                        <img src="images/efficient1.svg" alt="EfficientNet 이미지 1" style="width: 100%; height: 100%; object-fit: contain; border-radius: 4px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); transition: all 0.3s ease;">
                     </div>
                 </div>
-                <div style="flex: 0 0 32%; text-align: center; margin-bottom: 30px;">
-                    <div style="width: 376.5px; height: 280px; flex-shrink: 0; aspect-ratio: 376.50/251.00; border-radius: 4px; margin: 0 auto;">
-                        <img src="images/efficient2.svg" alt="EfficientNet 이미지 2" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px; box-shadow: 0 10px 30px">
+                <div style="flex: 1; text-align: center; margin: 0 10px 30px 10px; max-width: calc(33.33% - 20px);">
+                    <div style="width: 100%; height: 300px; flex-shrink: 0; border-radius: 4px; margin: 0 auto; overflow: hidden;">
+                        <img src="images/efficient2.svg" alt="EfficientNet 이미지 2" style="width: 100%; height: 100%; object-fit: contain; border-radius: 4px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); transition: all 0.3s ease;">
                     </div>
                 </div>
-                <div style="flex: 0 0 32%; text-align: center; margin-bottom: 30px;">
-                    <div style="width: 376.5px; height: 251px; flex-shrink: 0; aspect-ratio: 376.50/251.00; border-radius: 4px; margin: 0 auto;">
-                        <img src="images/efficient3.svg" alt="EfficientNet 이미지 3" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); transition: all 0.3s ease;">
+                <div style="flex: 1; text-align: center; margin: 0 10px 30px 10px; max-width: calc(33.33% - 20px);">
+                    <div style="width: 100%; height: 300px; flex-shrink: 0; border-radius: 4px; margin: 0 auto; overflow: hidden;">
+                        <img src="images/efficient3.svg" alt="EfficientNet 이미지 3" style="width: 100%; height: 100%; object-fit: contain; border-radius: 4px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); transition: all 0.3s ease;">
                     </div>
                 </div>
             </div>
         </div>
+    </section>
+
+    <!-- YOLO v8 + Deepsort 모델 섹션 -->
+    <section class="service-section" style="margin-top: 100px; clear: both;">
+        <div class="container" style="clear: both; max-width: 1400px;">
+            <div class="section-header" style="text-align: left; width: 100%;">
+                <h2 style="color: #000; font-family: 'Gmarket Sans'; font-size: 36px; font-style: normal; font-weight: 400; line-height: 140%; text-align: left; margin-left: 0;">3. 고객동선 추적 - YOLO v8 + Deepsort</h2>
+                <p style="color: #000; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 150%; margin-top: 20px; margin-bottom: 40px; text-align: left; margin-left: 0; width: 100%;">
+                    DeepSORT는 빠르고 정확한 객체 추적 알고리즘으로,<br>
+                    각각의 ID를 가진 다수의 객체를 높은 정확도로 추적 가능<br>
+                    사라졌던 객체도 일정 시간 이내에 다시 검출 시 동일 ID로 추적이 가능해<br>
+                    OFFFLOW 프로젝트에 매우 적합
+                </p>
+                <div style="text-align: left; margin-top: 30px; margin-bottom: 30px;">
+                    <img src="images/yolo1.svg" alt="YOLO v8 + Deepsort 모델" style="max-width: 100%; border-radius: 10px; display: block; margin-left: 0; margin-right: auto; float: left;">
+                </div>
+            </div>
+        </div>
+        <div style="clear: both;"></div>
     </section>
 
     <!-- 주요 기능 섹션 -->
     <section class="service-section" style="background-color: #f9fbff;">
         <div class="container">
             <div class="section-header" style="text-align: center;">
-                <span style="color: var(--main, #004BD6); font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 100%; margin-bottom: 10px; display: block;">Features</span>
-                <h2 style="color: #000; font-family: 'Gmarket Sans'; font-size: 36px; font-style: normal; font-weight: 400; line-height: 140%; margin-bottom: 50px;">주요 기능</h2>
+                <span style="color: var(--main, #004BD6); font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 100%; margin-bottom: 10px; display: block; text-align: center;">Features</span>
+                <h2 style="color: #000; font-family: 'Gmarket Sans'; font-size: 36px; font-style: normal; font-weight: 400; line-height: 140%; margin-bottom: 50px; text-align: center;">주요 기능</h2>
             </div>
             
             <div class="service-item service-item-reverse">
-                <div class="service-text">
-                    <h3 style="color: #000; font-family: 'Gmarket Sans'; font-size: 28px; font-style: normal; font-weight: 400; margin-bottom: 20px;">대시보드 시각화</h3>
-                    <p style="color: #000; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 150%; margin-bottom: 20px;">
-                        수집된 데이터는 직관적인 대시보드를 통해 시각화되어 제공됩니다. 방문객 수, 체류 시간, 혼잡도, 인구 통계 정보 등 다양한 지표를 한눈에 확인할 수 있습니다.
-                    </p>
-                    <p style="color: #000; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 150%;">
-                        사용자 맞춤형 대시보드 설정이 가능하며, 필요한 데이터만 선별하여 볼 수 있습니다.
-                    </p>
-                </div>
                 <div class="service-image">
-                    <img src="images/dashboard_preview.svg" alt="대시보드 시각화" style="width: 100%; max-width: 500px;">
+                    <img src="images/saimg.svg" alt="대시보드 시각화" style="width: auto; height: auto; border-radius: 10px; box-shadow: none;">
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 활용 사례 섹션 -->
-    <section class="service-section">
+    <section id="tech-stack" style="background: #F7F9FA">
+	    <div class="container" >
+		    <div class="section-header" style="text-align: center;">
+			    <span style="color: var(--main, #004BD6); font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 100%; margin-bottom: 10px; display: block; text-align: left">Technology</span>
+			    <h2 style="color: #000; font-family: 'Gmarket Sans'; font-size: 36px; font-style: normal; font-weight: 400; line-height: 140%; margin-bottom: 50px;">
+				    기술스택</h2>
+		    </div>
+
+
+		    <div style="background: #ffffff; padding: 48px;">
+			    <h3>💻 Frontend</h3>
+			    <div class="stack-group">
+				    <span class="badge" style="background-color:#F7DF1E; color:#000"><i class="fab fa-js"></i>Javascript</span>
+				    <span class="badge" style="background-color:#000"><i class="fab fa-react"></i>Next.js</span>
+				    <span class="badge" style="background-color:#CC6699"><i class="fab fa-sass"></i>Sass</span>
+				    <span class="badge" style="background-color:#4B32C3"><i class="fas fa-code"></i>ESLint</span>
+				    <span class="badge" style="background-color:#F7B93E"><i class="fas fa-paint-brush"></i>Prettier</span>
+				    <span class="badge" style="background-color:#2C8EBB"><i class="fab fa-yarn"></i>Yarn</span>
+				    <span class="badge" style="background-color:#009639"><i class="fab fa-linux"></i>Nginx</span>
+			    </div>
+
+			    <h3>💻 Backend</h3>
+			    <div class="stack-group">
+				    <span class="badge" style="background-color:#007396"><i class="fab fa-java"></i>Java</span>
+				    <span class="badge" style="background-color:#6DB33F"><i class="fas fa-leaf"></i>Spring Boot</span>
+				    <span class="badge" style="background-color:#02303A"><i class="fas fa-hammer"></i>Gradle</span>
+				    <span class="badge" style="background-color:#000"><i class="fas fa-plug"></i>Rest API</span>
+				    <span class="badge" style="background-color:#4169E1"><i class="fas fa-database"></i>PostgreSQL</span>
+				    <span class="badge" style="background-color:#FF4438"><i class="fas fa-memory"></i>Redis</span>
+				    <span class="badge" style="background-color:#231F20"><i class="fas fa-stream"></i>Kafka</span>
+				    <span class="badge" style="background-color:#03C75A"><i class="fas fa-sms"></i>Naver SMS</span>
+			    </div>
+
+			    <h3>💻 AI</h3>
+			    <div class="stack-group">
+				    <span class="badge" style="background-color:#3776AB"><i class="fab fa-python"></i>Python 3.10</span>
+				    <span class="badge" style="background-color:#E95420"><i class="fab fa-linux"></i>Ubuntu 22.04</span>
+				    <span class="badge" style="background-color:#76B900"><i class="fas fa-microchip"></i>CUDA 11.8</span>
+				    <span class="badge" style="background-color:#EE4C2C"><i class="fas fa-brain"></i>PyTorch</span>
+				    <span class="badge" style="background-color:#013243"><i class="fas fa-square-root-alt"></i>NumPy</span>
+				    <span class="badge" style="background-color:#111F68">YOLO</span>
+				    <span class="badge" style="background-color:#5C3EE8">OpenCV</span>
+				    <span class="badge" style="background-color:#4D4D4D">DeepSORT</span>
+				    <span class="badge" style="background-color:#4D4D4D">APGCC</span>
+				    <span class="badge" style="background-color:#4D4D4D">EfficientNet</span>
+			    </div>
+
+			    <h3>💻 Deployment</h3>
+			    <div class="stack-group">
+				    <span class="badge" style="background-color:#FF9900"><i class="fab fa-aws"></i>Amazon EC2</span>
+				    <span class="badge" style="background-color:#2088FF"><i class="fab fa-docker"></i>Docker</span>
+			    </div>
+
+			    <h3>💻 Common</h3>
+			    <div class="stack-group">
+				    <span class="badge" style="background-color:#5865F2"><i class="fab fa-discord"></i>Discord</span>
+				    <span class="badge" style="background-color:#F24E1E"><i class="fab fa-figma"></i>Figma</span>
+				    <span class="badge" style="background-color:#F05032"><i class="fab fa-git-alt"></i>Git</span>
+				    <span class="badge" style="background-color:#181717"><i class="fab fa-github"></i>GitHub</span>
+				    <span class="badge" style="background-color:#000"><i class="fab fa-notion"></i>Notion</span>
+				    <span class="badge" style="background-color:#0052CC"><i class="fab fa-trello"></i>Trello</span>
+			    </div>
+		    </div>
+	    </div>
+    </section>
+
+    <!-- 학술 논문 섹션 추가 -->
+    <section id="thesis-section" style="background-color: #0d47b4; padding: 80px 0; color: #FFF;">
         <div class="container">
-            <div class="section-header" style="text-align: center;">
-                <span style="color: var(--main, #004BD6); font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 100%; margin-bottom: 10px; display: block;">Use Cases</span>
-                <h2 style="color: #000; font-family: 'Gmarket Sans'; font-size: 36px; font-style: normal; font-weight: 400; line-height: 140%; margin-bottom: 50px;">활용 사례</h2>
+            <div class="section-header" style="text-align: center; margin-bottom: 110px;">
+                <span style="color: #FFF; text-align: center; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 100%; display: block; margin-bottom: 15px;">Thesis</span>
+                <h2 style="color: #FFF; text-align: center; font-family: 'Gmarket Sans'; font-size: 36px; font-style: normal; font-weight: 400; line-height: 140%; margin: 0;">캡스톤 학술 논문</h2>
             </div>
             
-            <div class="service-item">
-                <div class="service-text">
-                    <h3 style="color: #000; font-family: 'Gmarket Sans'; font-size: 28px; font-style: normal; font-weight: 400; margin-bottom: 20px;">팝업 스토어 최적화</h3>
-                    <p style="color: #000; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 150%; margin-bottom: 20px;">
-                        팝업 스토어 운영 시 방문객 데이터를 실시간으로 분석하여 매장 레이아웃, 상품 배치, 운영 시간 등을 최적화할 수 있습니다.
-                    </p>
-                    <p style="color: #000; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 150%;">
-                        고객 행동 패턴을 분석하여 마케팅 효과를 측정하고, 더 나은 고객 경험을 제공할 수 있습니다.
-                    </p>
+            <div style="display: flex; justify-content: space-between; flex-wrap: wrap;">
+                <!-- 왼쪽 논문 -->
+                <div style="flex: 0 0 48%; text-align: center; margin-bottom: 40px;">
+                    <div style="margin-bottom: 25px;">
+                        <img src="images/논문1.svg" alt="논문1" class="paper-img" onclick="openModal('modal1')" style="max-width: 100%; height: auto;">
+                    </div>
+                    <h3 style="color: #FFF; font-family: 'Gmarket Sans'; font-size: 24px; font-style: normal; font-weight: 400; line-height: 200%; margin: 0 0 10px 0;">오프라인 공간 행동분석 모니터링 시스템 구축</h3>
+                    <p style="color: #FFF; text-align: center; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 200%; margin: 0;">사용자 맞춤형 캠페인 작성을 통한 맞춤형 분석 시스템 관리<br>트래픽맵, 히트맵을 통한 시각화 시스템 구축</p>
                 </div>
-                <div class="service-image">
-                    <img src="images/popup_store.svg" alt="팝업 스토어 활용 사례" style="width: 100%; max-width: 500px;">
+                
+                <!-- 오른쪽 논문 -->
+                <div style="flex: 0 0 48%; text-align: center; margin-bottom: 40px;">
+                    <div style="margin-bottom: 25px;">
+                        <img src="images/논문2.svg" alt="논문2" class="paper-img" onclick="openModal('modal2')" style="max-width: 100%; height: auto;">
+                    </div>
+                    <h3 style="color: #FFF; text-align: center; font-family: 'Gmarket Sans'; font-size: 24px; font-style: normal; font-weight: 400; line-height: 200%; margin: 0 0 10px 0;">객체 인식을 통한 군중밀집도 및 동선 추적 기술 향상</h3>
+                    <p style="color: #FFF; text-align: center; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 200%; margin: 0;">오프라인 공간 내 카메라를 활용한<br>객체 인식 기술 향상 및 객체 추적 및 밀집도 기술 향상</p>
                 </div>
             </div>
         </div>
+        
+        <!-- 논문1 모달 팝업 -->
+        <div id="modal1" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('modal1')">&times;</span>
+                <img src="images/논문1원본.svg" alt="논문1 원본">
+            </div>
+        </div>
+        
+        <!-- 논문2 모달 팝업 -->
+        <div id="modal2" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('modal2')">&times;</span>
+                <img src="images/논문2원본.svg" alt="논문2 원본">
+            </div>
+        </div>
     </section>
-
     <style>
         section#tech-stack {
             padding: 80px 0;
@@ -498,20 +708,14 @@
 		    </div>
 	    </div>
     </section>
-
     <!-- Font Awesome for icons -->
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
 
-    <footer style="position: relative; overflow: hidden;">
-        <!-- 배경 SVG -->
-        <svg xmlns="http://www.w3.org/2000/svg" width="1920" height="400" viewBox="0 0 1920 400" fill="none" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;">
-            <g opacity="0.9">
-                <path d="M0 0H1920V400H0V0Z" fill="#071755" style="mix-blend-mode:multiply"/>
-            </g>
-        </svg>
+    <footer style="position: relative; overflow: hidden; background-image: url('images/footerback1.svg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+        <!-- 배경 SVG 대신 footerback.svg 이미지를 배경으로 사용 -->
         
-        <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 80px 0;">
+        <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 80px 0; position: relative; z-index: 1;">
             <div class="footer-content" style="display: flex; justify-content: space-between; align-items: center;">
                 <h3 style="color: #FFF; font-family: 'Gmarket Sans'; font-size: 36px; font-style: normal; font-weight: 400; line-height: 150%; text-align: left; margin: 0; max-width: 70%;">오프라인 공간의 눈이되어<br>의사결정을 위한 길잡이가 되겠습니다.</h3>
                 
@@ -542,6 +746,37 @@
                 const href = link.getAttribute('href');
                 if (currentPath.includes(href) && href !== '#') {
                     link.classList.add('active');
+                }
+            });
+        });
+        
+        // 모달 팝업 기능
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = "block";
+            document.body.style.overflow = "hidden"; // 스크롤 방지
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = "none";
+            document.body.style.overflow = "auto"; // 스크롤 복원
+        }
+        
+        // ESC 키를 눌러 모달 닫기
+        window.addEventListener('keydown', function(event) {
+            if (event.key === "Escape") {
+                document.querySelectorAll('.modal').forEach(modal => {
+                    modal.style.display = "none";
+                });
+                document.body.style.overflow = "auto";
+            }
+        });
+        
+        // 모달 바깥 영역 클릭 시 닫기
+        window.addEventListener('click', function(event) {
+            document.querySelectorAll('.modal').forEach(modal => {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                    document.body.style.overflow = "auto";
                 }
             });
         });
