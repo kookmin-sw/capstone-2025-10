@@ -53,6 +53,8 @@
 
 -  **OFFFLOW**는 매장 운영자가 **실시간으로 고객 흐름**을 파악하고, 혼잡 구간을 조정하거나 상품 배치를 최적화함으로써 **오프라인 공간의 운영 효율성**을 높일 수 있도록 지원합니다.
 
+#### 🔗 [OFFFLOW 소개 페이지 바로 가기](https://kookmin-sw.github.io/capstone-2025-10/)
+
 <br/>
 
 
@@ -86,6 +88,7 @@ AI 분석 결과는 Redis 및 Kafka를 활용하여 비동기식 메모리큐에
 
 ## 🎬 소개 영상
 
+[![Video Label]( https://img.youtube.com/vi/xR-jQg1DCww/0.jpg)](https://youtu.be/xR-jQg1DCww)
 
 <br/>
 
