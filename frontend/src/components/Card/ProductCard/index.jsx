@@ -39,6 +39,7 @@ const ProductCard = ({ mode = "edit", dashboardId }) => {
 
   const onCancelClick = () => {
     setFocusProduct(initProduct);
+    upload.setFile("");
   };
 
   const onDeleteClick = async (id) => {
@@ -54,6 +55,8 @@ const ProductCard = ({ mode = "edit", dashboardId }) => {
       await createProduct(dashboardId, focusProduct);
     }
     setShouldRefresh(true);
+    setFocusProduct(initProduct);
+    upload.setFile("");
   };
 
   useEffect(() => {

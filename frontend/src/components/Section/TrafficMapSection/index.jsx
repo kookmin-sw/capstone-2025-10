@@ -8,6 +8,7 @@ import ArrowCanvas from "@/components/Canvas/ArrowCanvas";
 import DashboardTable from "@/components/Table/DashboardTable";
 import Image from "next/image";
 import DateFilter from "@/components/Filter/DateFilter";
+import ImageGrid from "@/components/ImageGrid";
 
 const gridCols = 10;
 const cellSize = 480 / 10;
@@ -122,7 +123,7 @@ const TrafficMapSection = ({ sections, dashboardId }) => {
   }, [dashboardId, dateRange, selectedSectionId]);
 
   useEffect(() => {
-    const interval = setInterval(fetchTraffic, 1000);
+    const interval = setInterval(fetchTraffic, 1500);
     fetchTraffic(); // 초기 1회
     return () => clearInterval(interval);
   }, [fetchTraffic]);
@@ -142,6 +143,7 @@ const TrafficMapSection = ({ sections, dashboardId }) => {
               width={1080}
               height={608}
             />
+            <ImageGrid sections={sections} />
             <div className={styles.canvas}>
               <ArrowCanvas
                 canvasRef={canvasRef}

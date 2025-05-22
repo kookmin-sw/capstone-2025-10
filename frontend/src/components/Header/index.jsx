@@ -25,26 +25,14 @@ export default function Header() {
       path: "/campaign/1",
     },
     {
-      title: "이벤트",
-      path: "/event/1",
-    },
-    {
-      title: "회원 관리",
+      title: "마케팅",
       path: "/member",
-    },
-    {
-      title: "알림 전송",
-      path: "/notice",
     },
   ];
 
   const headerAuthItems = [
     {
       title: "마이페이지",
-      path: "/mypage",
-    },
-    {
-      title: "결제 팝업",
       path: "/mypage",
     },
   ];

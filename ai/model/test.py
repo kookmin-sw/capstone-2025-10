@@ -1,35 +1,22 @@
-from kafka import KafkaConsumer, KafkaProducer
+from kafka import KafkaProducer
 import json
 import cv2
 import time
 import torch
 import numpy as np
 from ultralytics import YOLO
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
 from torchvision import transforms
 from visitor_detect import MultiTaskEfficientNet
-import io
 
-# Kafka Consumer 설정
-consumer = KafkaConsumer(
-    'video-frame-topic',  # 프레임을 받는 토픽 이름
-    bootstrap_servers='192.168.33.162:9092',
-    value_deserializer=lambda m: m,
-    auto_offset_reset='latest',
-    enable_auto_commit=True,
-    group_id='offflow-frame-consumer'
-)
-
-# Kafka Producer 설정
-producer = KafkaProducer(
-    bootstrap_servers='192.168.33.162:9092',
-    value_serializer=lambda v: json.dumps(v).encode('utf-8'),
-)
-
-# 디바이스 설정
+# Device 설정
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# Transform
+producer = KafkaProducer(
+    bootstrap_servers='192.168.219.101:9092',
+    value_serializer=lambda v: json.dumps(v).encode('utf-8'),
+)
+# 얼굴 전처리 transform
 face_transform = transforms.Compose([
     transforms.Resize((224, 224)),
     transforms.ToTensor(),
@@ -37,20 +24,24 @@ face_transform = transforms.Compose([
                          std=[0.229, 0.224, 0.225])
 ])
 
+# 연령대 라벨 매핑
 group_names = {0: "0~10", 1: "10~20", 2: "20~30", 3: "30~40", 4: "40~50", 5: "50+"}
 
-# 모델 불러오기
+# YOLOv8 얼굴 감지 모델 로드 (얼굴 전용 모델)
 face_detector = YOLO("./yolov8n-face.pt")
+
+# MultiTaskEfficientNet 모델 로드 (체크포인트 사용)
 model = MultiTaskEfficientNet(num_gender_classes=2, num_age_groups=6)
-model.load_state_dict(torch.load("./model_checkpoint.pt", map_location=device))
+checkpoint_path = "./model_checkpoint.pt"
+model.load_state_dict(torch.load(checkpoint_path, map_location=device))
 model.to(device)
 model.eval()
 
-# 방문자 추적용 상태
-tracked_visitors = {}
-TRACKING_THRESHOLD = 75
-MIN_DETECTION_DURATION = 10
-EXPIRE_TIME = 60
+# 방문자(객체) 추적을 위한 간단한 딕셔너리
+tracked_visitors = {}  # key: visitor_id, value: dict with center, start_time, last_seen, predictions
+TRACKING_THRESHOLD = 75  # 픽셀 단위, 중심 좌표 차이 임계값
+MIN_DETECTION_DURATION = 1  # 10초 이상 머무른 방문자에 대해 서버에 전송
+EXPIRE_TIME = 60  # 60초 이상 보이지 않으면 해당 방문자 삭제
 
 def get_face_center(box):
     x1, y1, x2, y2 = box
@@ -61,9 +52,15 @@ def is_same_visitor(center, tracked_center, threshold=TRACKING_THRESHOLD):
     dy = center[1] - tracked_center[1]
     return np.sqrt(dx**2 + dy**2) < threshold
 
+def request_kafka(message):
+
+    producer.send("vision-data-topic", message)
+    producer.flush()
+
 def send_to_server(visitor_data):
-    print("Sending to Kafka:", visitor_data)
-    producer.send("vision-data-topic", {
+    # 실제 서버 API 호출 코드 (예: requests.post 등)
+    print("Sending data to server:", visitor_data)
+    request_kafka({
         "type": "genderAge",
         "payload": {
             "dashboardId": 1,
@@ -73,7 +70,9 @@ def send_to_server(visitor_data):
         }
     })
 
-def process_frame(frame, run_detection=True):
+# 추적 업데이트 및 검출 실행 함수 (추가: 10프레임마다 YOLO 검출 실행)
+def process_frame(frame, face_detector, model, transform, device, tracked_visitors, run_detection=True):
+    # frame: OpenCV BGR 이미지
     img_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     pil_img = Image.fromarray(img_rgb)
     draw = ImageDraw.Draw(pil_img)
@@ -81,6 +80,7 @@ def process_frame(frame, run_detection=True):
 
     detected_faces = []
     if run_detection:
+        # YOLO 얼굴 감지 실행
         results = face_detector(img_rgb, verbose=False)
         for result in results:
             boxes = result.boxes.xyxy.cpu().numpy()
@@ -89,6 +89,7 @@ def process_frame(frame, run_detection=True):
                 if conf < 0.5:
                     continue
                 x1, y1, x2, y2 = box.astype(int)
+                # 마진 추가 (10%)
                 w = x2 - x1
                 h = y2 - y1
                 margin = 0.1
@@ -101,6 +102,7 @@ def process_frame(frame, run_detection=True):
                     "center": get_face_center((new_x1, new_y1, new_x2, new_y2))
                 })
 
+    # 트래킹: 새로운 객체에 대해서만 모델 추론 실행
     for face in detected_faces:
         center = face["center"]
         matched_id = None
@@ -109,9 +111,10 @@ def process_frame(frame, run_detection=True):
                 matched_id = visitor_id
                 break
         if matched_id is None:
+            # 새로운 방문자: 모델 추론 실행
             x1, y1, x2, y2 = face["box"]
             face_crop = pil_img.crop((x1, y1, x2, y2))
-            face_input = face_transform(face_crop).unsqueeze(0).to(device)
+            face_input = transform(face_crop).unsqueeze(0).to(device)
             with torch.no_grad():
                 gender_logits, age_logits = model(face_input)
                 gender_pred = torch.argmax(gender_logits, dim=1).item()
@@ -128,6 +131,7 @@ def process_frame(frame, run_detection=True):
             }
             matched_id = new_id
         else:
+            # 기존 방문자: 정보 업데이트 (좌표 스무딩 적용)
             old_center = tracked_visitors[matched_id]["center"]
             new_center = face["center"]
             smoothed_center = ((old_center[0] + new_center[0]) // 2,
@@ -136,6 +140,21 @@ def process_frame(frame, run_detection=True):
             tracked_visitors[matched_id]["last_seen"] = current_time
             tracked_visitors[matched_id]["box"] = face["box"]
 
+    if run_detection:
+        for visitor_id in list(tracked_visitors.keys()):
+            if tracked_visitors[visitor_id]["last_seen"] < current_time:
+                del tracked_visitors[visitor_id]
+
+    # 시각화: 방문자들의 박스와 라벨 표시 (모델 추론은 최초 한번만)
+    for visitor_id, info in tracked_visitors.items():
+        gender_label = "Male" if info["gender"] == 1 else "Female"
+        age_label = group_names.get(info["age_group"], "Unknown")
+        label_text = f"{gender_label}, {age_label}, {visitor_id}"
+        box = info["box"]
+        draw.rectangle(box, outline="red", width=2)
+        draw.text((box[0], box[1] - 20), label_text, fill="red")
+
+    # 방문자 처리: 30초 이상 머문 방문자는 서버 전송, 60초 이상 보이지 않으면 삭제
     for visitor_id in list(tracked_visitors.keys()):
         duration = current_time - tracked_visitors[visitor_id]["start_time"]
         if duration >= MIN_DETECTION_DURATION and not tracked_visitors[visitor_id]["data_sent"]:
@@ -152,31 +171,31 @@ def process_frame(frame, run_detection=True):
 
     return np.array(pil_img)
 
-# Kafka로부터 프레임 수신 및 처리
-print("🎥 Kafka Consumer 시작됨...")
+# 메인 루프: 실시간 영상 처리 및 시각화
+cap = cv2.VideoCapture("test.mp4")  # ✅ 영상 파일로 변경
 frame_count = 0
-DETECTION_INTERVAL = 5
+DETECTION_INTERVAL = 10  # 10프레임마다 YOLO 검출 실행
 
-for message in consumer:
-    try:
-        byte_data = message.value
-        nparr = np.frombuffer(byte_data, np.uint8)
-        frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+while True:
+    ret, frame = cap.read()
+    if not ret:
+        break
+    frame_count += 1
 
-        if frame is None:
-            continue
+    if frame_count % DETECTION_INTERVAL == 0:
+        processed_frame = process_frame(
+            frame, face_detector, model, face_transform, device, tracked_visitors, run_detection=True
+        )
+    else:
+        processed_frame = process_frame(
+            frame, face_detector, model, face_transform, device, tracked_visitors, run_detection=False
+        )
 
-        frame_count += 1
-        run_detection = frame_count % DETECTION_INTERVAL == 0
-        result_frame = process_frame(frame, run_detection=run_detection)
+    processed_frame_bgr = cv2.cvtColor(processed_frame, cv2.COLOR_RGB2BGR)
+    cv2.imshow("Real-Time Visitor Tracking", processed_frame_bgr)
 
-        # 시각화 (선택)
-        show_frame = cv2.cvtColor(result_frame, cv2.COLOR_RGB2BGR)
-        cv2.imshow("Kafka Frame", show_frame)
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
+    if cv2.waitKey(1) & 0xFF == ord("q"):
+        break
 
-    except Exception as e:
-        print(f"[ERROR] {e}")
-
+cap.release()
 cv2.destroyAllWindows()

@@ -15,7 +15,7 @@ import java.util.Set;
 @Component
 public class GridConfig {
     private final int gridRows = 10;
-    private final int gridCols = 10;
+    private final int gridCols = 15;
 
     public int getMaxPosition(){
         return gridRows * gridCols;

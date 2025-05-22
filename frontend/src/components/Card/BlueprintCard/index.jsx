@@ -19,12 +19,22 @@ const BlueprintCard = ({ sections, setSections, upload, dashboardId }) => {
 
   const handleSectionNameSave = async (name) => {
     try {
-      await createSection({
+      const res = await createSection({
         name: name,
         positionList: Array.from(selected),
         dashboardId,
       });
-      handleSave(name);
+
+      setSections((prev) => [
+        ...prev,
+        {
+          id: res.id,
+          name: name,
+          cells: Array.from(selected),
+          color: generateRandomColor(),
+        },
+      ]);
+      setSelected(new Set());
       closeModal();
       focusClear();
     } catch (e) {

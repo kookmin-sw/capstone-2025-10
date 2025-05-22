@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import styles from "./page.module.scss";
+import { useRouter } from "next/navigation";
 
 export default function CreateEventPage() {
   const [eventName, setEventName] = useState("");
@@ -10,6 +11,7 @@ export default function CreateEventPage() {
   const [conditions, setConditions] = useState([
     { metric: "", operator: "같음", value: "" },
   ]);
+  const router = useRouter();
 
   const handleAddCondition = () => {
     setConditions([...conditions, { metric: "", operator: "같음", value: "" }]);
@@ -56,6 +58,7 @@ export default function CreateEventPage() {
       setEventDescription("");
       setDashboard("");
       setConditions([{ metric: "", operator: "같음", value: "" }]);
+      router.push("/event/1/create");
     } catch (err) {
       alert("오류 발생: " + err.message);
     }

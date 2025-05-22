@@ -11,54 +11,58 @@ function drawHeatmap(
   canvasWidth,
   canvasHeight,
 ) {
+  const container = ctx.canvas.parentElement;
+
+  // 기존 heatmap div 제거 (중복 방지)
+  const existing = container.querySelector(".heatmap-canvas");
+  if (existing) container.removeChild(existing);
+
   const heatmapInstance = h337.create({
-    container: ctx.canvas.parentElement,
-    radius: 45,
+    container,
+    radius: 200,
     maxOpacity: 0.6,
     minOpacity: 0.1,
-    blur: 0.85,
+    blur: 0.9,
   });
 
-  // 정규화된 위치 적용
-  const normalizedData = Object.entries(heatmapData).map(([key, value]) => {
+  // ⬇️ 1. 좌표 파싱
+  const raw = Object.entries(heatmapData).map(([key, value]) => {
     const [x, y] = key.split(",").map(Number);
-    console.log(
-      "x y",
-      (x / originalWidth) * canvasWidth,
-      (y / originalHeight) * canvasHeight,
-    );
-
-    return {
-      x: (x / originalWidth) * canvasWidth,
-      y: (y / originalHeight) * canvasHeight,
-      value,
-    };
+    return { x, y, value };
   });
 
-  const max = Math.max(...normalizedData.map((d) => d.value));
+  if (raw.length === 0) return;
 
-  heatmapInstance.setData({
-    max,
-    data: normalizedData,
+  // ⬇️ 2. 음수 좌표 정규화
+  const minX = Math.min(...raw.map((d) => d.x));
+  const minY = Math.min(...raw.map((d) => d.y));
+  const offsetWidth = originalWidth - minX;
+  const offsetHeight = originalHeight - minY;
+
+  const normalizedData = raw.map(({ x, y, value }) => ({
+    x: ((x - minX) / offsetWidth) * canvasWidth,
+    y: ((y - minY) / offsetHeight) * canvasHeight,
+    value,
+  }));
+
+  const max = Math.max(...normalizedData.map((d) => d.value)) || 1;
+
+  requestAnimationFrame(() => {
+    heatmapInstance.setData({
+      max,
+      data: normalizedData,
+    });
   });
 }
 
 export default function HeatmapCanvas({
   canvasRef,
   heatmapData,
-  gridCols,
-  gridRows,
-  cellSize,
   originalWidth = 480,
   originalHeight = 480,
 }) {
   const draw = (ctx) => {
-    ctx.clearRect(0, 0, 1080, 608);
-    console.log(
-      "ctx.canvas.width, ctx.canvas.height",
-      ctx.canvas.width,
-      ctx.canvas.height,
-    );
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     drawHeatmap(
       ctx,
       heatmapData,
@@ -70,10 +74,12 @@ export default function HeatmapCanvas({
   };
 
   return (
-    <BaseCanvas
-      canvasRef={canvasRef}
-      draw={draw}
-      dependencies={[heatmapData]}
-    />
+    <div style={{ position: "relative", width: "100%", height: "100%" }}>
+      <BaseCanvas
+        canvasRef={canvasRef}
+        draw={draw}
+        dependencies={[heatmapData]}
+      />
+    </div>
   );
 }
