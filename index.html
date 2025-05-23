@@ -322,28 +322,28 @@
 			</div>
 		</div>
 
-		<script>
-          document.addEventListener('DOMContentLoaded', () => {
-            const container = document.getElementById('processContainer');
-            const scrollEl = document.getElementById('processScroll');
+<!-- 		<script> -->
+<!--           document.addEventListener('DOMContentLoaded', () => { -->
+<!--             const container = document.getElementById('processContainer'); -->
+<!--             const scrollEl = document.getElementById('processScroll'); -->
 
-            scrollEl.scrollLeft = 10;
+<!--             scrollEl.scrollLeft = 10; -->
 
-            container.addEventListener('wheel', (e) => {
-              if (!scrollEl) return;
+<!--             container.addEventListener('wheel', (e) => { -->
+<!--               if (!scrollEl) return; -->
 
-              const scrollable = scrollEl.scrollWidth > scrollEl.clientWidth;
-              const atLeft = scrollEl.scrollLeft <= 0;
-              const atRight = Math.ceil(scrollEl.scrollLeft + scrollEl.clientWidth) >= scrollEl.scrollWidth;
+<!--               const scrollable = scrollEl.scrollWidth > scrollEl.clientWidth; -->
+<!--               const atLeft = scrollEl.scrollLeft <= 0; -->
+<!--               const atRight = Math.ceil(scrollEl.scrollLeft + scrollEl.clientWidth) >= scrollEl.scrollWidth; -->
 
-              if (scrollable && !(atLeft && e.deltaY < 0) && !(atRight && e.deltaY > 0)) {
-                e.preventDefault();
-                const SCROLL_SPEED = 10;
-                scrollEl.scrollLeft += e.deltaY * SCROLL_SPEED;
-              }
-            }, { passive: false });
-          });
-		</script>
+<!--               if (scrollable && !(atLeft && e.deltaY < 0) && !(atRight && e.deltaY > 0)) { -->
+<!--                 e.preventDefault(); -->
+<!--                 const SCROLL_SPEED = 10; -->
+<!--                 scrollEl.scrollLeft += e.deltaY * SCROLL_SPEED; -->
+<!--               } -->
+<!--             }, { passive: false }); -->
+<!--           }); -->
+<!-- 		</script> -->
 
 
 		<div style="text-align: center;">
