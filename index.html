@@ -295,7 +295,7 @@
                       // 끝에 도달하지 않았다면 가로 스크롤 처리
                       if (scrollable && !(atLeft && e.deltaY < 0) && !(atRight && e.deltaY > 0)) {
                         e.preventDefault();
-                        const SCROLL_SPEED = 10;
+                        const SCROLL_SPEED = 7;
                         scrollEl.scrollLeft += e.deltaY * SCROLL_SPEED;
                       }
                       // 끝이면 그냥 세로로 넘어가게 둠
@@ -372,7 +372,7 @@
 	<div class="container" style="max-width: 1200px; margin: 0 auto; position: relative; padding: 60px 0;">
 		<div class="dashboard-content"
 		     style="display: flex; flex-direction: column; align-items: flex-start; gap: 30px;">
-			<div class="dashboard-text" style="text-align: left; max-width: 600px;">
+			<div class="dashboard-text" style="text-align: left; max-width: 700px;">
 				<span style="color: #FFF; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 100%; margin-bottom: 10px; display: block;">VIDEO</span>
 				<h2 style="color: #FFF; font-family: 'Gmarket Sans'; font-size: 36px; font-style: normal; font-weight: 400; line-height: 140%; margin-bottom: 29px;">
 					눈에 보이지 않던 오프라인 흐름<br>오프플로우는 온라인으로 시각화합니다.</h2>
@@ -391,7 +391,7 @@
 						<iframe
 								width="100%"
 								height="100%"
-								src="https://youtu.be/xR-jQg1DCww?si=zwIiv1v5dBJn7Wee"
+								src="https://www.youtube.com/embed/xR-jQg1DCww"
 								title="오프플로우 대시보드 비디오"
 								frameborder="0"
 								allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -407,7 +407,7 @@
 
 <footer style="position: relative; overflow: hidden; background-image: url('images/footerback1.svg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
 	<!-- 배경 SVG 대신 footerback1.svg 이미지를 배경으로 사용 -->
-	
+
 	<div class="container" style="max-width: 1200px; margin: 0 auto; padding: 80px 0; position: relative; z-index: 1;">
 		<div class="footer-content" style="display: flex; justify-content: space-between; align-items: center;">
 			<h3 style="color: #FFF; font-family: 'Gmarket Sans'; font-size: 36px; font-style: normal; font-weight: 400; line-height: 150%; text-align: left; margin: 0; max-width: 70%;">
