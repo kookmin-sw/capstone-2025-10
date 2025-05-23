@@ -252,113 +252,99 @@
 		</div>
 
 		<!-- 완전히 새롭게 재구성한 process 섹션 -->
-		<div class="process-container" id="processContainer" style="position: relative; margin-bottom: 80px;">
-			<!-- 스크롤 가능한 컨테이너 -->
-			<div class="process-scroll" id="processScroll" style="scrollbar-width: none; -ms-overflow-style: none;">
-				<style>
-                    .process-scroll {
-                        overflow-x: auto;
-                        overflow-y: hidden;
-                        scroll-snap-type: x mandatory;
-                        -webkit-overflow-scrolling: touch;
-                        scrollbar-width: none;
-                    }
-                    .process-scroll::-webkit-scrollbar {
-                        display: none;
-                    }
+		<style>
+            .process-container {
+                position: relative;
+                margin-bottom: 80px;
+            }
 
-                    .process-items {
-                        display: flex;
-                        width: max-content;
-                        scroll-behavior: smooth;
-                    }
+            .process-scroll {
+                overflow-x: auto;
+                overflow-y: hidden;
+                scroll-snap-type: x mandatory;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+            }
 
-                    .process-item {
-                        flex: 0 0 100vw;
-                        scroll-snap-align: start;
-                        box-sizing: border-box;
-                        padding: 20px;
-                    }
-				</style>
-				<script>
-                  document.addEventListener('DOMContentLoaded', () => {
-                    const container = document.querySelector('section.how-it-works');
-                    const scrollEl = document.getElementById('processScroll');
+            .process-scroll::-webkit-scrollbar {
+                display: none;
+            }
 
-                    container.addEventListener('wheel', (e) => {
-                      if (!scrollEl) return;
+            .process-items {
+                display: flex;
+                width: max-content;
+                scroll-behavior: smooth;
+            }
 
-                      const scrollable = scrollEl.scrollWidth > scrollEl.clientWidth;
-                      const atLeft = scrollEl.scrollLeft <= 0;
-                      const atRight = Math.ceil(scrollEl.scrollLeft + scrollEl.clientWidth) >= scrollEl.scrollWidth;
+            .process-item {
+                /*flex: 0 0 100vw;*/
+                scroll-snap-align: start;
+                box-sizing: border-box;
+                padding: 20px;
+            }
+		</style>
 
-                      // 끝에 도달하지 않았다면 가로 스크롤 처리
-                      if (scrollable && !(atLeft && e.deltaY < 0) && !(atRight && e.deltaY > 0)) {
-                        e.preventDefault();
-                        const SCROLL_SPEED = 7;
-                        scrollEl.scrollLeft += e.deltaY * SCROLL_SPEED;
-                      }
-                      // 끝이면 그냥 세로로 넘어가게 둠
-                    }, { passive: false });
-                  });
-
-				</script>
-				<!-- 프로세스 아이템 컨테이너 -->
+		<div class="process-container" id="processContainer">
+			<div class="process-scroll" id="processScroll">
 				<div class="process-items" id="processItems">
-					<!-- 아이템 1 -->
-					<div class="process-item" style="flex: 1; text-align: center; padding: 20px 0px;">
-						<div class="process-image"
-						     style="margin-bottom: 40px; height: 280px; display: flex; align-items: center; justify-content: center;">
-							<img src="images/step1.svg" alt="방문객 QR등록"
-							     style="max-width: 100%; transform: scale(0.7); transform-origin: center;">
+					<div class="process-item" style="text-align: center;">
+						<div class="process-image" style="margin-bottom: 40px; height: 280px; display: flex; align-items: center; justify-content: center;">
+							<img src="images/step1.svg" alt="방문객 QR등록" style="max-width: 100%; transform: scale(0.7); transform-origin: center;">
 						</div>
-						<p style="color: var(--main, #004BD6); font-family: 'Gmarket Sans'; font-size: 24px; font-style: normal; font-weight: 400; line-height: 140%; margin: 0 0 10px 0;">
-							STEP 1</p>
-						<h3 style="color: #000; font-family: 'Gmarket Sans'; font-size: 24px; font-weight: 400; margin: 0;">
-							방문객 QR등록</h3>
+						<p style="color: var(--main, #004BD6); font-family: 'Gmarket Sans'; font-size: 24px; font-weight: 400; line-height: 140%;">STEP 1</p>
+						<h3 style="color: #000; font-family: 'Gmarket Sans'; font-size: 24px; font-weight: 400;">방문객 QR등록</h3>
 					</div>
 
-					<!-- 아이템 2 -->
-					<div class="process-item" style="flex: 1; text-align: center; padding: 20px 30px;">
-						<div class="process-image"
-						     style="margin-bottom: 40px; height: 280px; display: flex; align-items: center; justify-content: center;">
-							<img src="images/step2_.svg" alt="대시보드 연동"
-							     style="max-width: 100%; transform: scale(1); transform-origin: center;">
+					<div class="process-item" style="text-align: center;">
+						<div class="process-image" style="margin-bottom: 40px; height: 280px; display: flex; align-items: center; justify-content: center;">
+							<img src="images/step2_.svg" alt="대시보드 연동" style="max-width: 100%; transform: scale(1); transform-origin: center;">
 						</div>
-						<p style="color: var(--main, #004BD6); font-family: 'Gmarket Sans'; font-size: 24px; font-style: normal; font-weight: 400; line-height: 140%; margin: 0 0 10px 0;">
-							STEP 2</p>
-						<h3 style="color: #000; font-family: 'Gmarket Sans'; font-size: 24px; font-weight: 400; margin: 0;">
-							대시보드 연동</h3>
+						<p style="color: var(--main, #004BD6); font-family: 'Gmarket Sans'; font-size: 24px; font-weight: 400; line-height: 140%;">STEP 2</p>
+						<h3 style="color: #000; font-family: 'Gmarket Sans'; font-size: 24px; font-weight: 400;">대시보드 연동</h3>
 					</div>
 
-					<!-- 아이템 3 -->
-					<div class="process-item" style="flex: 1; text-align: center; padding: 20px 30px;">
-						<div class="process-image"
-						     style="margin-bottom: 40px; height: 280px; display: flex; align-items: center; justify-content: center;">
-							<img src="images/step3_.svg" alt="대시보드 시각화"
-							     style="max-width: 100%; transform: scale(1); transform-origin: center;">
+					<div class="process-item" style="text-align: center;">
+						<div class="process-image" style="margin-bottom: 40px; height: 280px; display: flex; align-items: center; justify-content: center;">
+							<img src="images/step3_.svg" alt="대시보드 시각화" style="max-width: 100%; transform: scale(1); transform-origin: center;">
 						</div>
-						<p style="color: var(--main, #004BD6); font-family: 'Gmarket Sans'; font-size: 24px; font-style: normal; font-weight: 400; line-height: 140%; margin: 0 0 10px 0;">
-							STEP 3</p>
-						<h3 style="color: #000; font-family: 'Gmarket Sans'; font-size: 24px; font-weight: 400; margin: 0;">
-							대시보드 시각화</h3>
+						<p style="color: var(--main, #004BD6); font-family: 'Gmarket Sans'; font-size: 24px; font-weight: 400; line-height: 140%;">STEP 3</p>
+						<h3 style="color: #000; font-family: 'Gmarket Sans'; font-size: 24px; font-weight: 400;">대시보드 시각화</h3>
 					</div>
 
-					<!-- 아이템 4 -->
-					<div class="process-item" style="flex: 1; text-align: center; padding: 20px 30px;">
-						<div class="process-image"
-						     style="margin-bottom: 40px; height: 280px; display: flex; align-items: center; justify-content: center;">
-							<img src="images/step4_.svg" alt="사후 마케팅"
-							     style="max-width: 100%; transform: scale(1); transform-origin: center;">
+					<div class="process-item" style="text-align: center;">
+						<div class="process-image" style="margin-bottom: 40px; height: 280px; display: flex; align-items: center; justify-content: center;">
+							<img src="images/step4_.svg" alt="사후 마케팅" style="max-width: 100%; transform: scale(1); transform-origin: center;">
 						</div>
-						<p style="color: var(--main, #004BD6); font-family: 'Gmarket Sans'; font-size: 24px; font-style: normal; font-weight: 400; line-height: 140%; margin: 0 0 10px 0;">
-							STEP 4</p>
-						<h3 style="color: #000; font-family: 'Gmarket Sans'; font-size: 24px; font-weight: 400; margin: 0;">
-							사후 마케팅</h3>
+						<p style="color: var(--main, #004BD6); font-family: 'Gmarket Sans'; font-size: 24px; font-weight: 400; line-height: 140%;">STEP 4</p>
+						<h3 style="color: #000; font-family: 'Gmarket Sans'; font-size: 24px; font-weight: 400;">사후 마케팅</h3>
 					</div>
 				</div>
 			</div>
 		</div>
+
+		<script>
+          document.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('processContainer');
+            const scrollEl = document.getElementById('processScroll');
+
+            scrollEl.scrollLeft = 10;
+
+            container.addEventListener('wheel', (e) => {
+              if (!scrollEl) return;
+
+              const scrollable = scrollEl.scrollWidth > scrollEl.clientWidth;
+              const atLeft = scrollEl.scrollLeft <= 0;
+              const atRight = Math.ceil(scrollEl.scrollLeft + scrollEl.clientWidth) >= scrollEl.scrollWidth;
+
+              if (scrollable && !(atLeft && e.deltaY < 0) && !(atRight && e.deltaY > 0)) {
+                e.preventDefault();
+                const SCROLL_SPEED = 10;
+                scrollEl.scrollLeft += e.deltaY * SCROLL_SPEED;
+              }
+            }, { passive: false });
+          });
+		</script>
+
 
 		<div style="text-align: center;">
 			<a href="service.html" class="custom-btn"
