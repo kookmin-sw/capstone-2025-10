@@ -491,12 +491,12 @@ python3.10 test.py
 
 ### <a href="https://drive.google.com/file/d/1NgPYaJ0WWilvp6KvgJUXREqFU6bwhMLK/view?usp=sharing" target="_blank">중간 발표 자료</a>
 
-### <a href="https://youtu.be/iDVUIyVrkfc" target="_blank">시연 동영상</a>
+### <a href="https://youtu.be/xR-jQg1DCww" target="_blank">시연 동영상</a>
 
 ### <a href="https://drive.google.com/file/d/1l8P5uDkvgciT3G50BEa2qxZpi9-E_244/view?usp=sharing" target="_blank">포스터</a>
 
 ### <a href="https://drive.google.com/file/d/1cN-sJrkvVY67GOnmQtYVh9RUbG3kZ9rW/view?usp=sharing" target="_blank">최종 발표 자료</a>
 
-### <a href="" target="_blank">결과 보고서</a>
+### <a href="https://drive.google.com/file/d/1rE1ZmlOMZOLH9JwzJRYYarncZwkI5Hi3/view?usp=sharing" target="_blank">결과 보고서</a>
 
 ### <a href="https://stingy-class-db5.notion.site/183bbb466427805fbbc4c5304230a5f6?pvs=4" target="_blank">회의록</a>
