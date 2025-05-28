@@ -11,4 +11,6 @@ public interface VisionRedisService {
     void cacheData(String key, Object data);
 
     void flushCacheToDatabase();
+
+    void flushOldTrackingData(); // 2시간 ~ 최근 1시간 데이터 저장
 }

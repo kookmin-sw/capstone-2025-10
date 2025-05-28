@@ -11,4 +11,6 @@ public interface TrackingService {
     List<TrackingDto> getTrackingById(Long dashboardId, User user);
 
     void save(TrackingDto dto, Long dashboardId);
+
+    List<TrackingDto> getTrackingForPreviousHour(Long dashboardId, User user);
 }

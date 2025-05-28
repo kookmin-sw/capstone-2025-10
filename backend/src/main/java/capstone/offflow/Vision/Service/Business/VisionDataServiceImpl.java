@@ -135,8 +135,18 @@ public class VisionDataServiceImpl implements VisionDataService {
     /**
      * Redis에 저장된 비전 데이터를 RDB로 옮기는 기능 호출
      */
+//    @Override
+//    public void persistDataFromRedis() {
+//        visionRedisService.flushCacheToDatabase();
+//    }
+
     @Override
-    public void persistDataFromRedis() {
-        visionRedisService.flushCacheToDatabase();
+    public void flushTrackingByTimeRange() {
+        visionRedisService.flushOldTrackingData(); // ZSet 처리
+    }
+
+    @Override
+    public void flushOtherVisionData() {
+        visionRedisService.flushCacheToDatabase(); // List 처리 (heatmap, genderAge)
     }
 }

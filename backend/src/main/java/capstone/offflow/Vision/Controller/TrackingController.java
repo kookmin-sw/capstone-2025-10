@@ -30,6 +30,17 @@ public class TrackingController {
         return ResponseEntity.ok(dto);
     }
 
+    @GetMapping("/previous-hour/{dashboardId}")
+    public ResponseEntity<?> getPreviousHourTracking(
+            @PathVariable Long dashboardId,
+            @AuthenticationPrincipal UserPrincipal userPrincipal
+    ) {
+        List<TrackingDto> trackingData = trackingService.getTrackingForPreviousHour(
+                dashboardId, userPrincipal.getUser());
+
+        return ResponseEntity.ok(trackingData);
+    }
+
 
 }
 

@@ -12,5 +12,8 @@ public interface VisionDataService {
 
     void processIncomingData(KafkaMessageWrapper wrapper);
 
-    void persistDataFromRedis();
+//    void persistDataFromRedis();
+
+    void flushTrackingByTimeRange(); // ZSet 기반 시간 조건 flush
+    void flushOtherVisionData();     // 기존 List 방식 flush
 }

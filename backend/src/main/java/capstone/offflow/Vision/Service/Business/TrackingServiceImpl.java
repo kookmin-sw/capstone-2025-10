@@ -55,6 +55,8 @@ public class TrackingServiceImpl implements TrackingService{
         return dbResult;
     }
 
+
+
     @Override
     public void save(TrackingDto dto, Long dashboardId) {
         Dashboard dashboard = dashboardRepository.findById(dashboardId)
@@ -62,6 +64,11 @@ public class TrackingServiceImpl implements TrackingService{
 
         Tracking entity = TrackingDto.convertToEntity(dto, dashboard);
         trackingRepository.save(entity);
+    }
+
+    @Override
+    public List<TrackingDto> getTrackingForPreviousHour(Long dashboardId, User user) {
+        return null;
     }
 
 }

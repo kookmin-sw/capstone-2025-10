@@ -35,7 +35,14 @@ public class VisionRedisServiceImpl implements VisionRedisService{
 
     //Redis에 데이터 넣는 Method
     public void cacheData(String key, Object data){
-        redisTemplate.opsForList().leftPush(key, data); //List로 저장
+        if (data instanceof Tracking tracking) {
+            // Redis Sorted Set에 시간 기준 저장
+            long timestamp = tracking.getDetectedTime().getTime();
+            redisTemplate.opsForZSet().add("tracking_data", tracking, timestamp);
+        } else {
+            // 기존 Heatmap, GenderAge는 리스트 방식 유지
+            redisTemplate.opsForList().leftPush(key, data);
+        }
     }
 
     //Redis -> DB로 flush하는 Method -> Vision
@@ -73,4 +80,35 @@ public class VisionRedisServiceImpl implements VisionRedisService{
         }
     }
 
+    // 2시간 ~ 최근 1시간 데이터 저장
+    @Override
+    public void flushOldTrackingData() {
+        long now = System.currentTimeMillis();
+        long oneHourAgo = now - (60 * 60 * 1000);
+        long twoHoursAgo = now - (2 * 60 * 60 * 1000);
+
+        var trackings = redisTemplate.opsForZSet()
+                .rangeByScore("tracking_data", twoHoursAgo, oneHourAgo);
+
+        if (trackings == null || trackings.isEmpty()) {
+            log.info("📭 [Tracking] No data to flush (2h~1h)");
+            return;
+        }
+
+        try {
+            List<Tracking> trackingList = trackings.stream()
+                    .map(obj -> (Tracking) obj)
+                    .collect(Collectors.toList());
+
+            trackingRepository.saveAll(trackingList);
+            log.info("📥 [Tracking] Flushed {} records to DB", trackingList.size());
+
+            // Redis에서 삭제
+            redisTemplate.opsForZSet().removeRangeByScore("tracking_data", twoHoursAgo, oneHourAgo);
+            log.info("🗑️ [Tracking] Deleted flushed data from Redis");
+
+        } catch (Exception e) {
+            log.error("❌ [Tracking] Error while flushing data: {}", e.getMessage());
+        }
+    }
 }
