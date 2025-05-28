@@ -31,6 +31,8 @@ public class Tracking {
 
     private String visitorLabel; //방문객 구분 라벨
 
+    @Lob
+    @Column(name = "grid_list", columnDefinition = "TEXT")
     private String gridList; //좌표 리스트 -> String으로 받을 예정
 
     @ManyToOne(optional = false) //항상 대시보드에 소속 (1개 대시보드 : 여러 대시보드 통계)

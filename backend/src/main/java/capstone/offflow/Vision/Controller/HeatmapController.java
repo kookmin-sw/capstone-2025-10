@@ -21,11 +21,20 @@ public class HeatmapController {
 
     private final HeatmapService heatmapService;
 
+    @GetMapping("/dashboard/{dashboardId}")
+    public ResponseEntity<?> getAllHeatmapByDashboardId(
+            @PathVariable(name = "dashboardId") Long dashboardId,
+            @AuthenticationPrincipal UserPrincipal userPrincipal
+            ){
+        List<HeatmapDto> dto = heatmapService.getAllHeatmapById(dashboardId, userPrincipal.getUser());
+        return ResponseEntity.ok(dto);
+    }
+
     @GetMapping("/{dashboardId}")
     public ResponseEntity<?> getHeatmapByDashboardId(
             @PathVariable(name = "dashboardId") Long dashboardId,
             @AuthenticationPrincipal UserPrincipal userPrincipal
-            ){
+    ){
         List<HeatmapDto> dto = heatmapService.getHeatmapById(dashboardId, userPrincipal.getUser());
         return ResponseEntity.ok(dto);
     }

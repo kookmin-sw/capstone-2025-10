@@ -27,6 +27,8 @@ public class Heatmap {
 
     private Date detectedTime; //보낸 시간
 
+    @Lob
+    @Column(name = "grid_list", columnDefinition = "TEXT")
     private String gridList; //좌표 리스트 -> String으로 받을 예정
 
 

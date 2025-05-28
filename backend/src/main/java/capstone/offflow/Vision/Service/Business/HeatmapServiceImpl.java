@@ -30,7 +30,7 @@ public class HeatmapServiceImpl implements HeatmapService {
     private static final String HEATMAP_KEY_PREFIX = "heatmap:";
 
     @Override
-    public List<HeatmapDto> getHeatmapById(Long dashboardId, User user) {
+    public List<HeatmapDto> getAllHeatmapById(Long dashboardId, User user) {
         String redisKey = HEATMAP_KEY_PREFIX + dashboardId;
 
         // 1. Redis에서 먼저 찾는다
@@ -56,6 +56,36 @@ public class HeatmapServiceImpl implements HeatmapService {
 
         return dbResult;
     }
+
+    @Override
+    public List<HeatmapDto> getHeatmapById(Long dashboardId, User user) {
+        String redisKey = HEATMAP_KEY_PREFIX + dashboardId + ":latest";
+
+        try {
+            Object cachedRaw = redisTemplate.opsForValue().get(redisKey);
+            if (cachedRaw instanceof List<?> cachedList && !cachedList.isEmpty()) {
+                if (cachedList.get(0) instanceof HeatmapDto) {
+                    return (List<HeatmapDto>) cachedRaw;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // 최근 1개만 조회
+        List<Heatmap> latestHeatmaps = heatmapRepository.findTop1ByDashboard_IdAndDashboard_UserOrderByDetectedTimeDesc(dashboardId, user);
+
+        List<HeatmapDto> dtoList = latestHeatmaps.stream()
+                .map(HeatmapDto::convertToDto)
+                .toList();
+
+        redisTemplate.opsForValue().set(redisKey, dtoList, Duration.ofMinutes(10));
+
+        return dtoList;
+    }
+
+
+
 
     @Override
     public void save(HeatmapDto dto, Long dashboardId) {

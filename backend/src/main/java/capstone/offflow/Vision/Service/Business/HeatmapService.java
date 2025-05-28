@@ -11,6 +11,7 @@ public interface HeatmapService {
 
     List<HeatmapDto> getHeatmapById(Long dashboardId, User user);
 
+    List<HeatmapDto> getAllHeatmapById(Long dashboardId, User user);
 
     void save(HeatmapDto dto, Long dashboardId);
 }
