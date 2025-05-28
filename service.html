@@ -404,9 +404,9 @@
     <!-- EfficientNet-B0 모델 섹션 -->
     <section class="service-section" style="margin-top: 100px; clear: both;">
         <div class="container" style="clear: both; text-align: right !important;">
-            <div class="section-header" style="text-align: right !important; width: 100%; float: right;">
+            <div class="section-header" style="text-align: right !important; width: 800px; float: right;">
                 <h2 style="color: #000; font-family: 'Gmarket Sans'; font-size: 36px; font-style: normal; font-weight: 400; line-height: 140%; text-align: right !important; width: 100%; margin-left: auto;">2. 성별, 연령대 분류 - EfficientNet-B0</h2>
-                <p style="color: #000; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 150%; margin-top: 20px; margin-bottom: 40px; text-align: right !important; width: 100%; margin-left: auto; direction: rtl;">
+                <p style="color: #000; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 150%; margin-top: 20px; margin-bottom: 40px; text-align: right !important; max-width: 800px; margin-left: auto; direction: rtl;">
                     EfficientNet-B0를 백본으로 하여 기존 classification head을 제거한 후<br>
                     성별 및 연령대 분류를 위한 맞춤형 헤드를 추가하여 재학습<br>
                     학습 데이터 셋: AI hub 안면 인식 에이징 이미지 데이터
@@ -435,21 +435,20 @@
 
     <!-- YOLO v8 + Deepsort 모델 섹션 -->
     <section class="service-section" style="margin-top: 100px; clear: both;">
-        <div class="container" style="clear: both; max-width: 1400px;">
-            <div class="section-header" style="text-align: left; width: 100%;">
-                <h2 style="color: #000; font-family: 'Gmarket Sans'; font-size: 36px; font-style: normal; font-weight: 400; line-height: 140%; text-align: left; margin-left: 0;">3. 고객동선 추적 - YOLO v8 + Deepsort</h2>
-                <p style="color: #000; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 150%; margin-top: 20px; margin-bottom: 40px; text-align: left; margin-left: 0; width: 100%;">
+        <div class="container"> 
+            <div class="section-header" style="text-align: left; width: 700px;">
+                <h2 style="color: #000; font-family: 'Gmarket Sans'; font-size: 36px; font-style: normal; font-weight: 400; line-height: 1.4; text-align: left; margin-bottom: 20px;">3. 고객동선 추적 - YOLO v8 + Deepsort</h2>
+                <p style="color: #000; font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 1.7; text-align: left !important; margin-bottom: 30px; word-break: keep-all; display: block; max-width: 700px;">
                     DeepSORT는 빠르고 정확한 객체 추적 알고리즘으로,<br>
                     각각의 ID를 가진 다수의 객체를 높은 정확도로 추적 가능<br>
                     사라졌던 객체도 일정 시간 이내에 다시 검출 시 동일 ID로 추적이 가능해<br>
                     OFFFLOW 프로젝트에 매우 적합
                 </p>
-                <div style="text-align: left; margin-top: 30px; margin-bottom: 30px;">
-                    <img src="images/yolo1.svg" alt="YOLO v8 + Deepsort 모델" style="max-width: 100%; border-radius: 10px; display: block; margin-left: 0; margin-right: auto; float: left;">
-                </div>
+            </div>
+            <div style="text-align: left; margin-top: 30px; margin-bottom: 30px; width: 100%;">
+                <img src="images/yolo1.svg" alt="YOLO v8 + Deepsort 모델" style="max-width: 100%; height: auto; border-radius: 10px; display: block; margin-left: 0;">
             </div>
         </div>
-        <div style="clear: both;"></div>
     </section>
 
     <!-- 주요 기능 섹션 -->
@@ -643,71 +642,7 @@
         }
     </style>
 
-    <section id="tech-stack" style="background: #F7F9FA">
-	    <div class="container" >
-		    <div class="section-header" style="text-align: center;">
-			    <span style="color: var(--main, #004BD6); font-family: 'Gmarket Sans'; font-size: 20px; font-style: normal; font-weight: 300; line-height: 100%; margin-bottom: 10px; display: block; text-align: left">Technology</span>
-			    <h2 style="color: #000; font-family: 'Gmarket Sans'; font-size: 36px; font-style: normal; font-weight: 400; line-height: 140%; margin-bottom: 50px;">
-				    기술스택</h2>
-		    </div>
-
-
-		    <div style="background: #ffffff; padding: 48px;">
-			    <h3>💻 Frontend</h3>
-			    <div class="stack-group">
-				    <span class="badge" style="background-color:#F7DF1E; color:#000"><i class="fab fa-js"></i>Javascript</span>
-				    <span class="badge" style="background-color:#000"><i class="fab fa-react"></i>Next.js</span>
-				    <span class="badge" style="background-color:#CC6699"><i class="fab fa-sass"></i>Sass</span>
-				    <span class="badge" style="background-color:#4B32C3"><i class="fas fa-code"></i>ESLint</span>
-				    <span class="badge" style="background-color:#F7B93E"><i class="fas fa-paint-brush"></i>Prettier</span>
-				    <span class="badge" style="background-color:#2C8EBB"><i class="fab fa-yarn"></i>Yarn</span>
-				    <span class="badge" style="background-color:#009639"><i class="fab fa-linux"></i>Nginx</span>
-			    </div>
-
-			    <h3>💻 Backend</h3>
-			    <div class="stack-group">
-				    <span class="badge" style="background-color:#007396"><i class="fab fa-java"></i>Java</span>
-				    <span class="badge" style="background-color:#6DB33F"><i class="fas fa-leaf"></i>Spring Boot</span>
-				    <span class="badge" style="background-color:#02303A"><i class="fas fa-hammer"></i>Gradle</span>
-				    <span class="badge" style="background-color:#000"><i class="fas fa-plug"></i>Rest API</span>
-				    <span class="badge" style="background-color:#4169E1"><i class="fas fa-database"></i>PostgreSQL</span>
-				    <span class="badge" style="background-color:#FF4438"><i class="fas fa-memory"></i>Redis</span>
-				    <span class="badge" style="background-color:#231F20"><i class="fas fa-stream"></i>Kafka</span>
-				    <span class="badge" style="background-color:#03C75A"><i class="fas fa-sms"></i>Naver SMS</span>
-			    </div>
-
-			    <h3>💻 AI</h3>
-			    <div class="stack-group">
-				    <span class="badge" style="background-color:#3776AB"><i class="fab fa-python"></i>Python 3.10</span>
-				    <span class="badge" style="background-color:#E95420"><i class="fab fa-linux"></i>Ubuntu 22.04</span>
-				    <span class="badge" style="background-color:#76B900"><i class="fas fa-microchip"></i>CUDA 11.8</span>
-				    <span class="badge" style="background-color:#EE4C2C"><i class="fas fa-brain"></i>PyTorch</span>
-				    <span class="badge" style="background-color:#013243"><i class="fas fa-square-root-alt"></i>NumPy</span>
-				    <span class="badge" style="background-color:#111F68">YOLO</span>
-				    <span class="badge" style="background-color:#5C3EE8">OpenCV</span>
-				    <span class="badge" style="background-color:#4D4D4D">DeepSORT</span>
-				    <span class="badge" style="background-color:#4D4D4D">APGCC</span>
-				    <span class="badge" style="background-color:#4D4D4D">EfficientNet</span>
-			    </div>
-
-			    <h3>💻 Deployment</h3>
-			    <div class="stack-group">
-				    <span class="badge" style="background-color:#FF9900"><i class="fab fa-aws"></i>Amazon EC2</span>
-				    <span class="badge" style="background-color:#2088FF"><i class="fab fa-docker"></i>Docker</span>
-			    </div>
-
-			    <h3>💻 Common</h3>
-			    <div class="stack-group">
-				    <span class="badge" style="background-color:#5865F2"><i class="fab fa-discord"></i>Discord</span>
-				    <span class="badge" style="background-color:#F24E1E"><i class="fab fa-figma"></i>Figma</span>
-				    <span class="badge" style="background-color:#F05032"><i class="fab fa-git-alt"></i>Git</span>
-				    <span class="badge" style="background-color:#181717"><i class="fab fa-github"></i>GitHub</span>
-				    <span class="badge" style="background-color:#000"><i class="fab fa-notion"></i>Notion</span>
-				    <span class="badge" style="background-color:#0052CC"><i class="fab fa-trello"></i>Trello</span>
-			    </div>
-		    </div>
-	    </div>
-    </section>
+  
     <!-- Font Awesome for icons -->
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
