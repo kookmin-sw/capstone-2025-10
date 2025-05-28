@@ -92,6 +92,7 @@ export default function VisitorRegistration() {
       },
       credentials: "include",
       body: JSON.stringify(visitorData),
+      credentials: "include",
     })
       .then((response) => {
         if (!response.ok) {
