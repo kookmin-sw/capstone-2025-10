@@ -12,6 +12,10 @@ from visitor_detect import MultiTaskEfficientNet
 # Device 설정
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+producer = KafkaProducer(
+    bootstrap_servers='192.168.219.101:9092',
+    value_serializer=lambda v: json.dumps(v).encode('utf-8'),
+)
 # 얼굴 전처리 transform
 face_transform = transforms.Compose([
     transforms.Resize((224, 224)),
@@ -36,7 +40,7 @@ model.eval()
 # 방문자(객체) 추적을 위한 간단한 딕셔너리
 tracked_visitors = {}  # key: visitor_id, value: dict with center, start_time, last_seen, predictions
 TRACKING_THRESHOLD = 75  # 픽셀 단위, 중심 좌표 차이 임계값
-MIN_DETECTION_DURATION = 10  # 10초 이상 머무른 방문자에 대해 서버에 전송
+MIN_DETECTION_DURATION = 1  # 10초 이상 머무른 방문자에 대해 서버에 전송
 EXPIRE_TIME = 60  # 60초 이상 보이지 않으면 해당 방문자 삭제
 
 def get_face_center(box):
@@ -49,12 +53,9 @@ def is_same_visitor(center, tracked_center, threshold=TRACKING_THRESHOLD):
     return np.sqrt(dx**2 + dy**2) < threshold
 
 def request_kafka(message):
-    producer = KafkaProducer(
-        bootstrap_servers='192.168.219.180:9092',
-        value_serializer=lambda v: json.dumps(v).encode('utf-8'),
-    )
 
     producer.send("vision-data-topic", message)
+    producer.flush()
 
 def send_to_server(visitor_data):
     # 실제 서버 API 호출 코드 (예: requests.post 등)
@@ -171,7 +172,7 @@ def process_frame(frame, face_detector, model, transform, device, tracked_visito
     return np.array(pil_img)
 
 # 메인 루프: 실시간 영상 처리 및 시각화
-cap = cv2.VideoCapture("rtsp://offflow:offflow1234@192.168.219.188/stream1")
+cap = cv2.VideoCapture("test.mp4")  # ✅ 영상 파일로 변경
 frame_count = 0
 DETECTION_INTERVAL = 10  # 10프레임마다 YOLO 검출 실행
 
@@ -181,16 +182,19 @@ while True:
         break
     frame_count += 1
 
-    # YOLO 검출은 매 DETECTION_INTERVAL 프레임마다 수행
     if frame_count % DETECTION_INTERVAL == 0:
-        processed_frame = process_frame(frame, face_detector, model, face_transform, device, tracked_visitors, run_detection=True)
+        processed_frame = process_frame(
+            frame, face_detector, model, face_transform, device, tracked_visitors, run_detection=True
+        )
     else:
-        # 이전 검출 결과(트래킹)만 업데이트: run_detection=False이면 새 검출은 수행하지 않고, 기존 방문자 정보만 업데이트 
-        processed_frame = process_frame(frame, face_detector, model, face_transform, device, tracked_visitors, run_detection=False)
+        processed_frame = process_frame(
+            frame, face_detector, model, face_transform, device, tracked_visitors, run_detection=False
+        )
 
     processed_frame_bgr = cv2.cvtColor(processed_frame, cv2.COLOR_RGB2BGR)
     cv2.imshow("Real-Time Visitor Tracking", processed_frame_bgr)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
+
+    if cv2.waitKey(1) & 0xFF == ord("q"):
         break
 
 cap.release()

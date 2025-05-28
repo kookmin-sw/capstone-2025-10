@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>OFFFLOW | 공간을 읽는 새로운 눈</title>
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet" />
+	<style>
+        .scroll-slider, .scroll-card {
+            user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+        body {
+            font-family: 'Roboto', 'Noto Sans KR', sans-serif;
+            background-color: var(--gray-6);
+            color: #1c1b1f;
+        }
+
+        .material-card {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.12), 0px 1px 3px rgba(0, 0, 0, 0.24);
+            transition: box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out;
+            padding: 1.5rem;
+        }
+
+        .material-card:hover {
+            box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2), 0px 3px 6px rgba(0, 0, 0, 0.23);
+            transform: translateY(-2px);
+        }
+
+        .material-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 0.75rem;
+        }
+
+        .material-title {
+            font-size: 1rem;
+            font-weight: 500;
+            margin: 0.25rem 0 0.1rem;
+        }
+
+        .material-subtitle {
+            font-size: 0.85rem;
+            color: var(--gray-1);
+            margin-bottom: 0.25rem;
+        }
+
+        .material-caption {
+            font-size: 0.75rem;
+            color: var(--gray-2);
+        }
+        :root {
+            --primary-blue: #004bd6;
+            --gradient-hero: linear-gradient(224deg, #004BD6 3.65%, #2594FF 31.56%, #3EDCEB 65.16%, #15FFEB 102.22%);
+            --gray-3: #d9d9d9;
+            --gray-1: #545f71;
+            --gray-2: #95989d;
+            --gray-6: #fafafa;
+        }
+
+        * {
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Noto Sans KR', sans-serif;
+            background: var(--gray-6);
+            color: #000;
+            line-height: 1.6;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 6rem 1rem 5rem;
+            background: var(--gradient-hero);
+            color: white;
+
+            & > div {
+                display: flex;
+                flex-direction: column;
+                align-items: end;
+            }
+        }
+
+        .hero h2 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 0.8rem 1.6rem;
+            background: white;
+            color: var(--primary-blue);
+            border-radius: 8px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+
+        .cta-button:hover {
+            background: #f0f0f0;
+        }
+
+        section {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: 100%;
+
+            & > div {
+                max-width: 960px;
+                width: 100%;
+                margin: auto;
+            }
+        }
+
+
+
+        .scroll-slider {
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE and Edge */
+            overflow-x: auto;
+            white-space: nowrap;
+            scroll-snap-type: x mandatory;
+            display: flex;
+            gap: 1.5rem;
+            padding: 1rem 0;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .scroll-card {
+            height: 160px;
+            overflow-wrap: break-word;
+            display: flex;
+            flex-direction: column;
+            flex: 0 0 auto;
+            scroll-snap-align: start;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.07);
+            padding: 1.5rem;
+            min-width: 280px;
+            max-width: 300px;
+            transition: transform 0.3s ease;
+            white-space: break-spaces;
+            word-break: keep-all;
+        }
+
+        .scroll-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .scroll-card strong {
+            display: block;
+            font-size: 1.1rem;
+            color: #004bd6;
+            margin-bottom: 0.5rem;
+        }
+
+        .scroll-card p {
+            font-size: 0.95rem;
+            color: #444;
+            margin: 0;
+        }
+        .scroll-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+        .scroll-slider::-webkit-scrollbar {
+            display: none;
+        }
+	</style>
+</head>
+<body>
+<nav style="position: fixed; top: 0; left: 0; right: 0; height: 60px; background: white; box-shadow: 0 2px 6px rgba(0,0,0,0.08); display: flex; align-items: center; justify-content: space-between; padding: 0 1.5rem; z-index: 1000;">
+	<div style="font-weight: 700; font-size: 1.2rem; color: #004bd6;">OFFFLOW</div>
+	<div style="display: flex; gap: 1.5rem; font-size: 0.95rem;">
+		<a href="#problem" style="text-decoration: none; color: #333;">문제</a>
+		<a href="#flow" style="text-decoration: none; color: #333;">흐름도</a>
+		<a href="#value" style="text-decoration: none; color: #333;">기능</a>
+		<a href="#techstack" style="text-decoration: none; color: #333;">기술스택</a>
+		<a href="#team" style="text-decoration: none; color: #333;">팀원</a>
+	</div>
+</nav>
+<div style="height: 60px;"></div>
+<section class="hero">
+	<div>
+		<h2>공간을 읽는 새로운 눈</h2>
+		<p>AI 기반 오프라인 고객 분석 솔루션</p>
+		<a href="#flow" class="cta-button">서비스 흐름도 보기</a>
+	</div>
+</section>
+
+<section id="problem" data-aos="fade-up" style="background:#f7f9fc; padding: 4rem 1rem;">
+	<div style="width: 100%; margin: 0 auto; padding: 0 1rem;">
+		<h2 style="text-align: center; color: #003bbf; font-size: 2.3rem; font-weight: 800; margin-bottom: 1rem; font-family: 'Roboto', 'Noto Sans KR', sans-serif;">기존 시스템의 문제</h2>
+		<p style="text-align: center; color: #666; font-size: 1.05rem; margin-bottom: 2.2rem; font-weight: 400;">OFFFLOW가 해결하고자 하는 기존 오프라인 공간 데이터 관리의 한계</p>
+
+		<div style="display: flex; flex-wrap: wrap; gap: 2rem; justify-content: center;">
+			<div style="flex: 1 1 420px; background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+				<h3 style="color:#004bd6; font-size: 1.2rem;">📝 스탭의 수기 관리방식</h3>
+				<ul style="padding-left: 1rem; line-height: 1.6; color: #444;">
+					<li>담당자에 따라 기록 방식이 상이해 데이터 통일성 부족</li>
+					<li>체류시간, 방문시간 등 정량적 지표 확보 어려움</li>
+					<li>성별/연령 기반 마케팅 지표 수집 불가</li>
+				</ul>
+			</div>
+			<div style="flex: 1 1 420px; background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+				<h3 style="color:#004bd6; font-size: 1.2rem;">📊 파편화된 방문객 관리 및 마케팅</h3>
+				<ul style="padding-left: 1rem; line-height: 1.6; color: #444;">
+					<li>SNS/오프라인/웹 채널 간 연계성 부족</li>
+					<li>이벤트, 고객DB, 방문기록 데이터가 통합되지 않음</li>
+					<li>성과 분석 어려움, 개인화 마케팅 불가</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section id="flow" data-aos="fade-up" style="background:#f7f9fc; padding: 4rem 1rem;">
+	<h2 style="text-align: center; color: #004bd6; font-size: 2.25rem; font-weight: 900; margin-bottom: 1rem; letter-spacing: -0.5px;">서비스 흐름도</h2>
+	<p style="text-align: center; color: #555; font-size: 1rem; margin-bottom: 2rem;">방문부터 분석, 개선까지 오프라인 공간의 인사이트 도출 과정</p>
+	<div class="scroll-slider">
+		<div class="scroll-card">
+			<strong>1. 현장 방문 및 카메라 설치</strong>
+			<p>고객사의 오프라인 공간에 AI 분석용 카메라 설치</p>
+		</div>
+		<div class="scroll-card">
+			<strong>2. 대시보드 생성</strong>
+			<p>도면 등록, 구역 설정, 상품 등록 진행</p>
+		</div>
+		<div class="scroll-card">
+			<strong>2-1. 방문객 QR 등록</strong>
+			<p>고객은 QR을 통해 방문 정보 자동 등록</p>
+		</div>
+		<div class="scroll-card">
+			<strong>3. 실시간 데이터 수집</strong>
+			<p>AI가 고객의 동선, 성별, 연령, 밀집도 등을 분석</p>
+		</div>
+		<div class="scroll-card">
+			<strong>4. 데이터 처리 및 시각화</strong>
+			<p>분석 결과를 대시보드에 실시간 시각화 제공</p>
+		</div>
+		<div class="scroll-card">
+			<strong>5. 방문객 설문조사 진행</strong>
+			<p>고객 대상 만족도 및 행동 설문조사 수행</p>
+		</div>
+		<div class="scroll-card">
+			<strong>6. 개선 방안 도출</strong>
+			<p>분석 및 피드백을 바탕으로 인사이트 정리</p>
+		</div>
+		<div class="scroll-card">
+			<strong>7. 팝업스토어 개선 및 재설정</strong>
+			<p>상품/구역 재배치 및 운영 전략 수정</p>
+		</div>
+	</div>
+</section>
+<section id="value" data-aos="fade-up" style="background:#ffffff; padding: 6rem 1rem;">
+	<div style="width: 100%; margin: 0 auto; padding: 0 1rem; text-align: center;">
+		<h2 style="text-align: center; color: #004bd6; font-size: 2.25rem; font-weight: 900; margin-bottom: 1rem; letter-spacing: -0.5px;">주요 기능</h2>
+		<p style="text-align: center; color: #555; font-size: 1rem; margin-bottom: 2rem;">오프라인 공간 운영을 위한 통합 데이터 분석 솔루션의 이점</p>
+
+		<div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:1.5rem;">
+			<div style="background:#f7f9fc; border-radius:12px; padding:1.5rem; box-shadow:0 2px 6px rgba(0,0,0,0.05);">
+				<h3 style="color:#004bd6;">📍 실시간 동선 시각화</h3>
+				<p style="font-size:0.9rem; color:#555;">현장 내 혼잡도 및 이동 패턴 파악</p>
+			</div>
+			<div style="background:#f7f9fc; border-radius:12px; padding:1.5rem; box-shadow:0 2px 6px rgba(0,0,0,0.05);">
+				<h3 style="color:#004bd6;">🧠 데이터 기반 인사이트</h3>
+				<p style="font-size:0.9rem; color:#555;">공간 운영 전략 수립 및 개선</p>
+			</div>
+			<div style="background:#f7f9fc; border-radius:12px; padding:1.5rem; box-shadow:0 2px 6px rgba(0,0,0,0.05);">
+				<h3 style="color:#004bd6;">🎯 마케팅 성과 측정</h3>
+				<p style="font-size:0.9rem; color:#555;">고객군별 맞춤 분석 및 타겟팅 가능</p>
+			</div>
+		</div>
+	</div>
+</section>
+<section id="techstack" data-aos="fade-up" style="background:#ffffff; padding: 6rem 1rem;">
+	<div style="max-width:960px; margin: 0 auto;">
+		<div style="display: grid; gap: 2rem; font-size: 0.9rem;">
+			<div>
+				<h3>💻 Frontend</h3>
+				<div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+					<img src="https://img.shields.io/badge/Javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"/>
+					<img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=Next.js&logoColor=white"/>
+					<img src="https://img.shields.io/badge/Sass-CC6699?style=for-the-badge&logo=Sass&logoColor=white"/>
+					<img src="https://img.shields.io/badge/ESLint-4B32C3?style=for-the-badge&logo=ESLint&logoColor=white"/>
+					<img src="https://img.shields.io/badge/Prettier-F7B93E?style=for-the-badge&logo=Prettier&logoColor=white"/>
+					<img src="https://img.shields.io/badge/Yarn-2C8EBB?style=for-the-badge&logo=Yarn&logoColor=white"/>
+					<img src="https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=Nginx&logoColor=white"/>
+				</div>
+			</div>
+			<div>
+				<h3>💻 Backend</h3>
+				<div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+					<img src="https://img.shields.io/badge/Java-004027?style=for-the-badge&logo=openjdk&logoColor=white"/>
+					<img src="https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=SpringBoot&logoColor=white"/>
+					<img src="https://img.shields.io/badge/Gradle-02303A?style=for-the-badge&logo=Gradle&logoColor=white"/>
+					<img src="https://img.shields.io/badge/REST_API-000000?style=for-the-badge&logo=OpenAPI&logoColor=white"/>
+					<img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=PostgreSQL&logoColor=white"/>
+					<img src="https://img.shields.io/badge/Redis-FF4438?style=for-the-badge&logo=Redis&logoColor=white"/>
+					<img src="https://img.shields.io/badge/Kafka-231F20?style=for-the-badge&logo=ApacheKafka&logoColor=white"/>
+					<img src="https://img.shields.io/badge/Naver_SMS-03C75A?style=for-the-badge&logo=Naver&logoColor=white"/>
+				</div>
+			</div>
+			<div>
+				<h3>💻 AI</h3>
+				<div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+					<img src="https://img.shields.io/badge/Python_3.10-3776AB?style=for-the-badge&logo=python&logoColor=white"/>
+					<img src="https://img.shields.io/badge/Ubuntu_22.04-E95420?style=for-the-badge&logo=ubuntu&logoColor=white"/>
+					<img src="https://img.shields.io/badge/CUDA_11.8-76B900?style=for-the-badge&logo=nvidia&logoColor=white"/>
+					<img src="https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=PyTorch&logoColor=white"/>
+					<img src="https://img.shields.io/badge/NumPy-013243?style=for-the-badge&logo=NumPy&logoColor=white"/>
+					<img src="https://img.shields.io/badge/YOLO-111F68?style=for-the-badge&logo=YOLO&logoColor=white"/>
+					<img src="https://img.shields.io/badge/OpenCV-5C3EE8?style=for-the-badge&logo=OpenCV&logoColor=white"/>
+					<img src="https://img.shields.io/badge/DeepSORT-4D4D4D?style=for-the-badge"/>
+					<img src="https://img.shields.io/badge/APGCC-4D4D4D?style=for-the-badge"/>
+					<img src="https://img.shields.io/badge/EfficientNet-4D4D4D?style=for-the-badge"/>
+				</div>
+			</div>
+			<div>
+				<h3>💻 Deployment</h3>
+				<div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+					<img src="https://img.shields.io/badge/Amazon_EC2-FF9900?style=for-the-badge&logo=AmazonEC2&logoColor=white"/>
+					<img src="https://img.shields.io/badge/Docker-2088FF?style=for-the-badge&logo=Docker&logoColor=white"/>
+				</div>
+			</div>
+			<div>
+				<h3>💻 Common</h3>
+				<div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+					<img src="https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=Discord&logoColor=white"/>
+					<img src="https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=Figma&logoColor=white"/>
+					<img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=Git&logoColor=white"/>
+					<img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=GitHub&logoColor=white"/>
+					<img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=Notion&logoColor=white"/>
+					<img src="https://img.shields.io/badge/Trello-0052CC?style=for-the-badge&logo=Trello&logoColor=white"/>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<section id="result" data-aos="fade-up" style="background:#f7f9fc; padding: 6rem 1rem;">
+	<div style="max-width:960px; margin: 0 auto; text-align:center;">
+
+		<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem;">
+			<div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); width: 260px;">
+				<h3 style="color: #004bd6; font-size: 2rem; margin: 0;">↑ 30%</h3>
+				<p style="margin: 0.5rem 0 0; font-size: 0.95rem; color: #444;">매장 운영 효율 향상</p>
+			</div>
+			<div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); width: 260px;">
+				<h3 style="color: #004bd6; font-size: 2rem; margin: 0;">↑ 25%</h3>
+				<p style="margin: 0.5rem 0 0; font-size: 0.95rem; color: #444;">공간 활용 최적화</p>
+			</div>
+			<div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); width: 260px;">
+				<h3 style="color: #004bd6; font-size: 2rem; margin: 0;">↑ 40%</h3>
+				<p style="margin: 0.5rem 0 0; font-size: 0.95rem; color: #444;">데이터 기반 마케팅 효과</p>
+			</div>
+		</div>
+	</div>
+</section>
+<section id="demo" data-aos="fade-up" style="background:#ffffff; padding: 6rem 1rem;">
+	<div style="max-width:960px; margin: 0 auto; text-align:center;">
+
+		<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+			<iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
+		</div>
+		<p style="margin-top:1rem; font-size:0.9rem; color:#555;">※ 영상은 데모를 위해 사전 녹화된 자료입니다.</p>
+	</div>
+</section>
+<section id="team" data-aos="fade-up" style="background:#f7f9fc; padding: 6rem 1rem;">
+	<div style="max-width:960px; margin:0 auto; text-align:center;">
+
+		<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem;">
+			<div class="material-card">
+				<img src="https://avatars.githubusercontent.com/u/134192611?v=4" alt="김민준" class="material-avatar"/>
+				<h3 class="material-title">김민준</h3>
+				<p class="material-subtitle">팀장, Backend, DB</p>
+				<p class="material-caption">kkmj1374@kookmin.ac.kr</p>
+			</div>
+			<div class="material-card">
+				<img src="https://avatars.githubusercontent.com/u/19978313?v=4" alt="최진혁" class="material-avatar"/>
+				<h3 class="material-title">최진혁</h3>
+				<p class="material-subtitle">Frontend, Infra</p>
+				<p class="material-caption">skan9708@kookmin.ac.kr</p>
+			</div>
+			<div class="material-card">
+				<img src="https://avatars.githubusercontent.com/u/38872856?v=4" alt="김린회" class="material-avatar"/>
+				<h3 class="material-title">김린회</h3>
+				<p class="material-subtitle">Frontend, Backend</p>
+				<p class="material-caption">flsghl@kookmin.ac.kr</p>
+			</div>
+			<div class="material-card">
+				<img src="https://avatars.githubusercontent.com/u/113752290?v=4" alt="성정규" class="material-avatar"/>
+				<h3 class="material-title">성정규</h3>
+				<p class="material-subtitle">AI</p>
+				<p class="material-caption">juku1133@kookmin.ac.kr</p>
+			</div>
+			<div class="material-card">
+				<img src="https://avatars.githubusercontent.com/u/55175192?v=4" alt="윤민상" class="material-avatar"/>
+				<h3 class="material-title">윤민상</h3>
+				<p class="material-subtitle">AI</p>
+				<p class="material-caption">nornen20@kookmin.ac.kr</p>
+			</div>
+		</div>
+	</div>
+</section>
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script>
+  AOS.init({
+    duration: 800,
+    easing: 'ease-in-out',
+    once: true
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const flowSlider = document.querySelector('.scroll-slider');
+    if (!flowSlider) return;
+
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    flowSlider.style.cursor = 'grab';
+
+    flowSlider.addEventListener('mousedown', (e) => {
+      e.preventDefault(); // prevent text selection
+      isDown = true;
+      flowSlider.style.cursor = 'grabbing';
+      startX = e.pageX - flowSlider.offsetLeft;
+      scrollLeft = flowSlider.scrollLeft;
+    });
+
+    flowSlider.addEventListener('mouseleave', () => {
+      isDown = false;
+      flowSlider.style.cursor = 'grab';
+    });
+
+    flowSlider.addEventListener('mouseup', () => {
+      isDown = false;
+      flowSlider.style.cursor = 'grab';
+    });
+
+    flowSlider.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - flowSlider.offsetLeft;
+      const walk = (x - startX) * 1.5;
+      flowSlider.scrollLeft = scrollLeft - walk;
+    });
+  });
+  // 휠 스크롤로 좌우 이동 기능
+  document.addEventListener('DOMContentLoaded', () => {
+    const flowSlider = document.querySelector('.scroll-slider');
+    if (!flowSlider) return;
+
+    flowSlider.addEventListener('wheel', (e) => {
+      if (e.deltaY === 0) return;
+      e.preventDefault();
+      flowSlider.scrollBy({ left: e.deltaY, behavior: 'smooth' });
+    }, { passive: false });
+  });
+</script>
+</body>
+</html>

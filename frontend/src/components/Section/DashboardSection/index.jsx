@@ -193,10 +193,10 @@ const DashboardSection = ({ visitors }) => {
     maintainAspectRatio: false,
   };
 
-  if (Object.keys(visitors).length === 0) {
-    //router.push("/login");
-    return <RequireLogin></RequireLogin>;
-  }
+  //if (Object.keys(visitors).length === 0) {
+  //  //router.push("/login");
+  //  return <RequireLogin></RequireLogin>;
+  //}
 
   return (
     <RequireLogin>

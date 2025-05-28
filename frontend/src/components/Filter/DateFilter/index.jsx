@@ -20,8 +20,12 @@ const DateFilter = ({ dateRange, setDateRange }) => {
 
   const handleShortcut = (days) => {
     const now = new Date();
+    now.setHours(23, 59, 59, 999); // ✅ 오늘의 끝
+
     const from = new Date();
     from.setDate(now.getDate() - days + 1);
+    from.setHours(0, 0, 0, 0); // ✅ from은 시작 시각
+
     setDateRange([from, now]);
   };
 

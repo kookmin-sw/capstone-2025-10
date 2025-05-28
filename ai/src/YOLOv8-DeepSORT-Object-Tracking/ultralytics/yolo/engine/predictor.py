@@ -153,7 +153,7 @@ class BasePredictor:
                                       stride=stride,
                                       auto=pt,
                                       transforms=getattr(model.model, 'transforms', None),
-                                      vid_stride=self.args.vid_stride)
+                                      vid_stride=5)
         self.vid_path, self.vid_writer = [None] * bs, [None] * bs
         model.warmup(imgsz=(1 if pt or model.triton else bs, 3, *imgsz))  # warmup
 
@@ -224,12 +224,13 @@ class BasePredictor:
 
     def show(self, p):
         im0 = self.annotator.result()
+        im0 = cv2.resize(im0, (426, 241))  # 이미지 자체 리사이즈
         if platform.system() == 'Linux' and p not in self.windows:
             self.windows.append(p)
-            cv2.namedWindow(str(p), cv2.WINDOW_NORMAL | cv2.WINDOW_KEEPRATIO)  # allow window resize (Linux)
-            cv2.resizeWindow(str(p), im0.shape[1], im0.shape[0])
+            cv2.namedWindow(str(p), cv2.WINDOW_NORMAL | cv2.WINDOW_KEEPRATIO)
+            cv2.resizeWindow(str(p), 426, 241)
         cv2.imshow(str(p), im0)
-        cv2.waitKey(1)  # 1 millisecond
+        cv2.waitKey(1)
 
     def save_preds(self, vid_cap, idx, save_path):
         im0 = self.annotator.result()

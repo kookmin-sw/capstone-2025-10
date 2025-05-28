@@ -90,6 +90,7 @@ export default function VisitorRegistration() {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify(visitorData),
       credentials: "include",
     })
@@ -104,7 +105,7 @@ export default function VisitorRegistration() {
         alert("방문객 등록이 완료되었습니다. 감사합니다.");
       })
       .catch((error) => {
-        console.log("방문객 등록 실패:", error);
+        console.error("방문객 등록 실패:", error);
         alert("방문객 등록 중 오류가 발생했습니다. 다시 시도해주세요.");
       });
   };

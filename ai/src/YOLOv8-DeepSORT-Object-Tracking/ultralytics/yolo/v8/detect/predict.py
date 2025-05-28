@@ -17,11 +17,6 @@ from ultralytics.yolo.utils import DEFAULT_CONFIG, ROOT, ops
 from ultralytics.yolo.utils.checks import check_imgsz
 from ultralytics.yolo.utils.plotting import Annotator
 
-from config import cfg as base_cfg, merge_from_file
-from deep_sort_pytorch.deep_sort import DeepSort
-from deep_sort_pytorch.utils.parser import get_config
-from models import build_model
-
 palette = (2 ** 11 - 1, 2 ** 15 - 1, 2 ** 20 - 1)
 data_deque = {}
 
@@ -29,6 +24,11 @@ deepsort = None
 
 
 def init_tracker():
+    from config import cfg as base_cfg, merge_from_file
+    from deep_sort_pytorch.deep_sort import DeepSort
+    from deep_sort_pytorch.utils.parser import get_config
+    from models import build_model
+
     global deepsort
     cfg_deep = get_config()
     cfg_deep.merge_from_file("deep_sort_pytorch/configs/deep_sort.yaml")
@@ -218,7 +218,7 @@ class DetectionPredictor(BasePredictor):
     def __init__(self, cfg):
         super().__init__(cfg)
         self.producer = KafkaProducer(
-            bootstrap_servers='15.164.214.248:9092',
+            bootstrap_servers='192.168.219.101:9092',
             value_serializer=lambda v: json.dumps(v).encode('utf-8'),
         )
 
@@ -301,28 +301,61 @@ class DetectionPredictor(BasePredictor):
             draw_boxes(im0, bbox_xyxy, self.model.names, object_id,identities)
 
             batch_messages = []
-            print(bbox_xyxy, identities, object_id)
+#             print(bbox_xyxy, identities, object_id)
 
-            for i, box in enumerate(bbox_xyxy):
-                x1, y1, x2, y2 = [int(i) for i in box]
+#             for i, box in enumerate(bbox_xyxy):
+#                 x1, y1, x2, y2 = [int(i) for i in box]
+#
+#                 src_pts = np.float32([
+#                     [756, 142],
+#                     [936, 151],
+#                     [0,   626],
+#                     [1080, 724]
+#                 ])
+#
+#                 bev_width, bev_height = 1080, 608
+#                 dst_pts = np.float32([
+#                     [0, 0],
+#                     [bev_width, 0],
+#                     [0, bev_height],
+#                     [bev_width, bev_height]
+#                 ])
+#
+#                 # 변환 행렬 계산
+#                 M = cv2.getPerspectiveTransform(src_pts, dst_pts)
+#
+#
+#                 visitor_points = [(int((x2+x1)/ 2), int((y2+y2)/2))]
+#
+#                 def transform_points(points, matrix):
+#                     pts = np.float32(points).reshape(-1, 1, 2)
+#                     transformed = cv2.perspectiveTransform(pts, matrix)
+#                     return transformed.reshape(-1, 2)
+#
+#
+#                 bev_points = transform_points(visitor_points, M)
 
-                tracking_message = {
-                    "type": "tracking",
-                    "payload": {
-                        "dashboardId": 1,
-                        "detectedTime": int(time.time() * 1000),
-                        "visitorLabel": int(identities[i]),
-                        "gridList": f"[[{int((x2+x1)/ 2)}, {int((y2+y2)/2)}]]"
-                    }
-                }
-                print(tracking_message)
-                batch_messages.append(tracking_message)
 
-            for msg in batch_messages:
-                self.producer.send("vision-data-topic", msg)
-
-            self.producer.flush()
-            # 명시적으로 flush할 수도 있음
+#                 for i, (orig, transformed) in enumerate(zip(visitor_points, bev_points)):
+#                     print(transformed[0])
+#                 print(bev_points)
+#                 tracking_message = {
+#                     "type": "tracking",
+#                     "payload": {
+#                         "dashboardId": 1,
+#                         "detectedTime": int(time.time() * 1000),
+#                         "visitorLabel": int(identities[i]),
+#                         "gridList": f"[[{bev_points[0][0]}, {bev_points[0][1]}]]"
+#                     }
+#                 }
+#                 print(tracking_message)
+#                 batch_messages.append(tracking_message)
+#
+#             for msg in batch_messages:
+#                 self.producer.send("vision-data-topic", msg)
+#
+#             self.producer.flush()
+#             명시적으로 flush할 수도 있음
         frame_rgb = cv2.cvtColor(im0, cv2.COLOR_BGR2RGB)
         points = inference_and_restore(apgcc_model, device_apgcc, frame_rgb)
 
@@ -330,17 +363,42 @@ class DetectionPredictor(BasePredictor):
         for pt in points:
             cv2.circle(im0, (int(pt[0]), int(pt[1])), 3, (0, 0, 255), -1)
 
-        # Kafka로 heatmap 메시지 전송
+#         Kafka로 heatmap 메시지 전송
+        src_pts = np.float32([
+            [756, 142],
+            [936, 151],
+            [0,   626],
+            [1080, 724]
+        ])
+
+        bev_width, bev_height = 1080, 608
+        dst_pts = np.float32([
+            [0, 0],
+            [bev_width, 0],
+            [0, bev_height],
+            [bev_width, bev_height]
+        ])
+
+        # 변환 행렬 계산
+        M = cv2.getPerspectiveTransform(src_pts, dst_pts)
+
+        def transform_points(points, matrix):
+            pts = np.float32(points).reshape(-1, 1, 2)
+            transformed = cv2.perspectiveTransform(pts, matrix)
+            return transformed.reshape(-1, 2)
+
+        bev_points = transform_points(points, M)
+        print(bev_points)
         heatmap_msg = {
             "type": "heatmap",
             "payload": {
                 "dashboardId": 1,
                 "detectedTime": int(time.time() * 1000),
-                "gridList": json.dumps([[int(x), int(y)] for x, y in points])
+                "gridList": json.dumps(bev_points.tolist())
             }
         }
-        print(heatmap_msg)
         self.producer.send("vision-data-topic", heatmap_msg)
+        print(heatmap_msg)
         self.producer.flush()
         return log_string
 

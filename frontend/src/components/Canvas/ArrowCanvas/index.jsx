@@ -3,15 +3,9 @@
 import BaseCanvas from "../";
 import { drawSectionArrows } from "@/utils/drawUtils";
 
-export default function ArrowCanvas({
-  canvasRef,
-  sections,
-  arrows,
-  gridCols,
-  cellSize,
-}) {
+export default function ArrowCanvas({ canvasRef, sections, arrows }) {
   const draw = (ctx) => {
-    drawSectionArrows(ctx, arrows, gridCols, cellSize);
+    drawSectionArrows(ctx, arrows);
   };
 
   return (

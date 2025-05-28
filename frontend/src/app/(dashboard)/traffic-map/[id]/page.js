@@ -20,18 +20,20 @@ async function getTrafficPointData(id) {
     const imageHeight = 480;
     const gridWidth = 20;
     const gridHeight = 20;
-    return raw.map((item) => {
-      const [gridX, gridY] = JSON.parse(item.gridList)[0].map(Number);
+    if (raw.length) {
+      return raw?.map((item) => {
+        const [gridX, gridY] = JSON.parse(item.gridList)[0].map(Number);
 
-      return {
-        id: item.id,
-        dashboardId: item.dashboardId,
-        createdAt: item.detectedTime,
-        x: gridX,
-        y: gridY,
-        userLabel: item.visitorLabel,
-      };
-    });
+        return {
+          id: item.id,
+          dashboardId: item.dashboardId,
+          createdAt: item.detectedTime,
+          x: gridX,
+          y: gridY,
+          userLabel: item.visitorLabel,
+        };
+      });
+    }
   }
 
   return transformTrackingData(
@@ -55,7 +57,6 @@ export default async function TrafficMapPage({ params }) {
       <main className={styles.main}>
         <TrafficMapSection
           sections={getSectionFromCampaign(campaign)}
-          trafficPoints={trafficPoints}
           dashboardId={id}
         />
       </main>

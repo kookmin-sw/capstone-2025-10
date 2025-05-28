@@ -26,7 +26,8 @@ class KafkaStreamLoader:
                  imgsz=640, stride=32, auto=True, transforms=None, buffer_size=64):
         self.consumer = KafkaConsumer(
             'vision-frame-topic',
-            bootstrap_servers='15.164.214.248:9092',
+            bootstrap_servers='192.168.219.105:9092',
+
             auto_offset_reset='latest',
             group_id='vision-consumer-group-100',
             value_deserializer=lambda m: json.loads(m.decode('utf-8'))
