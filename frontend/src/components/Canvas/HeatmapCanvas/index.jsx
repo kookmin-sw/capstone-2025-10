@@ -15,7 +15,7 @@ function drawHeatmap(
 
   // 기존 heatmap div 제거 (중복 방지)
   const existing = container.querySelector(".heatmap-canvas");
-  if (existing) container.removeChild(existing);
+  if (existing) {container.removeChild(existing);}
 
   const heatmapInstance = h337.create({
     container,
@@ -31,7 +31,7 @@ function drawHeatmap(
     return { x, y, value };
   });
 
-  if (raw.length === 0) return;
+  if (raw.length === 0) {return;}
 
   // ⬇️ 2. 음수 좌표 정규화
   const minX = Math.min(...raw.map((d) => d.x));

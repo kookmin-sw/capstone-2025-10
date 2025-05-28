@@ -5,16 +5,16 @@ import styles from "./index.module.scss";
 import Image from "next/image";
 
 const CardSlider = ({ cards }) => {
-  if (!cards.length) return null;
+  if (!cards.length) {return null;}
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const prev = () => {
-    if (currentIndex > 0) setCurrentIndex(currentIndex - 1);
+    if (currentIndex > 0) {setCurrentIndex(currentIndex - 1);}
   };
 
   const next = () => {
-    if (currentIndex < cards.length - 1) setCurrentIndex(currentIndex + 1);
+    if (currentIndex < cards.length - 1) {setCurrentIndex(currentIndex + 1);}
   };
 
   return (
@@ -35,9 +35,9 @@ const CardSlider = ({ cards }) => {
       <div className={styles["slider"]}>
         {cards.map((card, i) => {
           let className = styles["card"];
-          if (i === currentIndex) className += ` ${styles["active"]}`;
-          else if (i < currentIndex) className += ` ${styles["left"]}`;
-          else if (i > currentIndex) className += ` ${styles["right"]}`;
+          if (i === currentIndex) {className += ` ${styles["active"]}`;}
+          else if (i < currentIndex) {className += ` ${styles["left"]}`;}
+          else if (i > currentIndex) {className += ` ${styles["right"]}`;}
 
           return (
             <div key={i} className={className}>

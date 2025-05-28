@@ -72,20 +72,20 @@ const getChartDataFromVisitors = (visitors) => {
       age = match ? parseInt(match[0]) : -1;
     }
     if (age >= 0) {
-      if (age <= 9) ageGroups["9세 이하"]++;
-      else if (age <= 19) ageGroups["10대"]++;
-      else if (age <= 29) ageGroups["20대"]++;
-      else if (age <= 39) ageGroups["30대"]++;
-      else if (age <= 49) ageGroups["40대"]++;
-      else if (age <= 59) ageGroups["50대"]++;
-      else ageGroups["60대 이상"]++;
+      if (age <= 9) {ageGroups["9세 이하"]++;}
+      else if (age <= 19) {ageGroups["10대"]++;}
+      else if (age <= 29) {ageGroups["20대"]++;}
+      else if (age <= 39) {ageGroups["30대"]++;}
+      else if (age <= 49) {ageGroups["40대"]++;}
+      else if (age <= 59) {ageGroups["50대"]++;}
+      else {ageGroups["60대 이상"]++;}
     }
 
     // 시간대별 성별 카운트
     timeSlots.forEach((slot, index) => {
       if (hour >= slot.start && hour < slot.end) {
-        if (gender === "male") timeGender[index].male++;
-        if (gender === "female") timeGender[index].female++;
+        if (gender === "male") {timeGender[index].male++;}
+        if (gender === "female") {timeGender[index].female++;}
       }
     });
   });
@@ -113,8 +113,8 @@ const DashboardSection = ({ visitors }) => {
   const genderRatioDiff =
     totalGenderCount > 0
       ? Math.abs(
-          ((genderCount.male - genderCount.female) / totalGenderCount) * 100,
-        ).toFixed(1)
+        ((genderCount.male - genderCount.female) / totalGenderCount) * 100,
+      ).toFixed(1)
       : 0;
 
   const timeSlotStats = timeGender.map((t, i) => {

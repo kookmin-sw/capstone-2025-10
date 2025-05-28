@@ -3,22 +3,25 @@ import { fetchWithSession } from "@/lib/fetchWithSession";
 import VisitorStatsSection from "@/components/Section/VisitorStatsSection";
 
 async function getVisitorData(id) {
-  return await fetchWithSession(`http://localhost:8080/api/gender/${id}`, {
+  return await fetchWithSession(`https://back.offflow.co.kr/api/gender/${id}`, {
     cache: "no-store",
     credentials: "include",
   });
 }
 
 async function getTrackingData(id) {
-  return await fetchWithSession(`http://localhost:8080/api/tracking/${id}`, {
-    cache: "no-store",
-    credentials: "include",
-  });
+  return await fetchWithSession(
+    `https://back.offflow.co.kr/api/tracking/${id}`,
+    {
+      cache: "no-store",
+      credentials: "include",
+    },
+  );
 }
 
 async function getDashboardSections(id) {
   const res = await fetchWithSession(
-    `http://localhost:8080/api/dashboard/test1/${id}`,
+    `https://back.offflow.co.kr/api/dashboard/test1/${id}`,
     {
       cache: "no-store",
       credentials: "include",
@@ -28,7 +31,7 @@ async function getDashboardSections(id) {
 }
 
 async function getEventList(id) {
-  return await fetchWithSession(`http://localhost:8080/api/event/${id}`, {
+  return await fetchWithSession(`https://back.offflow.co.kr/api/event/${id}`, {
     cache: "no-store",
     credentials: "include",
   });

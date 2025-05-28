@@ -12,7 +12,7 @@ async function getHeatmapData(id) {
 
 async function getCampaign(id) {
   return await fetchWithSession(
-    `http://localhost:8080/api/dashboard/test1/${id}`,
+    `https://back.offflow.co.kr/api/dashboard/test1/${id}`,
     {
       cache: "no-store",
       credentials: "include",

@@ -5,7 +5,7 @@ import { fetchWithSession } from "@/lib/fetchWithSession";
 
 async function getCampaign(id) {
   return await fetchWithSession(
-    `http://localhost:8080/api/dashboard/test1/${id}`,
+    `https://back.offflow.co.kr/api/dashboard/test1/${id}`,
     {
       cache: "no-store",
       credentials: "include",
@@ -37,7 +37,7 @@ async function getTrafficPointData(id) {
   }
 
   return transformTrackingData(
-    await fetchWithSession(`http://localhost:8080/api/tracking/${id}`, {
+    await fetchWithSession(`https://back.offflow.co.kr/api/tracking/${id}`, {
       cache: "no-store",
       credentials: "include",
     }),

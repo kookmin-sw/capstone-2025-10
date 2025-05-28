@@ -8,8 +8,10 @@ export default function useSession() {
   useEffect(() => {
     const fetchSession = async () => {
       try {
-        const res = await fetch(`http://localhost:8080/api/auth/check`, {
+        const res = await fetch(`https://back.offflow.co.kr/api/auth/check`, {
+          cache: "no-store",
           credentials: "include",
+          method: "GET",
         });
 
         if (!res.ok) {

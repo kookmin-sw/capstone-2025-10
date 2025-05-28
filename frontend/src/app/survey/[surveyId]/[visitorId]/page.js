@@ -154,7 +154,7 @@ export default function SurveyPage() {
     try {
       // API 호출
       const response = await fetch(
-        "http://localhost:8080/api/survey/surveyAnswer",
+        "https://back.offflow.co.kr/api/survey/surveyAnswer",
         {
           method: "POST",
           headers: {

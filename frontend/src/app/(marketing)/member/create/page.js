@@ -49,7 +49,7 @@ export default function MemberCreatePage() {
 
   // 저장 버튼 핸들러
   const handleSave = async () => {
-    if (!isValid || loading) return;
+    if (!isValid || loading) {return;}
 
     try {
       setLoading(true);

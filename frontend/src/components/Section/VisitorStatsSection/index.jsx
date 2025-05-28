@@ -50,20 +50,20 @@ const evaluateCondition = (a, operator, b) => {
   a = parseFloat(a);
   b = parseFloat(b);
   switch (operator) {
-    case "같음":
-      return a === b;
-    case "같지 않음":
-      return a !== b;
-    case "다음값보다 큼":
-      return a > b;
-    case "다음값보다 크거나 같음":
-      return a >= b;
-    case "다음값보다 작음":
-      return a < b;
-    case "다음값보다 작거나 같음":
-      return a <= b;
-    default:
-      return false;
+  case "같음":
+    return a === b;
+  case "같지 않음":
+    return a !== b;
+  case "다음값보다 큼":
+    return a > b;
+  case "다음값보다 크거나 같음":
+    return a >= b;
+  case "다음값보다 작음":
+    return a < b;
+  case "다음값보다 작거나 같음":
+    return a <= b;
+  default:
+    return false;
   }
 };
 
@@ -85,7 +85,7 @@ const getSectionStats = (sections, tracking, dateRange) => {
 
   tracking.forEach((t) => {
     const time = new Date(t.detectedTime);
-    if (time < dateRange[0] || time > dateRange[1]) return;
+    if (time < dateRange[0] || time > dateRange[1]) {return;}
 
     const [x, y] = JSON.parse(t.gridList)[0];
     const cellX = Math.floor(x / CELL_WIDTH);
@@ -99,13 +99,13 @@ const getSectionStats = (sections, tracking, dateRange) => {
 
         const ts = time.getTime();
         if (!stayTimeMap[s.name][t.visitorLabel])
-          stayTimeMap[s.name][t.visitorLabel] = [];
+        {stayTimeMap[s.name][t.visitorLabel] = [];}
         stayTimeMap[s.name][t.visitorLabel].push(ts);
 
         const slotIdx = timeSlots.findIndex(
           (slot) => hour >= slot.start && hour < slot.end,
         );
-        if (slotIdx !== -1) sectionTimeSeries[s.name][slotIdx]++;
+        if (slotIdx !== -1) {sectionTimeSeries[s.name][slotIdx]++;}
 
         if (ts >= fiveMinAgo) {
           sectionRecentVisitors[s.name].add(t.visitorLabel);
@@ -131,8 +131,8 @@ const getSectionStats = (sections, tracking, dateRange) => {
     const allDurations = Object.values(userDurations[name]);
     avgTimes[name] = allDurations.length
       ? Math.floor(
-          allDurations.reduce((a, b) => a + b, 0) / allDurations.length,
-        )
+        allDurations.reduce((a, b) => a + b, 0) / allDurations.length,
+      )
       : 0;
   }
   console.log(userDurations);
@@ -177,7 +177,7 @@ const VisitorStatusSection = ({ visitors, trackingData, sections, events }) => {
 
   filtered.forEach((v) => {
     const gender = v.gender?.toLowerCase();
-    if (gender === "male" || gender === "female") genderCount[gender]++;
+    if (gender === "male" || gender === "female") {genderCount[gender]++;}
 
     let age = parseInt(v.age);
     if (isNaN(age)) {
@@ -185,13 +185,13 @@ const VisitorStatusSection = ({ visitors, trackingData, sections, events }) => {
       age = match ? parseInt(match[0]) : -1;
     }
     if (age >= 0) {
-      if (age <= 9) ageGroupCount["9세 이하"]++;
-      else if (age <= 19) ageGroupCount["10대"]++;
-      else if (age <= 29) ageGroupCount["20대"]++;
-      else if (age <= 39) ageGroupCount["30대"]++;
-      else if (age <= 49) ageGroupCount["40대"]++;
-      else if (age <= 59) ageGroupCount["50대"]++;
-      else ageGroupCount["60대 이상"]++;
+      if (age <= 9) {ageGroupCount["9세 이하"]++;}
+      else if (age <= 19) {ageGroupCount["10대"]++;}
+      else if (age <= 29) {ageGroupCount["20대"]++;}
+      else if (age <= 39) {ageGroupCount["30대"]++;}
+      else if (age <= 49) {ageGroupCount["40대"]++;}
+      else if (age <= 59) {ageGroupCount["50대"]++;}
+      else {ageGroupCount["60대 이상"]++;}
     }
   });
 

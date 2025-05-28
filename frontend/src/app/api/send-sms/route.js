@@ -144,7 +144,7 @@ function generateSignature(method, url, timestamp, accessKey, secretKey) {
   const space = ' ';
   const newLine = '\n';
   
-  let message = [];
+  const message = [];
   message.push(method);
   message.push(space);
   message.push(url);

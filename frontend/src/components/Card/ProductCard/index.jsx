@@ -65,7 +65,7 @@ const ProductCard = ({ mode = "edit", dashboardId }) => {
 
   useEffect(() => {
     console.log("refresh");
-    if (!shouldRefresh) return;
+    if (!shouldRefresh) {return;}
 
     const getProduct = async () => {
       const response = await getProductByDashboardId(dashboardId);

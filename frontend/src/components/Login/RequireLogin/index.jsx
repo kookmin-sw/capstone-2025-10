@@ -12,7 +12,7 @@ const RequireLogin = ({ children }) => {
     }
   }, [loading, isLoggedIn, router]);
 
-  if (loading) return <p>세션 확인 중...</p>;
+  if (loading) {return <p>세션 확인 중...</p>;}
 
   return <>{children}</>;
 };

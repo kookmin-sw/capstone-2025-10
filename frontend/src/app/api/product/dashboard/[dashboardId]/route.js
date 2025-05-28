@@ -5,7 +5,7 @@ export async function GET(req, context) {
 
   return await proxyFetch({
     req,
-    backendUrl: `http://localhost:8080/api/products/dashboard/${dashboardId}`,
+    backendUrl: `https://back.offflow.co.kr/api/products/dashboard/${dashboardId}`,
     method: "GET",
   });
 }

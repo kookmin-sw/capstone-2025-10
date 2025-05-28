@@ -4,7 +4,7 @@ import { fetchWithSession } from "@/lib/fetchWithSession";
 import EventSection from "@/components/Section/EventSection";
 
 async function getVisitorData(id) {
-  return await fetchWithSession(`http://localhost:8080/api/event/${id}`, {
+  return await fetchWithSession(`https://back.offflow.co.kr/api/event/${id}`, {
     cache: "no-store",
     credentials: "include",
   });

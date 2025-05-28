@@ -7,7 +7,7 @@ export async function POST(req, res) {
 
   return await proxyFetch({
     req,
-    backendUrl: "http://localhost:8080/api/users/login",
+    backendUrl: "https://back.offflow.co.kr/api/users/login",
     method: "POST",
     withCredentials: false,
   });

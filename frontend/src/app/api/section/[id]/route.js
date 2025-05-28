@@ -4,7 +4,7 @@ export async function PATCH(req, context) {
   const { id } = context.params;
   return await proxyFetch({
     req,
-    backendUrl: `http://localhost:8080/api/sections/${id}`,
+    backendUrl: `https://back.offflow.co.kr/api/sections/${id}`,
     method: "PATCH",
   });
 }
@@ -13,7 +13,7 @@ export async function DELETE(req, context) {
   const { id } = context.params;
   return await proxyFetch({
     req,
-    backendUrl: `http://localhost:8080/api/sections/${id}`,
+    backendUrl: `https://back.offflow.co.kr/api/sections/${id}`,
     method: "DELETE",
   });
 }

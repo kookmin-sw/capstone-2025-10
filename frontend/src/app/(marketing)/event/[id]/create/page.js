@@ -42,7 +42,7 @@ export default function CreateEventPage() {
     };
 
     try {
-      const res = await fetch("http://localhost:8080/api/event", {
+      const res = await fetch("https://back.offflow.co.kr/api/event", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

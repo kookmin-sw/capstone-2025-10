@@ -4,7 +4,7 @@ import styles from "./page.module.scss";
 import { fetchWithSession } from "@/lib/fetchWithSession";
 
 async function getVisitorData(id) {
-  return await fetchWithSession(`http://localhost:8080/api/gender/${id}`, {
+  return await fetchWithSession(`https://back.offflow.co.kr/api/gender/${id}`, {
     cache: "no-store",
     credentials: "include",
   });

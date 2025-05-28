@@ -14,7 +14,7 @@ const SurveyTable = ({
 }) => {
   // 날짜 포맷 함수
   const formatDate = (dateString) => {
-    if (!dateString) return '-';
+    if (!dateString) {return '-';}
     const date = new Date(dateString);
     return date.toLocaleDateString('ko-KR', {
       year: 'numeric',

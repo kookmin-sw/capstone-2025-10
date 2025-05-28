@@ -4,7 +4,7 @@ export async function PATCH(req) {
   const body = await req.json();
   return await proxyFetch({
     req,
-    backendUrl: `http://localhost:8080/api/products/${body.productId}/assign-section/${body.sectionId}`,
+    backendUrl: `https://back.offflow.co.kr/api/products/${body.productId}/assign-section/${body.sectionId}`,
     method: "PATCH",
     hasBody: false,
   });

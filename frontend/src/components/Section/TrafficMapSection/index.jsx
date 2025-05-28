@@ -27,7 +27,7 @@ function generateArrowsFromTracking(
   const userGroups = new Map();
   trackingData.forEach((item) => {
     const userId = item.userLabel ?? "unknown";
-    if (!userGroups.has(userId)) userGroups.set(userId, []);
+    if (!userGroups.has(userId)) {userGroups.set(userId, []);}
     userGroups.get(userId).push(item);
   });
 
@@ -75,7 +75,7 @@ const TrafficMapSection = ({ sections, dashboardId }) => {
   const fetchTraffic = useCallback(async () => {
     try {
       const res = await fetch(
-        `http://localhost:8080/api/tracking/${dashboardId}`,
+        `https://back.offflow.co.kr/api/tracking/${dashboardId}`,
         {
           cache: "no-store",
           credentials: "include",

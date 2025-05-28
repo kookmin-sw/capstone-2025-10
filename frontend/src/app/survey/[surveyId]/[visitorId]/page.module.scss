@@ -9,27 +9,6 @@
   position: relative;
 }
 
-/* 글로벌 헤더 숨김 처리 */
-:global(header), 
-:global(.header), 
-:global(nav), 
-:global(.sidebar), 
-:global(.sideNav), 
-:global(.sideNavigation),
-:global(.side-navigation),
-:global(#sideNav) {
-  display: none !important;
-  width: 0 !important;
-}
-
-/* 콘텐츠 영역 너비 조정 */
-:global(.content) {
-  display: block !important;
-  width: 100% !important;
-  margin-left: 0 !important;
-  padding-left: 0 !important;
-}
-
 .title {
   font-size: 18px;
   font-weight: bold;
@@ -99,11 +78,11 @@
   color: #333;
   background-color: #FFFFFF;
   box-sizing: border-box;
-  
+
   &::placeholder {
     color: #b1b1b1;
   }
-  
+
   &:focus {
     outline: none;
     border-color: #004BD6; /* 활성화 시 파란색 테두리 */
@@ -127,7 +106,7 @@
   cursor: pointer;
   text-align: center;
   transition: background-color 0.3s ease; /* 색상 변경 애니메이션 */
-  
+
   &.active {
     background-color: #004BD6; /* 활성화 시 파란색으로 변경 */
   }
@@ -145,11 +124,11 @@
   box-sizing: border-box;
   display: flex;
   align-items: center; /* 텍스트 세로 중앙 정렬 */
-  
+
   &::placeholder {
     color: #b1b1b1;
   }
-  
+
   &:focus {
     outline: none;
     border-color: #004BD6; /* 활성화 시 파란색 테두리 */

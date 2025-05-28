@@ -85,14 +85,13 @@ export default function VisitorRegistration() {
     console.log("방문객 등록 제출:", visitorData);
 
     // API 호출
-    fetch("http://localhost:8080/api/visitors", {
+    fetch("https://back.offflow.co.kr/api/visitors", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       credentials: "include",
       body: JSON.stringify(visitorData),
-      credentials: "include",
     })
       .then((response) => {
         if (!response.ok) {

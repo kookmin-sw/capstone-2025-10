@@ -1,6 +1,6 @@
-import axios from 'axios';
+import axios from "axios";
 
-const API_BASE_URL = 'http://localhost:8080/api';
+const API_BASE_URL = "https://back.offflow.co.kr/api";
 
 // 모든 방문객 목록 조회
 export const fetchUsers = async () => {
@@ -8,7 +8,7 @@ export const fetchUsers = async () => {
     const response = await axios.get(`${API_BASE_URL}/users`);
     return response.data;
   } catch (error) {
-    console.error('사용자 목록 조회 실패:', error);
+    console.error("사용자 목록 조회 실패:", error);
     throw error;
   }
 };
@@ -30,7 +30,7 @@ export const createUser = async (userData) => {
     const response = await axios.post(`${API_BASE_URL}/users`, userData);
     return response.data;
   } catch (error) {
-    console.error('사용자 생성 실패:', error);
+    console.error("사용자 생성 실패:", error);
     throw error;
   }
 };
@@ -38,7 +38,10 @@ export const createUser = async (userData) => {
 // 방문객 정보 업데이트
 export const updateUser = async (userId, userData) => {
   try {
-    const response = await axios.put(`${API_BASE_URL}/users/${userId}`, userData);
+    const response = await axios.put(
+      `${API_BASE_URL}/users/${userId}`,
+      userData,
+    );
     return response.data;
   } catch (error) {
     console.error(`사용자 ID ${userId} 업데이트 실패:`, error);
@@ -68,18 +71,20 @@ export const mapUserFromBackend = (user) => {
     userId: `user_${user.id}`, // 기본 사용자 ID 형식 설정
     registerDate: formatDate(user.registerDate),
     privacyAccepted: user.privacyAccepted,
-    serviceAccepted: user.serviceAccepted
+    serviceAccepted: user.serviceAccepted,
   };
 };
 
 // 날짜 포맷 변환 함수 (예: '2025-02-06 21:20:48' -> '2025.02.06')
 function formatDate(dateString) {
-  if (!dateString) return '';
-  
+  if (!dateString) {
+    return "";
+  }
+
   const date = new Date(dateString);
   const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
   return `${year}.${month}.${day}`;
-} 
+}

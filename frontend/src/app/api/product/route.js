@@ -3,7 +3,7 @@ import { proxyFetch } from "@/lib/proxyFetch";
 export async function POST(req) {
   return await proxyFetch({
     req,
-    backendUrl: `http://localhost:8080/api/products`,
+    backendUrl: `https://back.offflow.co.kr/api/products`,
     method: "POST",
   });
 }
