@@ -30,10 +30,9 @@ from collections import defaultdict
 from pathlib import Path
 
 import cv2
-
 from ultralytics.nn.autobackend import AutoBackend
 from ultralytics.yolo.configs import get_config
-from ultralytics.yolo.data.dataloaders.stream_loaders import LoadImages, LoadScreenshots, LoadStreams
+from ultralytics.yolo.data.dataloaders.stream_loaders import LoadImages, LoadScreenshots, LoadStreams, KafkaStreamLoader
 from ultralytics.yolo.data.utils import IMG_FORMATS, VID_FORMATS
 from ultralytics.yolo.utils import DEFAULT_CONFIG, LOGGER, SETTINGS, callbacks, colorstr, ops
 from ultralytics.yolo.utils.checks import check_file, check_imgsz, check_imshow
@@ -139,6 +138,15 @@ class BasePredictor:
                                            stride=stride,
                                            auto=pt,
                                            transforms=getattr(model.model, 'transforms', None))
+        elif source.startswith("kafka://"):
+            self.dataset = KafkaStreamLoader(
+                topic=source.replace("kafka://", ""),
+                imgsz=imgsz,
+                stride=stride,
+                auto=pt,
+                transforms=getattr(model.model, 'transforms', None)
+            )
+
         else:
             self.dataset = LoadImages(source,
                                       imgsz=imgsz,
@@ -238,7 +246,7 @@ class BasePredictor:
                     w = int(vid_cap.get(cv2.CAP_PROP_FRAME_WIDTH))
                     h = int(vid_cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
                 else:  # stream
-                    fps, w, h = 1, im0.shape[1], im0.shape[0]
+                    fps, w, h = 15, im0.shape[1], im0.shape[0]
                 save_path = str(Path(save_path).with_suffix('.mp4'))  # force *.mp4 suffix on results videos
                 self.vid_writer[idx] = cv2.VideoWriter(save_path, cv2.VideoWriter_fourcc(*'mp4v'), fps, (w, h))
             self.vid_writer[idx].write(im0)
