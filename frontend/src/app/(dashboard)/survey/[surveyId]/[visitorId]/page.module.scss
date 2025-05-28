@@ -1,0 +1,226 @@
+.form {
+  max-width: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 16px;
+  background-color: #FFFFFF;
+  box-sizing: border-box;
+  display: block;
+  position: relative;
+}
+
+/* 글로벌 헤더 숨김 처리 */
+:global(header), 
+:global(.header), 
+:global(nav), 
+:global(.sidebar), 
+:global(.sideNav), 
+:global(.sideNavigation),
+:global(.side-navigation),
+:global(#sideNav) {
+  display: none !important;
+  width: 0 !important;
+}
+
+/* 콘텐츠 영역 너비 조정 */
+:global(.content) {
+  display: block !important;
+  width: 100% !important;
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 40px; /* 제목 위에 79px 공간 추가 */
+  margin-bottom: 24px;
+  position: relative;
+  display: block !important; /* 헤더 보이게 설정 */
+
+  &:after {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -12px;
+    height: 1px;
+    background-color: #eee;
+  }
+}
+
+.question {
+  margin-bottom: 24px;
+  width: 100%;
+
+  p {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+}
+
+.routeButton {
+  display: flex;
+  align-items: center; /* 세로 중앙 정렬 */
+  justify-content: left; /* 가로 중앙 정렬 */
+  width: 100%;
+  height: 46px; /* 버튼 높이 고정 */
+  margin-bottom: 8px;
+  text-align: center; /* 텍스트 중앙 정렬 */
+  border: 2px solid #e0e0e0; /* 테두리 굵게 */
+  border-radius: 12px;
+  background-color: #FAFAFA;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-sizing: border-box;
+  padding: 0 14px; /* 좌우 패딩만 유지 */
+
+  &.selected {
+    border-color: #004BD6;
+    color: #004BD6; /* 선택 시 텍스트도 파란색으로 */
+  }
+}
+
+.textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 14px;
+  border: 2px solid #e0e0e0; /* 테두리 굵게 */
+  border-radius: 12px;
+  resize: vertical;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-top: 8px;
+  font-family: inherit;
+  color: #333;
+  background-color: #FFFFFF;
+  box-sizing: border-box;
+  
+  &::placeholder {
+    color: #b1b1b1;
+  }
+  
+  &:focus {
+    outline: none;
+    border-color: #004BD6; /* 활성화 시 파란색 테두리 */
+  }
+}
+
+.submitButton {
+  display: flex;
+  align-items: center; /* 세로 중앙 정렬 */
+  justify-content: center; /* 가로 중앙 정렬 */
+  width: 160px;
+  height: 46px; /* 버튼 높이 고정 */
+  margin: 32px auto 0;
+  padding: 0; /* 패딩 제거하고 높이로 조절 */
+  background-color: #9b9b9b;
+  color: #fff;
+  border: none;
+  border-radius: 24px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.3s ease; /* 색상 변경 애니메이션 */
+  
+  &.active {
+    background-color: #004BD6; /* 활성화 시 파란색으로 변경 */
+  }
+}
+
+.otherInput {
+  width: 100%;
+  height: 46px; /* 입력 필드 높이 고정 */
+  padding: 0 14px; /* 좌우 패딩만 유지 */
+  border: 2px solid #e0e0e0; /* 테두리 굵게 */
+  border-radius: 12px;
+  font-size: 14px;
+  margin-top: 8px;
+  background-color: #FFFFFF;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center; /* 텍스트 세로 중앙 정렬 */
+  
+  &::placeholder {
+    color: #b1b1b1;
+  }
+  
+  &:focus {
+    outline: none;
+    border-color: #004BD6; /* 활성화 시 파란색 테두리 */
+  }
+}
+
+.otherLabel {
+  display: block;
+  margin-top: 16px;
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.charCount {
+  text-align: right;
+  color: #888;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.errorText {
+  color: #e53e3e;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* 모달 관련 스타일 */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background-color: white;
+  width: 280px;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  position: relative;
+  text-align: center;
+}
+
+.closeButton {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+}
+
+.checkIcon {
+  width: 56px;
+  height: 56px;
+  margin: 16px auto;
+  display: block;
+}
+
+.completeText {
+  font-size: 16px;
+  font-weight: 500; /* medium */
+  color: #333;
+  margin-top: 16px;
+}
