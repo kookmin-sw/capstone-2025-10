@@ -1,6 +1,7 @@
 package capstone.offflow.Visitor.Controller;
 
 
+import capstone.offflow.User.Service.UserPrincipal;
 import capstone.offflow.Visitor.Domain.Visitor;
 import capstone.offflow.Visitor.Dto.VisitorDto;
 import capstone.offflow.Visitor.Service.VisitorService;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,13 +58,24 @@ public class VisitorController {
 
 
     //방문객 조회 (전체)
-    @GetMapping("/{id}")
+    @GetMapping("/user/{userId}")
     public ResponseEntity<?> getAllVisitor(
-            @PathVariable(name= "id") Long id){
+            @PathVariable(name= "userId") Long id){
 
         List<VisitorDto> dto = visitorService.getVisitorByUserId(id);
         return ResponseEntity.ok(dto);
     }
+
+
+    //방문객 개별조회
+    @GetMapping("/{visitorId}")
+    public ResponseEntity<?> getVisitor(
+            @PathVariable(name= "visitorId") Long visitorId){
+        VisitorDto dto = visitorService.getVisitorById(visitorId);
+        return ResponseEntity.ok(dto);
+    }
+
+
 
     //방문객 삭제
     @DeleteMapping("/{id}")
