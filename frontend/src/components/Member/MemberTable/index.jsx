@@ -3,17 +3,17 @@ import styles from "./index.module.scss";
 import Image from "next/image";
 import Pagination from "@/components/Pagination";
 
-const MemberTable = ({ 
-  visitors, 
-  checkedItems, 
-  currentPage, 
-  totalPages, 
-  handleCheckboxClick, 
-  handleDetail, 
-  handlePageChange 
+const MemberTable = ({
+  visitors,
+  checkedItems,
+  currentPage,
+  totalPages,
+  handleCheckboxClick,
+  handleDetail,
+  handlePageChange,
 }) => {
   return (
-    <div>
+    <div style={{ width: "100%" }}>
       <div className={styles.tableContainer}>
         <table className={styles.table}>
           <thead>
@@ -33,7 +33,11 @@ const MemberTable = ({
               <tr key={visitor.id}>
                 <td>
                   <Image
-                    src={checkedItems[visitor.id] ? "/checkblue.svg" : "/checkgray.svg"}
+                    src={
+                      checkedItems[visitor.id]
+                        ? "/checkblue.svg"
+                        : "/checkgray.svg"
+                    }
                     alt="체크박스"
                     width={20}
                     height={20}
@@ -69,4 +73,4 @@ const MemberTable = ({
   );
 };
 
-export default MemberTable; 
+export default MemberTable;
