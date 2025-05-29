@@ -30,7 +30,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> {})
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/users/login", "/api/users/register").permitAll() // 회원가입/로그인은 로그인 없이 가능
+                        .requestMatchers("/api/users/login", "/api/users/register", "/api/survey/surveyAnswer").permitAll() // 회원가입/로그인은 로그인 없이 가능
                         .requestMatchers("/api/users/**").authenticated() // /api/users/ 하위는 로그인만 하면 접근 가능
                         .anyRequest().authenticated())
                 .logout(logout -> logout

@@ -17,8 +17,8 @@ export default function RegistrationSuccessPage() {
     const header = document.querySelector('header');
     const sideMenu = document.querySelector('.side-menu-selector'); // 실제 사이드 메뉴 선택자로 변경 필요
 
-    if (header) header.style.display = 'none';
-    if (sideMenu) sideMenu.style.display = 'none';
+    if (header) {header.style.display = 'none';}
+    if (sideMenu) {sideMenu.style.display = 'none';}
 
     // fetch('/Animation - 1748527190437.json') // Lottie 데이터 fetch 제거
     //   .then((response) => response.json())
@@ -26,8 +26,8 @@ export default function RegistrationSuccessPage() {
     //   .catch((error) => console.error('Error fetching animation data:', error));
 
     return () => {
-      if (header) header.style.display = ''; // 원래 상태로 복원
-      if (sideMenu) sideMenu.style.display = ''; // 원래 상태로 복원
+      if (header) {header.style.display = '';} // 원래 상태로 복원
+      if (sideMenu) {sideMenu.style.display = '';} // 원래 상태로 복원
     };
   }, []);
 

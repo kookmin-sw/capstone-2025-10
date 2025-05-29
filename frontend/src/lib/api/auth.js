@@ -9,6 +9,8 @@ export const login = async (userId, password) => {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ userId, password }),
+    cache: "no-store",
+    credentials: "include",
   });
   return response;
 };

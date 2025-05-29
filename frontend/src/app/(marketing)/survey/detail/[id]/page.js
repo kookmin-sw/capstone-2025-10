@@ -12,7 +12,7 @@ export default function SurveyDetailPage() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!surveyId) return;
+    if (!surveyId) {return;}
 
     const fetchSurveyAnswers = async () => {
       setLoading(true);
