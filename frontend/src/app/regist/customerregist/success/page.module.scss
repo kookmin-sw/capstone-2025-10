@@ -1,0 +1,142 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 50px;
+  min-height: 100vh;
+  background-color: var(--background-color, #f8f9fa);
+  padding: 20px;
+  box-sizing: border-box;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+.pageHeader {
+  width: 100%;
+  max-width: 700px;
+  text-align: left;
+  margin-bottom: 30px;
+}
+
+.mainTitle {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-primary, #212529);
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 40px;
+  width: 100%;
+  max-width: 700px;
+}
+
+.button {
+  flex-grow: 1;
+  padding: 12px 25px;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 8px;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.viewButton {
+  background-color: var(--white, #ffffff);
+  color: var(--primary-blue, #007bff);
+  border: 1px solid var(--primary-blue, #007bff);
+}
+
+.viewButton:hover {
+  background-color: var(--primary-blue-light, #e7f3ff);
+  color: var(--primary-blue-dark, #0056b3);
+}
+
+.moreButton {
+  background-color: var(--primary-blue, #007bff);
+  color: var(--white, #ffffff);
+  border: 1px solid var(--primary-blue, #007bff);
+}
+
+.moreButton:hover {
+  background-color: var(--primary-blue-dark, #0056b3);
+  border-color: var(--primary-blue-dark, #0056b3);
+}
+
+.card {
+  background-color: var(--white, #ffffff);
+  border: 1px solid var(--gray-3, #e0e0e0);
+  border-radius: 16px;
+  padding: 30px;
+  width: 100%;
+  max-width: 700px;
+  margin-bottom: 30px;
+  text-align: left;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--gray-lighter, #eeeeee);
+}
+
+.cardTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary, #212529);
+}
+
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.eventMainTitle {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary, #212529);
+  margin-bottom: 5px;
+}
+
+.eventTimeDate, .eventLocation {
+  font-size: 16px;
+  color: var(--text-secondary, #555555);
+  line-height: 1.6;
+}
+
+.calendarLink {
+  display: inline-flex;
+  align-items: center;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--primary-blue, #007bff);
+  text-decoration: none;
+  margin-top: 15px;
+  gap: 6px;
+}
+
+.calendarLink:hover {
+  color: var(--primary-blue-dark, #0056b3);
+  text-decoration: underline;
+}
+
+.calendarIcon {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+/* .userInfoSection, .infoTitle, .userDetail 은 page.js에서 삭제되었으므로 제거합니다. */
+
+/* 더 이상 사용되지 않는 클래스 (정리 필요) */
+.checkIcon, .message, .homeButton, .title, .logo /* .logo 는 page.js에서 제거됨 */ {
+  display: none;
+} 

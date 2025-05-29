@@ -6,27 +6,33 @@ export async function POST(request) {
   try {
     const { recipients, content, title, type } = await request.json();
     
-    // API 설정값 로드 - constants.js의 기본값 사용
-    const SERVICE_ID = process.env.NAVER_SMS_SERVICE_ID || SMS_API_CONFIG.SERVICE_ID;
-    const ACCESS_KEY = process.env.NAVER_SMS_ACCESS_KEY || SMS_API_CONFIG.ACCESS_KEY;
-    const SECRET_KEY = process.env.NAVER_SMS_SECRET_KEY || SMS_API_CONFIG.SECRET_KEY;
-    const SENDER_PHONE = process.env.NAVER_SMS_SENDER_PHONE || SMS_API_CONFIG.SENDER_PHONE;
-    const BASE_URL = SMS_API_CONFIG.BASE_URL;
+    // === 디버깅 로그 추가 시작 ===
+    console.log('--- API Route: Received SMS Content ---');
+    console.log(content);
+    console.log('---------------------------------------');
+    // === 디버깅 로그 추가 끝 ===
+
+    // API 설정값 로드 - 환경 변수에서 직접 로드
+    const SERVICE_ID = process.env.NAVER_SMS_SERVICE_ID;
+    const ACCESS_KEY = process.env.NAVER_SMS_ACCESS_KEY;
+    const SECRET_KEY = process.env.NAVER_SMS_SECRET_KEY;
+    const SENDER_PHONE = process.env.NAVER_SMS_SENDER_PHONE;
+    const BASE_URL = SMS_API_CONFIG.BASE_URL; // BASE_URL 및 SMS_URL은 constants.js 값 유지
     const SMS_URL = SMS_API_CONFIG.SMS_URL;
     
-    // 환경 변수 확인 로그
-    console.log('SMS API 설정 상태:', {
-      serviceId: !!SERVICE_ID,
-      accessKey: !!ACCESS_KEY,
-      secretKey: !!SECRET_KEY,
-      senderPhone: !!SENDER_PHONE
+    // 환경 변수 확인 로그 (값 자체는 로그에 남기지 않도록 수정)
+    console.log('SMS API 환경 변수 로드 상태:', {
+      serviceIdProvided: !!SERVICE_ID,
+      accessKeyProvided: !!ACCESS_KEY,
+      secretKeyProvided: !!SECRET_KEY,
+      senderPhoneProvided: !!SENDER_PHONE
     });
     
     // 필수 설정값 확인
     if (!SERVICE_ID || !ACCESS_KEY || !SECRET_KEY || !SENDER_PHONE) {
-      console.error('네이버 SENS SMS API 설정이 누락되었습니다.');
+      console.error('네이버 SENS SMS API 환경 변수가 올바르게 설정되지 않았습니다.');
       return NextResponse.json({ 
-        message: 'API 설정이 완료되지 않았습니다. 환경 변수를 확인하세요.',
+        message: 'API 설정이 완료되지 않았습니다. .env.local 파일을 확인하세요.',
         missingConfig: {
           serviceId: !SERVICE_ID,
           accessKey: !ACCESS_KEY,

@@ -1,0 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+
+/* 기본 레이아웃 */
+.container {
+  padding: 32px;
+  font-family: 'Noto Sans KR', sans-serif;
+  background-color: #f8f9fa; /* member/detail 과 유사한 배경색 */
+  min-height: calc(100vh - 60px); /* 헤더 높이 제외 (필요시 조정) */
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: #333;
+}
+
+.surveyIdText {
+  font-size: 16px;
+  font-weight: 500;
+  color: #555;
+  margin-bottom: 24px;
+}
+
+/* 답변 카드 */
+.answerCard {
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.answerTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #004bd6; /* 포인트 컬러 */
+  margin-bottom: 12px;
+}
+
+.answerList {
+  list-style-type: none;
+  padding-left: 0;
+  li {
+    font-size: 15px;
+    color: #444;
+    padding: 8px 0;
+    border-bottom: 1px dashed #eee;
+    &:last-child {
+      border-bottom: none;
+    }
+    strong {
+      font-weight: 500;
+      color: #222;
+      margin-right: 8px;
+      display: inline-block;
+      min-width: 120px; /* 레이블 너비 고정 */
+    }
+  }
+}
+
+/* 로딩, 에러, 데이터 없음 메시지 */
+.loading, .error, .noData {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  text-align: center;
+  font-size: 16px;
+  color: #666;
+  min-height: 200px;
+}
+
+.error {
+  color: #d32f2f;
+}
+
+/* member/detail 페이지의 .formSection, .sectionTitle, .formGrid 등과 유사한 스타일을 만들려면
+   page.js의 JSX 구조를 member/detail 처럼 변경하고 아래 스타일을 적용/수정해야 합니다.
+   일단은 위에서 정의한 answerCard 기반의 리스트 스타일을 사용합니다.
+*/
+
+/* 예시: member/detail의 formGrid 스타일 (참고용) */
+/*
+.detailGrid {
+  border: 1px solid #E8E8E8;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 20px;
+}
+
+.detailRow {
+  display: flex;
+  align-items: stretch; // 레이블과 컨텐츠 높이 통일
+  border-bottom: 1px solid #E8E8E8;
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.detailLabel {
+  width: 200px; // 너비 조정
+  background: #F5F5F5;
+  font-weight: 500;
+  font-size: 15px;
+  color: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+  border-right: 1px solid #E8E8E8;
+  flex-shrink: 0;
+}
+
+.detailValue {
+  flex: 1;
+  padding: 15px;
+  background: #fff;
+  font-size: 15px;
+  color: #333;
+  display: flex;
+  align-items: center;
+}
+*/

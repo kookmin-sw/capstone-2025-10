@@ -3,14 +3,18 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./page.module.scss";
+import { useRouter } from "next/navigation";
+import { sendSMS } from "@/app/api/sms";
 
 export default function VisitorRegistration() {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     name: "",
     phoneNumber: "",
     source: "",
     agreeToTerms: false,
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // 모바일 환경에서 뷰포트 높이 설정 및 헤더 숨기기
   useEffect(() => {
@@ -61,52 +65,83 @@ export default function VisitorRegistration() {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setIsSubmitting(true);
 
-    // 필수 항목 검증
-    if (!formData.name || !formData.phoneNumber || !formData.agreeToTerms) {
-      alert("모든 항목을 입력하고 개인정보 수집에 동의해주세요.");
+    // 필수 항목 (이름, 전화번호) 및 개인정보 동의 확인
+    if (!formData.name || !formData.phoneNumber) {
+      alert("이름과 전화번호를 모두 입력해주세요.");
+      setIsSubmitting(false);
       return;
     }
 
-    // API 호출을 위한 데이터 구성
-    const visitorData = {
-      visitorName: formData.name,
-      phoneNumber: formData.phoneNumber,
-      privacyAccepted: formData.agreeToTerms,
-      serviceAccepted: true, // 기본값 설정
-      marketingAccepted: false, // 기본값 설정
-      phoneVerified: true, // 기본값 설정
-      userId: "testUser2", // 고정값
-      dashboardId: 1, // 고정값
-    };
+    if (!formData.agreeToTerms) {
+      alert("개인정보 수집 및 이용에 동의해주세요.");
+      setIsSubmitting(false);
+      return;
+    }
 
-    console.log("방문객 등록 제출:", visitorData);
+    try {
+      // 1. 방문자 정보 백엔드 API로 전송
+      const visitorData = {
+        visitorName: formData.name,
+        phoneNumber: formData.phoneNumber,
+        privacyAccepted: formData.agreeToTerms,
+        serviceAccepted: true, // 고정값
+        marketingAccepted: false, // 고정값
+        phoneVerified: true, // 고정값 (SMS 인증 후 변경 가능)
+        userId: "testUser2", // 고정값 또는 동적 할당 필요
+        dashboardId: 1, // 고정값 또는 동적 할당 필요
+      };
 
-    // API 호출
-    fetch("https://back.offflow.co.kr/api/visitors", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify(visitorData),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("서버 응답이 올바르지 않습니다");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("방문객 등록 성공:", data);
-        alert("방문객 등록이 완료되었습니다. 감사합니다.");
-      })
-      .catch((error) => {
-        console.error("방문객 등록 실패:", error);
-        alert("방문객 등록 중 오류가 발생했습니다. 다시 시도해주세요.");
+      const visitorResponse = await fetch("https://back.offflow.co.kr/api/visitors", { // HTTP 프로토콜 명시
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(visitorData),
       });
+
+      if (!visitorResponse.ok) {
+        // API 호출 실패 시 처리
+        const errorData = await visitorResponse.json().catch(() => ({ message: "방문자 정보 저장에 실패했습니다." }));
+        console.error("방문자 정보 저장 실패:", visitorResponse.status, errorData);
+        alert(`방문자 정보 저장에 실패했습니다: ${errorData.message || visitorResponse.statusText}. 문제가 지속되면 관리자에게 문의하세요.`);
+        setIsSubmitting(false);
+        return;
+      }
+
+      const visitorResult = await visitorResponse.json();
+      console.log("방문자 정보 저장 성공:", visitorResult);
+
+      // 2. SMS 발송 및 페이지 이동 로직
+      const smsContent = `[오프플로우] ${formData.name}님\n2025 KMUCS EXPO 행사 등록이 완료되었습니다.\n\n■ 2025 KMUCS EXPO\n기간 : 05/30 (금)\n장소 : 국민대학교 본부관 1층, 학술회의장\n시간 : 09:30 ~ 17:30\n\n■ 문의처\n오프플로우 : 010-7494-1426`;
+
+      const smsResult = await sendSMS({
+        recipients: [formData.phoneNumber],
+        content: smsContent,
+        title: "2025 KMUCS EXPO 등록 완료",
+        type: "LMS"
+      });
+
+      if (smsResult && smsResult.success) {
+        console.log("SMS 발송 성공:", smsResult);
+        router.push("/regist/customerregist/success");
+      } else {
+        console.error("SMS 발송 실패:", smsResult ? smsResult.error : '알 수 없는 오류');
+        alert(
+          "SMS 발송에 실패했습니다. 잠시 후 다시 시도해주세요. 문제가 지속되면 관리자에게 문의하세요."
+        );
+        setIsSubmitting(false);
+      }
+    } catch (error) {
+      console.error("등록 처리 중 오류:", error);
+      alert(
+        "등록 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요. 문제가 지속되면 관리자에게 문의하세요."
+      );
+      setIsSubmitting(false);
+    }
   };
 
   // 팝업 스토어 정보 데이터
@@ -202,8 +237,8 @@ export default function VisitorRegistration() {
         </div>
 
         <div className={styles.buttonContainer}>
-          <button type="submit" className={styles.submitButton}>
-            등록하기
+          <button type="submit" className={styles.submitButton} disabled={isSubmitting}>
+            {isSubmitting ? '등록 중...' : '등록하기'}
           </button>
         </div>
       </form>
