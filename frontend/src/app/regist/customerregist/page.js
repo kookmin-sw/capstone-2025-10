@@ -101,6 +101,7 @@ export default function VisitorRegistration() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(visitorData),
+        credentials: "include", // 세션 인증용 기본 설정  
       });
 
       if (!visitorResponse.ok) {
