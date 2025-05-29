@@ -91,7 +91,7 @@ export default function VisitorRegistration() {
         serviceAccepted: true, // 고정값
         marketingAccepted: false, // 고정값
         phoneVerified: true, // 고정값 (SMS 인증 후 변경 가능)
-        userId: "testUser2", // 고정값 또는 동적 할당 필요
+        userId: "test1", // 고정값 또는 동적 할당 필요
         dashboardId: 1, // 고정값 또는 동적 할당 필요
       };
 
