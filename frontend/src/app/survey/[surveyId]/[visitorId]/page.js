@@ -1,10 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useParams } from 'next/navigation';
 import styles from "./page.module.scss";
 import Image from "next/image";
 
 export default function SurveyPage() {
+  const params = useParams();
+  const surveyIdFromUrl = params.surveyId;
+  const visitorIdFromUrl = params.visitorId;
+
   const [formData, setFormData] = useState({
     ageQuestion: "",
     genderQuestion: "",
@@ -139,8 +144,8 @@ export default function SurveyPage() {
 
     // 서버에 제출할 데이터 형식 구성
     const submitData = {
-      visitorId: 3, // 이 부분은 실제로는 동적으로 설정되어야 함
-      surveyId: 1, // 이 부분은 실제로는 동적으로 설정되어야 함
+      visitorId: visitorIdFromUrl ? parseInt(visitorIdFromUrl, 10) : null,
+      surveyId: surveyIdFromUrl ? parseInt(surveyIdFromUrl, 10) : null,
       ageQuestion: formData.ageQuestion,
       genderQuestion: formData.genderQuestion,
       knowRoute:
