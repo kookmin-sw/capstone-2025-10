@@ -5,19 +5,37 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile.dev
-    ports:
-      - "8080:8080"
+    container_name: spring-backend
+    expose:
+      - "8080"  # Nginx가 접근
     depends_on:
       - db
       - kafka
-      - redis  # ✅ Redis 의존성 추가
+      - redis
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/offflow
       SPRING_DATASOURCE_USERNAME: offflow
       SPRING_DATASOURCE_PASSWORD: secret
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
-      SPRING_DATA_REDIS_HOST: redis        # 🔁 변경
-      SPRING_DATA_REDIS_PORT: 6379         # ✅ 추가
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+    networks:
+      - backend
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - backend
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/ssl:/etc/letsencrypt
+      - ./nginx/ssl:/var/www/certbot
+    networks:
+      - backend
 
   db:
     image: postgres:15
@@ -31,6 +49,8 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - backend
 
   zookeeper:
     image: bitnami/zookeeper:latest
@@ -39,6 +59,8 @@ services:
       - "2181:2181"
     environment:
       ALLOW_ANONYMOUS_LOGIN: "yes"
+    networks:
+      - backend
 
   kafka:
     image: bitnami/kafka:3.5.1
@@ -50,11 +72,17 @@ services:
       KAFKA_CFG_BROKER_ID: 1
       KAFKA_CFG_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_CFG_LISTENERS: PLAINTEXT://0.0.0.0:9092
+<<<<<<< Updated upstream
       KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://192.168.219.101:9092  # ← 여기에 외부에서 접근 가능한 IP
+=======
+      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://15.164.214.248:9092
+>>>>>>> Stashed changes
       KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
       ALLOW_PLAINTEXT_LISTENER: "yes"
     depends_on:
       - zookeeper
+    networks:
+      - backend
 
   redis:
     image: redis:7
@@ -62,6 +90,12 @@ services:
     ports:
       - "6379:6379"
     restart: unless-stopped
+    networks:
+      - backend
 
 volumes:
   pgdata:
+
+networks:
+  backend:
+

@@ -16,6 +16,11 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 // 				pattern = "capstone\\.offflow\\.Vision\\.(?!Controller\\.DashboardStatisticsController|Service\\.Business\\.DashboardStatistics.*|Repository\\.DashboardStatistics.*|Domain\\.DashboardStatistics.*|Dto\\.DashboardStatisticsDto).*"
 // 		)
 // )
+
+@ComponentScan(basePackages = {
+    "capstone.offflow", // ✅ 이거 넣으면 전체 포함
+})
+
 public class OffflowApplication {
 
 	public static void main(String[] args) {

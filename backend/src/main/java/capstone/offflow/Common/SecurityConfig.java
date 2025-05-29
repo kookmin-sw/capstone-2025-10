@@ -14,52 +14,58 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    //SecurityConfig에서는 UserDetailsService 인터페이스만 봄
-    //UserServiceImpl은 SecurityConfig를 몰라야함 -> 순환참조 현상 제거
     private final UserService userService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
-                .cors(cors -> {})
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/users/login", "/api/users/register").permitAll() // 회원가입/로그인은 로그인 없이 가능
-                        .requestMatchers("/api/users/**").authenticated() // /api/users/ 하위는 로그인만 하면 접근 가능
-                        .anyRequest().authenticated())
-                .logout(logout -> logout
-                        .logoutSuccessUrl("/login")
-                        .invalidateHttpSession(true))
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED));
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))  // ✅ 여기!
+            .csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/api/users/login", "/api/users/register").permitAll()
+                .requestMatchers("/api/users/**").authenticated()
+                .anyRequest().authenticated())
+            .logout(logout -> logout
+                .logoutSuccessUrl("/login")
+                .invalidateHttpSession(true))
+            .sessionManagement(session -> session
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED));
 
         return http.build();
     }
 
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(List.of("https://offflow.co.kr"));
+	config.setAllowCredentials(true);
+	config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setMaxAge(1800L);
 
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
+    }
 
-    /**
-     * 내부에서 비밀번호 검증
-     * 로그인 처리 담당하는 핵심 로직 (수동처리)
-     * 수동처리 -> 로그인 API 활용해야하기 때문에
-     * 인증 요청을 받은 후 인증처리 수행 후 성공시 Authentication 객체 반환, 실패시 예외
-     */
     @Bean
     public AuthenticationManager authenticationManager(UserDetailsService userDetailsService,
                                                        PasswordEncoder passwordEncoder) {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(); //실질적으로 DB에서 유저정보를 가져와서 비밀번호 비교까지 수행하는 실제 실행자
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userDetailsService);
         provider.setPasswordEncoder(passwordEncoder);
         return new ProviderManager(provider);
     }
-
-
 }
-
 
