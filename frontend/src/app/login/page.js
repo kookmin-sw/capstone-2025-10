@@ -22,7 +22,12 @@ export default function LoginPage() {
     setError("");
 
     try {
-      await login(userId, password);
+      const response = await fetch("https://back.offflow.co.kr/api/users/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId, password }),
+        credentials: "include", // 세션 인증용 기본 설정
+      });
       router.push("/dashboard/1");
     } catch (err) {
       console.log(err);
