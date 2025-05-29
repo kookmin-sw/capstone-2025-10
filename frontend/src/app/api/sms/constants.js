@@ -1,12 +1,12 @@
 // SENS SMS API 관련 상수 및 설정
 export const SMS_API_CONFIG = {
-  // 실제 값으로 변경 필요
-  SERVICE_ID: process.env.NEXT_PUBLIC_NAVER_SMS_SERVICE_ID || 'ncp:sms:kr:351119368542:offflow_sms',
-  ACCESS_KEY: process.env.NEXT_PUBLIC_NAVER_SMS_ACCESS_KEY || 'ncp_iam_BPAMKR5e0DwBTqIIOcag',
-  SECRET_KEY: process.env.NEXT_PUBLIC_NAVER_SMS_SECRET_KEY || 'ncp_iam_BPKMKRN8wRxLIrQPZyOVmiOi2jYMa14OHM',
-  SENDER_PHONE: process.env.NEXT_PUBLIC_NAVER_SMS_SENDER_PHONE || '01074941426',
+  // 실제 값은 .env.local 파일에서 환경 변수를 통해 로드됩니다.
+  SERVICE_ID: process.env.NAVER_SMS_SERVICE_ID, // 삭제된 하드코딩 값 대신 process.env 참조 (실제 사용은 route.js에서)
+  ACCESS_KEY: process.env.NAVER_SMS_ACCESS_KEY, // 삭제된 하드코딩 값 대신 process.env 참조
+  SECRET_KEY: process.env.NAVER_SMS_SECRET_KEY, // 삭제된 하드코딩 값 대신 process.env 참조
+  SENDER_PHONE: process.env.NAVER_SMS_SENDER_PHONE, // 삭제된 하드코딩 값 대신 process.env 참조
     
-  // API 엔드포인트
+  // API 엔드포인트 (이 값들은 유지)
   BASE_URL: 'https://sens.apigw.ntruss.com',
   SMS_URL: '/sms/v2/services/',
 }

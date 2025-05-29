@@ -31,7 +31,7 @@ export async function sendSMS({
         recipients,
         content,
         title,
-        type: "SMS",
+        type,
       }),
     });
 
